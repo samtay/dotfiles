@@ -6,3 +6,23 @@ alias watch-exception="less +F var/log/exception.log"
 alias watch-system="less +F var/log/system.log"
 alias reindex-site="n98-magerun.phar index:reindex:all"
 
+function sanitize() {
+  BASE_URL="http://$1/";
+  n98-magerun.phar db:query "update core_config_data set value = '$BASE_URL' where path = 'web/unsecure/base_url';"
+  n98-magerun.phar db:query "update core_config_data set value = '$BASE_URL' where path = 'web/secure/base_url';"
+  n98-magerun.phar db:query "update core_config_data set value = '0' where path = 'payment/authorizenet/active';"
+  n98-magerun.phar db:query "update core_config_data set value = '1' where path = 'payment/ccsave/active';"
+  n98-magerun.phar db:query "delete from core_config_data where path = 'web/cookie/cookie_domain';"
+  n98-magerun.phar db:query "update core_config_data set value = '0' where path = 'dev/js/merge_files';"
+  n98-magerun.phar db:query "update core_config_data set value = '0' where path = 'dev/css/merge_files';"
+  n98-magerun.phar db:query "update core_config_data set value = '{{unsecure_base_url}}' where path = 'web/unsecure/base_link_url';"
+  n98-magerun.phar db:query "update core_config_data set value = '{{unsecure_base_url}}skin/' where path = 'web/unsecure/base_skin_url';"
+  n98-magerun.phar db:query "update core_config_data set value = '{{unsecure_base_url}}media/' where path = 'web/unsecure/base_media_url';"
+  n98-magerun.phar db:query "update core_config_data set value = '{{unsecure_base_url}}js/' where path = 'web/unsecure/base_js_url';"
+  n98-magerun.phar db:query "update core_config_data set value = '{{secure_base_url}}' where path = 'web/secure/base_link_url';"
+  n98-magerun.phar db:query "update core_config_data set value = '{{secure_base_url}}skin/' where path = 'web/secure/base_skin_url';"
+  n98-magerun.phar db:query "update core_config_data set value = '{{secure_base_url}}media/' where path = 'web/secure/base_media_url';"
+  n98-magerun.phar db:query "update core_config_data set value = '{{secure_base_url}}js/' where path = 'web/secure/base_js_url';"
+  n98-magerun.phar db:query "update core_config_data set value = '0' where path = 'admin/security/password_is_forced';"
+  n98-magerun.phar db:query "update core_config_data set value = '1000' where path = 'admin/security/password_lifetime';"
+}
