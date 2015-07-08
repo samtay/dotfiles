@@ -25,4 +25,5 @@ function sanitize() {
   n98-magerun.phar db:query "update core_config_data set value = '{{secure_base_url}}js/' where path = 'web/secure/base_js_url';"
   n98-magerun.phar db:query "update core_config_data set value = '0' where path = 'admin/security/password_is_forced';"
   n98-magerun.phar db:query "update core_config_data set value = '1000' where path = 'admin/security/password_lifetime';"
+  n98-magerun.phar db:query "update core_config_data set value = '86400' where path = 'admin/security/session_cookie_lifetime';"
 }
