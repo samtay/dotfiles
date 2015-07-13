@@ -1,4 +1,4 @@
-alias fix-permissions="sudo chmod -R 777 media var app/etc"
+alias fix-permissions="sudo chmod -R 777 media var app/etc && git config core.fileMode false"
 alias clear-cache-rm="sudo rm -rf var/cache var/full_page_cache"
 alias clear-cache-n98="n98-magerun.phar cache:flush && n98-magerun.phar cache:clean"
 alias clear-session="sudo rm -rf var/session"
@@ -26,4 +26,5 @@ function sanitize() {
   n98-magerun.phar db:query "update core_config_data set value = '0' where path = 'admin/security/password_is_forced';"
   n98-magerun.phar db:query "update core_config_data set value = '1000' where path = 'admin/security/password_lifetime';"
   n98-magerun.phar db:query "update core_config_data set value = '86400' where path = 'admin/security/session_cookie_lifetime';"
+  n98-magerun.phar admin:user:create samtay s@t.com matrix7 sam tay
 }
