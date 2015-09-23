@@ -40,4 +40,5 @@ function sanitize() {
   n98-magerun.phar db:query "update core_config_data set value = '86400' where path = 'admin/security/session_cookie_lifetime';"
   n98-magerun.phar config:set admin/security/session_cookie_lifetime 86400
   n98-magerun.phar admin:user:create samtay s@t.com matrix7 sam tay
+  n98-magerun.phar config:set admin/startup/page 'system/config'
 }
