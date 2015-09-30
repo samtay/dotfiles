@@ -41,4 +41,29 @@ function sanitize() {
   n98-magerun.phar config:set admin/security/session_cookie_lifetime 86400
   n98-magerun.phar admin:user:create samtay s@t.com matrix7 sam tay
   n98-magerun.phar config:set admin/startup/page 'system/config'
+  n98-magerun.phar config:set dev/log/active 1
+}
+
+delete-customers(){
+  n98-magerun.phar db:query "SET foreign_key_checks = 0;TRUNCATE \`customer_address_entity\`;TRUNCATE \`customer_address_entity_datetime\`;TRUNCATE \`customer_address_entity_decimal\`;TRUNCATE \`customer_address_entity_int\`;TRUNCATE \`customer_address_entity_text\`;TRUNCATE \`customer_address_entity_varchar\`;TRUNCATE \`customer_entity\`;TRUNCATE \`customer_entity_datetime\`;TRUNCATE \`customer_entity_decimal\`;TRUNCATE \`customer_entity_int\`;TRUNCATE \`customer_entity_text\`;TRUNCATE \`customer_entity_varchar\`;SET foreign_key_checks = 1;"
+}
+
+getLocalXmlValue() {
+  echo $1 | sed -n -e "s/.*<$2><!\[CDATA\[\(.*\)\]\]><\/$2>.*/\1/p" | head -n 1
+}
+
+getLocalXmlKey(){
+  for f in `ls app/etc/local.xml*`
+  do
+    if [ ! -z $(getLocalXmlValue $f $1) ]
+    then
+      echo `getLocalXmlValue $f $1`
+      return
+    fi  
+  done
+
+}
+
+magento-database-table-sizes(){
+  n98-magerun.phar db:query --no-ansi "pager less -SFX; SELECT TABLE_SCHEMA, TABLE_NAME, (INDEX_LENGTH+DATA_LENGTH)/(1024*1024) AS SIZE_MB,TABLE_ROWS FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA in ('$1') ORDER BY SIZE_MB DESC;"
 }
