@@ -12,6 +12,13 @@ function clear-session() {
     sudo rm -rf var/session
   fi
 }
+function enable-errors() {
+  local file="index.php"
+  if [ -d webroot ]; then
+    file="webroot/index.php"
+  fi
+  sed -i.original 's/umask(0);/Mage::setIsDeveloperMode(true); ini_set("display_errors", 1); umask(0);/'  $file
+}
 alias clear-cache-n98="n98-magerun.phar cache:flush && n98-magerun.phar cache:clean"
 alias reindex-site="n98-magerun.phar index:reindex:all"
 alias fix-permissions="sudo chmod -R 777 media var app/etc && git config core.fileMode false"
