@@ -49,6 +49,8 @@ function sanitize() {
   n98-magerun.phar admin:user:create samtay s@t.com matrix7 sam tay
   n98-magerun.phar config:set admin/startup/page 'system/config'
   n98-magerun.phar config:set dev/log/active 1
+  n98-magerun.phar config:set dev/template/allow_symlink 1
+  n98-magerun.phar config:set google/analytics/active 0
 }
 
 delete-customers(){
