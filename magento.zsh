@@ -5,6 +5,19 @@ function get-magento-root() {
   fi
   echo $magentopath;
 }
+function get-blueacornui() {
+  local siteroot=`git rev-parse --show-toplevel`;
+  if [ -d "$siteroot/blueacornui" ]; then
+    echo "$siteroot/blueacornui"
+  else
+    echo "blueacornui directory not found"
+    exit 1
+  fi
+}
+
+function compile-assets() {
+  cd $(get-blueacornui) && grunt compile && cd -
+}
 function clear-cache-rm() {
   sudo rm -rf $(get-magento-root)/var/cache $(get-magento-root)/var/full_page_cache
 }
@@ -14,10 +27,14 @@ function clear-session() {
 }
 function enable-errors() {
   sed -i.original 's/umask(0);/Mage::setIsDeveloperMode(true); ini_set("display_errors", 1); umask(0);/' $(get-magento-root)/index.php
+  rm $(get-magento-root)/index.php.original
 }
 alias clear-cache-n98="n98-magerun.phar cache:flush && n98-magerun.phar cache:clean"
 alias reindex-site="n98-magerun.phar index:reindex:all"
-alias fix-permissions="sudo chmod -R 777 media var app/etc && git config core.fileMode false"
+function fix-permissions() {
+  sudo chmod -R 777 $(get-magento-root)/media $(get-magento-root)/var $(get-magento-root)/app/etc
+  git config core.fileMode false
+}
 function watch-exception() {
   less +F $(get-magento-root)/var/log/exception.log
 }
@@ -61,8 +78,9 @@ function sanitize() {
   echo "Set default admin page to system configuration"
   n98-magerun.phar config:set admin/startup/page 'system/config'
 
-  echo "Creating admin user..."
+  echo "Creating admin user and customer..."
   n98-magerun.phar admin:user:create samtay s@t.com matrix7 sam tay
+  n98-magerun.phar customer:create s@t.com matrix sam tay 1
 
   echo "Enabling Logging for exceptions..."
   n98-magerun.phar dev:log --global --on
