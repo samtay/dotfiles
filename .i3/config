@@ -45,6 +45,7 @@ exec_always --no-startup-id i3-msg 'workspace 1; exec hipchat'
 exec_always --no-startup-id i3-msg 'workspace 2; exec google-chrome'
 exec_always --no-startup-id i3-msg 'workspace 3; exec pstorm'
 exec_always --no-startup-id i3-msg 'workspace 3; exec i3-sensible-terminal'
+exec_always --no-startup-id i3-msg 'workspace 8; exec audacious'
 
 # startup workspaces
 workspace 3 output DP-2
