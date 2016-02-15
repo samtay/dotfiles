@@ -30,11 +30,17 @@ set expandtab
 set softtabstop=2
 set shiftwidth=2
 
+"""""""" Aliases """""""
+
+" Save read-only files easily
+cmap w!! w !sudo tee > /dev/null %
+" Comment command with '#' by default
+cmap comment s/^/#/
 " New lines without insert mode
 map <Enter> o<ESC>
 map <S-Enter> O<ESC>
 
-" Colors
+""""""" Colors
 set t_Co=256
 set background=dark
 let g:kolor_italic=1                    " Enable italic. Default: 1
@@ -42,6 +48,3 @@ let g:kolor_bold=1                      " Enable bold. Default: 1
 let g:kolor_underlined=0                " Enable underline. Default: 0
 let g:kolor_alternative_matchparen=0    " Gray 'MatchParen' color. Default: 0
 colorscheme gruvbox
-
-" Save read-only files easily
-cmap w!! w !sudo tee > /dev/null %
