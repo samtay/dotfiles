@@ -1,0 +1,9 @@
+set nocompatible
+filetype off
+
+" New lines without insert mode
+map <Enter> o<ESC>
+map <S-Enter> O<ESC>
+
+" Save read-only files easily
+cmap w!! w !sudo tee > /dev/null %
