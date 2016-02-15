@@ -37,8 +37,13 @@ set $left h
 set $right l
 
 # fix fn keys
-bindsym XF86MonBrightnessUp exec xbacklight +10
-bindsym XF86MonBrightnessDown exec xbacklight -10
+bindsym XF86MonBrightnessUp exec xbacklight -inc 10
+bindsym XF86MonBrightnessDown exec xbacklight -dec 10
+bindsym XF86AudioPause exec audacious --play-pause
+bindsym XF86AudioPlay exec audacious --play-pause
+bindsym $mod+XF86AudioPlay exec audacious --show-jump-box
+#bindsym XF86AudioPrev exec audacious --rew
+#bindsym XF86AudioNext exec audacious --fwd
 
 # startup apps
 exec_always --no-startup-id i3-msg 'workspace 1; exec hipchat'
