@@ -1,6 +1,6 @@
-alias g2sites='cd /home/sites && ll'
-alias g2modules='cd ~/modules'
-alias g2innovation='cd ~/innovation'
+alias g2sites='cd /home/samtay/git/sites && ll'
+alias g2modules='cd ~/git/modules'
+alias g2innovation='cd ~/git/innovation'
 alias copy-ssh-key='echo "todo:: fix this"'
 alias reload-zsh='source ~/.zshrc'
 alias ba-jump="ssh -o 'ProxyCommand ssh -W %h:%p jump'"
