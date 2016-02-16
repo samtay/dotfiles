@@ -52,17 +52,21 @@ bindsym XF86AudioPrev exec audacious --rew
 bindsym XF86AudioNext exec audacious --fwd
 
 # startup apps
-exec_always --no-startup-id i3-msg 'workspace 1; exec hipchat'
-exec_always --no-startup-id i3-msg 'workspace 2; exec google-chrome'
-exec_always --no-startup-id i3-msg 'workspace 3; exec pstorm'
-exec_always --no-startup-id i3-msg 'workspace 3; exec i3-sensible-terminal'
-exec_always --no-startup-id i3-msg 'workspace 8; exec audacious'
+exec --no-startup-id i3-msg 'workspace 1; exec hipchat'
+exec --no-startup-id i3-msg 'workspace 2; exec google-chrome'
+exec --no-startup-id i3-msg 'workspace 3; exec pstorm'
+exec --no-startup-id i3-msg 'workspace 3; exec i3-sensible-terminal'
+exec --no-startup-id i3-msg 'workspace 8; exec audacious'
+
+exec_always --no-startup-id /usr/bin/syndaemon -d -i 1
 
 # startup workspaces
 workspace 3 output DP-2
 
 # workspace switching
 workspace_auto_back_and_forth yes
+bindsym $mod+Tab workspace next
+bindsym $mod+Shift+Tab workspace prev
 
 # container stacking by default
 workspace_layout stacking
