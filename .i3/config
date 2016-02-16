@@ -36,14 +36,20 @@ set $down j
 set $left h
 set $right l
 
-# fix fn keys
+# fn keys
+# volume
+bindsym XF86AudioLowerVolume exec amixer set Master playback 1-
+bindsym XF86AudioRaiseVolume exec amixer set Master playback 1+
+bindsym XF86AudioMute exec amixer set Master playback 0%
+# brightness
 bindsym XF86MonBrightnessUp exec xbacklight -inc 10
 bindsym XF86MonBrightnessDown exec xbacklight -dec 10
+# audacious controls
 bindsym XF86AudioPause exec audacious --play-pause
 bindsym XF86AudioPlay exec audacious --play-pause
 bindsym $mod+XF86AudioPlay exec audacious --show-jump-box
-#bindsym XF86AudioPrev exec audacious --rew
-#bindsym XF86AudioNext exec audacious --fwd
+bindsym XF86AudioPrev exec audacious --rew
+bindsym XF86AudioNext exec audacious --fwd
 
 # startup apps
 exec_always --no-startup-id i3-msg 'workspace 1; exec hipchat'
