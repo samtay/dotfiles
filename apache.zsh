@@ -17,8 +17,8 @@ add-site(){
   local site_toupper=$(echo "$1" | tr '[:lower:]' '[:upper:]')
   echo "$VHOST_TEMPLATE" | sed "s/{site_tolower}/$site_tolower/g" | sed "s/{site_toupper}/$site_toupper/g" | sudo tee /etc/apache2/sites-available/$site_tolower.conf > /dev/null
   echo "127.0.0.1 $site_tolower.dev" | sudo tee -a /etc/hosts > /dev/null
-  sudo a2ensite $site_tolower.conf
-  sudo service apache2 reload
+  enable-site "$site_tolower.conf"
+  restart-apache
 }
 
 remove-site(){
@@ -26,4 +26,8 @@ remove-site(){
   sudo a2dissite $site_tolower
   sudo rm /etc/apache2/sites-available/$site_tolower.conf
   sudo service apache2 reload
+}
+
+enable-site(){
+  sudo a2ensite $1
 }
