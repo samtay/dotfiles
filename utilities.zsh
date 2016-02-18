@@ -5,6 +5,9 @@ alias copy-ssh-key='echo "todo:: fix this"'
 alias reload-zsh='source ~/.zshrc'
 alias ba-jump="ssh -o 'ProxyCommand ssh -W %h:%p jump'"
 alias ba-jump-scp="scp -o 'ProxyCommand ssh -W %h:%p jump'"
+alias ba-vpn="sudo openvpn --daemon /etc/openvpn/ba-client.conf"
+alias wifi-scan="sudo iwlist wlp3s0 scan"
+
 copy-file(){
 echo "todo:: fix this"
 }
