@@ -53,8 +53,6 @@ plugins=(git n98-magerun docker docker-compose boot2docker)
 
 # User configuration
 
-RVM_PATH="/home/samtay/.rvm/gems/ruby-2.0.0-p643/bin"
-export PATH="$PATH:$RVM_PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
@@ -95,7 +93,5 @@ export BLUEACORN_SERVICE_CREDENTIALS="/Users/samtay/innovation/devops-docker/mac
 ulimit -n 65536
 ulimit -u 2048
 export BLUEACORN_BOOTSTRAP_DIR="/home/samtay/bootstrap"
-
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
-
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+RVM_PATH="/home/samtay/.rvm/gems/ruby-2.0.0-p643/bin"
+export PATH="$RVM_PATH:$PATH"
