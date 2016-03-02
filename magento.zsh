@@ -43,7 +43,12 @@ function watch-system() {
 }
 
 function sanitize() {
-  echo "Setting up site $1..."
+  local url="$1"
+  if [ -z "$url" ]; then
+    read "url?Base URL (example: client.dev): "
+  fi
+
+  echo "Setting up site $url..."
 
   echo "Disabling GA, setting up payment methods..."
   n98-magerun.phar config:set google/analytics/active 0
@@ -56,8 +61,8 @@ function sanitize() {
   n98-magerun.phar config:set dev/css/merge_files 0
 
   echo "Setting up URL configuration..."
-  n98-magerun.phar config:set web/unsecure/base_url "http://$1/"
-  n98-magerun.phar config:set web/secure/base_url "http://$1/"
+  n98-magerun.phar config:set web/unsecure/base_url "http://$url/"
+  n98-magerun.phar config:set web/secure/base_url "http://$url/"
   n98-magerun.phar config:set web/unsecure/base_link_url '{{unsecure_base_url}}'
   n98-magerun.phar config:set web/unsecure/base_skin_url '{{unsecure_base_url}}skin/'
   n98-magerun.phar config:set web/unsecure/base_media_url '{{unsecure_base_url}}media/'
