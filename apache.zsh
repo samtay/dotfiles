@@ -11,11 +11,25 @@ VHOST_TEMPLATE="
   DocumentRoot $SITES_DIR/{site_toupper}/webroot
 </VirtualHost>
 "
+VHOST_TEMPLATE_NOWEBROOT="
+<VirtualHost *:80>
+  ServerName {site_tolower}.dev
+  DocumentRoot $SITES_DIR/{site_dir}
+</VirtualHost>
+"
 
 add-site(){
   local site_tolower=$(echo "$1" | tr '[:upper:]' '[:lower:]')
   local site_toupper=$(echo "$1" | tr '[:lower:]' '[:upper:]')
   echo "$VHOST_TEMPLATE" | sed "s/{site_tolower}/$site_tolower/g" | sed "s/{site_toupper}/$site_toupper/g" | sudo tee /etc/apache2/sites-available/$site_tolower.conf > /dev/null
+  echo "127.0.0.1 $site_tolower.dev" | sudo tee -a /etc/hosts > /dev/null
+  enable-site "$site_tolower.conf"
+  restart-apache
+}
+
+add-site-no-webroot(){
+  local site_tolower=$(echo "$1" | tr '[:upper:]' '[:lower:]')
+  echo "$VHOST_TEMPLATE_NOWEBROOT" | sed "s/{site_tolower}/$site_tolower/g" | sed "s/{site_dir}/$1/g" | sudo tee /etc/apache2/sites-available/$site_tolower.conf > /dev/null
   echo "127.0.0.1 $site_tolower.dev" | sudo tee -a /etc/hosts > /dev/null
   enable-site "$site_tolower.conf"
   restart-apache
