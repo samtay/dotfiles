@@ -40,6 +40,12 @@ cmap comment s/^/#/
 map <Enter> o<ESC>
 map <S-Enter> O<ESC>
 
+" copy to buffer
+vmap <C-c> :w! ~/.vimbuffer<CR>
+nmap <C-c> :.w! ~/.vimbuffer<CR>
+" paste from buffer
+map <C-p> :r ~/.vimbuffer<CR>
+
 """"""" Colors
 set t_Co=256
 set background=dark
