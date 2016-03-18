@@ -12,14 +12,29 @@ alias wifi-connect="nmcli -a d wifi connect"
 alias displays-on="xrandr --output HDMI-0 --auto --rotate left --right-of DP-0 && xrandr --output DP-2 --auto --right-of HDMI-0"
 alias displays-off="xrandr --output HDMI-0 --off && xrandr --output DP-2 --off"
 alias screenshot-select="scrot -s -e 'mv \$f ~/screenshots/'"
-
 copy-file(){
 echo "todo:: fix this"
 }
+
 watch(){
   less +F $1
 }
 
 mysql-command() {
   echo "$1" | mysql -uroot -proot
+}
+
+find-process() {
+  ps aux | grep "$@"
+}
+
+XDEBUG_EXTENSION_ON="zend_extension=\/usr\/lib\/php5\/20131226\/xdebug.so"
+XDEBUG_EXTENSION_OFF=";$XDEBUG_EXTENSION_ON"
+
+cli-xdebug-on() {
+  sudo sed -i "s/$XDEBUG_EXTENSION_OFF/$XDEBUG_EXTENSION_ON/g" /etc/php5/cli/php.ini
+}
+
+cli-xdebug-off() {
+  sudo sed -i "s/$XDEBUG_EXTENSION_ON/$XDEBUG_EXTENSION_OFF/g" /etc/php5/cli/php.ini
 }
