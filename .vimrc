@@ -18,7 +18,7 @@ filetype plugin indent on    " required
 
 """""""""""""""""""""""""""" Personal Vim Settings """"""""""""""""""""
 " Show line numbers by default
-set number
+set relativenumber
 
 " Don't auto comment for the love of god
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
@@ -38,6 +38,7 @@ cmap w!! w !sudo tee > /dev/null %
 cmap comment s/^/#/
 " New lines without insert mode
 map <Enter> o<ESC>
+" Damn this doesn't work
 map <S-Enter> O<ESC>
 
 " copy to buffer
@@ -45,6 +46,18 @@ vmap <C-c> :w! ~/.vimbuffer<CR>
 nmap <C-c> :.w! ~/.vimbuffer<CR>
 " paste from buffer
 map <C-p> :r ~/.vimbuffer<CR>
+
+function! NumberToggle()
+  if(&rnu == 0 && &nu == 0)
+    set nu
+  elseif(&nu == 1)
+    set nonu
+    set rnu
+  else
+    set nornu
+  endif
+endfunc
+nnoremap <C-n> :call NumberToggle()<CR>
 
 """"""" Colors
 set t_Co=256

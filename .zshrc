@@ -95,3 +95,4 @@ ulimit -u 2048
 export BLUEACORN_BOOTSTRAP_DIR="/home/samtay/bootstrap"
 RVM_PATH="/home/samtay/.rvm/gems/ruby-2.0.0-p643/bin"
 export PATH="$RVM_PATH:$PATH"
+export BLUEACORN_SERVICE_CREDENTIALS="/home/samtay/git/innovation/devops-docker/machines/service-credentials"
