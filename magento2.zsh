@@ -7,7 +7,7 @@ function get-magento-root() {
 }
 
 function bin-magento(){
-  php $(get-magento-root)/bin/magento "$@"
+  php $(get-magento-root)/bin/magento -vvv "$@"
 }
 
 function install-m2(){
