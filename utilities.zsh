@@ -1,8 +1,8 @@
-alias g2sites='cd /home/samtay/git/sites && ll'
 alias g2modules='cd ~/git/modules'
 alias g2innovation='cd ~/git/innovation'
 alias g2etc='cd ~/git/etc'
-alias copy-ssh-key='echo "todo:: fix this"'
+alias copy="xclip -sel clip"
+alias copy-ssh-key='copy-file ~/.ssh/id_rsa.pub'
 alias reload-zsh='source ~/.zshrc'
 alias ba-jump="ssh -o 'ProxyCommand ssh -W %h:%p jump'"
 alias ba-jump-scp="scp -o 'ProxyCommand ssh -W %h:%p jump'"
@@ -14,7 +14,7 @@ alias displays-on="xrandr --output HDMI-0 --auto --rotate left --right-of DP-0 &
 alias displays-off="xrandr --output HDMI-0 --off && xrandr --output DP-2 --off"
 alias screenshot-select="scrot -s -e 'mv \$f ~/screenshots/'"
 copy-file(){
-echo "todo:: fix this"
+  cat $1 | xclip -sel clip
 }
 
 watch(){
