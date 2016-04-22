@@ -13,6 +13,11 @@ alias wifi-connect="nmcli -a d wifi connect"
 alias displays-on="xrandr --output HDMI-0 --auto --rotate left --right-of DP-0 && xrandr --output DP-2 --auto --right-of HDMI-0"
 alias displays-off="xrandr --output HDMI-0 --off && xrandr --output DP-2 --off"
 alias screenshot-select="scrot -s -e 'mv \$f ~/screenshots/'"
+
+g2site() {
+  cd "$SITES_DIR/$1" && ll
+}
+
 copy-file(){
   cat $1 | xclip -sel clip
 }
