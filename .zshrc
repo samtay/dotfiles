@@ -7,6 +7,9 @@ export ZSH=/home/samtay/.oh-my-zsh
 # time that oh-my-zsh is loaded.
 ZSH_THEME="Soliah"
 
+# Globals used during development
+SITES_DIR="/home/samtay/git/sites/"
+
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
 
@@ -49,7 +52,7 @@ ZSH_THEME="Soliah"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git n98-magerun docker docker-compose boot2docker m2 composer)
+plugins=(git n98-magerun n98-magerun2 docker docker-compose boot2docker m2 composer g2site)
 
 # User configuration
 
