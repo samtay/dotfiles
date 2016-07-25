@@ -55,11 +55,11 @@ bindsym Print exec scrot -e 'mv $f ~/screenshots/'
 bindsym $mod+Print exec scrot -s -e 'mv $f ~/screenshots/'
 
 # startup apps
-exec --no-startup-id i3-msg 'workspace 1; exec google-chrome'
-exec --no-startup-id i3-msg 'workspace 1; exec hipchat'
-exec --no-startup-id i3-msg 'workspace 1; exec pstorm'
-exec --no-startup-id i3-msg 'workspace 1; exec i3-sensible-terminal'
-#exec --no-startup-id i3-msg 'workspace 1; exec audacious'
+exec --no-startup-id exec google-chrome
+exec --no-startup-id exec hipchat4
+exec --no-startup-id exec pstorm
+exec --no-startup-id exec i3-sensible-terminal
+exec --no-startup-id exec audacious
 
 exec --no-startup-id /usr/bin/syndaemon -d -i 1
 exec --no-startup-id setopt NO_NOmatch
