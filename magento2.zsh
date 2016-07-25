@@ -21,3 +21,7 @@ function install-m2(){
   fi
   php $(get-magento-root)/bin/magento setup:install --base-url="http://$url/" --backend-frontname=admin --db-host=localhost --db-name="$db" --db-user=root --db-password=root --admin-firstname=sam --admin-lastname=tay --admin-email=s@t.com --admin-user=samtay --admin-password=matrix7 --language=en_US --currency=USD --timezone=America/New_York --use-rewrites=1
 }
+
+function clear-cache() {
+  sudo rm -rf $(get-magento-root)/var/cache $(get-magento-root)/var/page_cache $(get-magento-root)/var/generation $(get-magento-root)/var/di
+}
