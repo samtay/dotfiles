@@ -66,6 +66,7 @@ exec --no-startup-id setopt NO_NOmatch
 exec_always --no-startup-id /usr/bin/synclient HorizTwoFingerScroll=1
 
 # startup workspaces
+workspace 2 output HDMI-0
 workspace 3 output DP-2
 
 # workspace switching

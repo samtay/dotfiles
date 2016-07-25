@@ -1,5 +1,6 @@
 set nocompatible
 set relativenumber
+set number
 filetype off
 " Save read-only files easily
 cmap w!! w !sudo tee > /dev/null %

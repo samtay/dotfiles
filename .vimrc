@@ -9,6 +9,7 @@ Plugin 'gmarik/Vundle.vim'
 
 """"""""""" Custom added plugins """"""""""""""""""""
 Plugin 'morhetz/gruvbox'
+Plugin 'StanAngeloff/php.vim'
 " Plugin 'zeis/vim-kolor'
 
 
