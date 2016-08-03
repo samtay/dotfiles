@@ -16,9 +16,10 @@ function dockmaster() {
   fi
 
   # forward args to docker-compose, executing from composition directory
-  cd "$composition_dir"
-  docker-compose $@
-  cd ~-
+  (
+    cd "$composition_dir"
+    docker-compose $@
+  )
 }
 
 # check cwd is in git repo
