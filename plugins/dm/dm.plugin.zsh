@@ -1,4 +1,4 @@
-#compdef dockmaster
+#compdef dm
 
 _list_compositions() {
   local compositions_dir="$(_get_repo_root)/compositions"
@@ -12,7 +12,7 @@ _compadd_compositions () {
   compadd $(_list_compositions)
 }
 
-_dockmaster () {
+_dm () {
   if ! _is_in_docker_repo; then
     return 1
   fi
@@ -20,4 +20,4 @@ _dockmaster () {
     '1: :_compadd_compositions' \
 }
 
-compdef _dockmaster dockmaster
+compdef _dm dm
