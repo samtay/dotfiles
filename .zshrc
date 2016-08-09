@@ -56,7 +56,7 @@ SITES_DIR=$GIT_DIR/sites
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git n98-magerun n98-magerun2 docker docker-compose boot2docker m2 composer g2site g2module g2innovation g2etc)
+plugins=(git n98-magerun n98-magerun2 docker docker-compose boot2docker m2 composer g2site g2module g2innovation g2etc dm)
 
 # User configuration
 
@@ -104,3 +104,4 @@ ulimit -n 65536
 ulimit -u 2048
 export BLUEACORN_BOOTSTRAP_DIR="/home/samtay/bootstrap"
 export BLUEACORN_SERVICE_CREDENTIALS="/home/samtay/git/innovation/devops-docker/machines/service-credentials"
+export PATH="$PATH:/home/samtay/git/innovation/devops-docker/bin"
