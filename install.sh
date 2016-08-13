@@ -1,0 +1,11 @@
+audacious
+xbacklight
+lamp-server
+tree
+nodejs
+tmux
+atom
+docker
+docker-machine
+docker-compose
+ansible
