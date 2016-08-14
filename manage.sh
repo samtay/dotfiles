@@ -11,7 +11,9 @@ display_help() {
   Usage: manage.sh <command>
 
   Commands:
-  symlink              symlinks dotfiles to home directory
+  link-config              stow directories of this repo into ~
+  install-packages         install base packages (from packages.txt)
+  bootstrap                bootstrap my arch linux environment
 EOF
 
   if [ $# -eq 0 ]; then
