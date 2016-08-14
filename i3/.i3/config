@@ -31,9 +31,9 @@ set $mod Mod1
 
 # use these keys for focus, movement, and resize directions when reaching for
 # the arrows is not convenient
-set $up k
-set $down j
 set $left h
+set $down j
+set $up k
 set $right l
 
 # fn keys
@@ -45,24 +45,22 @@ bindsym XF86AudioMute exec amixer set Master playback 0%
 bindsym XF86MonBrightnessUp exec xbacklight -inc 10
 bindsym XF86MonBrightnessDown exec xbacklight -dec 10
 # audacious controls
-bindsym XF86AudioPause exec audacious --play-pause
-bindsym XF86AudioPlay exec audacious --play-pause
-bindsym $mod+XF86AudioPlay exec audacious --show-jump-box
-bindsym XF86AudioPrev exec audacious --rew
-bindsym XF86AudioNext exec audacious --fwd
+#bindsym XF86AudioPause exec audacious --play-pause
+#bindsym XF86AudioPlay exec audacious --play-pause
+#bindsym $mod+XF86AudioPlay exec audacious --show-jump-box
+#bindsym XF86AudioPrev exec audacious --rew
+#bindsym XF86AudioNext exec audacious --fwd
 # screenshot controls
 bindsym Print exec scrot -e 'mv $f ~/screenshots/'
 bindsym $mod+Print exec scrot -s -e 'mv $f ~/screenshots/'
 
 # startup apps
-exec --no-startup-id exec google-chrome
+exec --no-startup-id exec google-chrome-stable
 exec --no-startup-id exec hipchat4
-exec --no-startup-id exec pstorm
-exec --no-startup-id exec i3-sensible-terminal
-exec --no-startup-id exec audacious
+exec --no-startup-id exec termite
 
-exec --no-startup-id /usr/bin/syndaemon -d -i 1
-exec --no-startup-id setopt NO_NOmatch
+#exec --no-startup-id /usr/bin/syndaemon -d -i 1
+#exec --no-startup-id setopt NO_NOmatch
 exec_always --no-startup-id /usr/bin/synclient HorizTwoFingerScroll=1
 
 # startup workspaces

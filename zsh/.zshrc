@@ -5,7 +5,7 @@ export ZSH=/home/samtay/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="Soliah"
+ZSH_THEME="robbyrussell"
 
 # Global constants
 GIT_DIR=$HOME/git
@@ -100,8 +100,8 @@ export BLUEACORN_DIR="/etc/blueacorn"
 export BLUEACORN_BOOTSTRAP_DIR="/Users/samtay/devops-bootstrap"
 export BLUEACORN_PROJ_DIR="/Users/samtay"
 export BLUEACORN_SERVICE_CREDENTIALS="/Users/samtay/innovation/devops-docker/machines/service-credentials"
-ulimit -n 65536
-ulimit -u 2048
+#ulimit -n 65536
+#ulimit -u 2048
 export BLUEACORN_BOOTSTRAP_DIR="/home/samtay/bootstrap"
 export BLUEACORN_SERVICE_CREDENTIALS="/home/samtay/git/innovation/devops-docker/machines/service-credentials"
 export PATH="$PATH:/home/samtay/git/innovation/devops-docker/bin"
