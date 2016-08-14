@@ -1,5 +1,6 @@
 base-devel
 dmenu
+tree
 infinality-bundle
 git
 gpicview
