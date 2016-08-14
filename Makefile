@@ -19,8 +19,10 @@ enable-services:
 	sudo tlp start
 
 link-config:
-	stow --restow `ls -d */`
-
+	for d in `ls .`;
+	do
+	    ( stow $d )
+	done
 set-shell:
 	chsh -s `which zsh`
 
