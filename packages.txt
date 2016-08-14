@@ -25,4 +25,5 @@ ranger
 zathura
 evince
 cmus
+nodejs-tldr
 yaourt
