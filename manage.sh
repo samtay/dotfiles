@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-### Add dm script to PATH
-### Warning: depends on BlueAcornInc\bootstrap
-
 # utility
 #########
 
@@ -35,21 +32,53 @@ error(){
 type greadlink >/dev/null 2>&1 && CWD="$(dirname "$(greadlink -f "$0")")" || \
   CWD="$(dirname "$(readlink -f "$0")")"
 
-symlink_files=(".atom" ".i3/config" ".ideavimrc" ".oh-my-zsh/custom" ".tmux.conf" ".vimrc" ".zshrc")
-
 # functions
 ###########
-symlink() {
-  # TODO check if these are symlinks first
-  for file in "${symlink_files[@]}"
-  do
-    if [ ! -e "$HOME/${file}" ]; then
-      echo "Symlinking to ~/${file}"
-      ln -s "${CWD}/${file}" "$HOME/${file}"
-    fi
+link-config() {
+  for d in $(ls -d */); do
+    ( stow --target=$HOME --restow $d )
   done
 }
 
+install-packages() {
+  sudo pacman -Sy yaourt
+  yaourt -S --needed --noconfirm `cat packages.txt`
+}
+
+add-repositories() {
+  add-infinality-key
+  cat repositories.txt | sudo tee -a /etc/pacman.conf
+}
+
+add-infinality-key() {
+  sudo dirmngr &
+  sleep 1
+  sudo pacman-key -r 962DDE58
+  sudo pacman-key --lsign-key 962DDE58
+}
+
+enable-services() {
+  sudo systemctl enable tlp tlp-sleep
+  sudo systemctl disable systemd-rfkill
+  sudo tlp start
+}
+
+set-shell() {
+ chsh -s $(which zsh)
+}
+
+show-post-install() {
+  cat ./post-install.txt
+}
+
+bootstrap() {
+  add-repositories
+  install-packages
+  enable-services
+  link-config
+  set-shell
+  show-notes
+}
 
 # runtime
 #########
@@ -60,7 +89,9 @@ else
   while [ $# -ne 0 ]; do
     case $1 in
       -h|--help|help)    display_help ;;
-      symlink)           runstr="symlink" ;;
+      link-config)       runstr="link-config" ;;
+      install-packages)  runstr="install-packages" ;;
+      bootstrap)         runstr="bootstrap" ;;
       *)                 echo "invalid option: $1" ; display_help 1 ;;
     esac
     shift
