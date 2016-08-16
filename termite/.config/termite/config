@@ -1,57 +1,72 @@
 [options]
-resize_grip = false
 scroll_on_output = false
 scroll_on_keystroke = true
 audible_bell = false
-visible_bell = false
 mouse_autohide = false
 allow_bold = true
 dynamic_title = true
 urgent_on_bell = true
 clickable_url = true
-scrollback_lines = 1000
+#font = Office Code Pro 8
+scrollback_lines = 10000
 search_wrap = true
+#icon_name = terminal
+#geometry = 640x480
+
+# "system", "on" or "off"
 cursor_blink = system
+
+# "block", "underline" or "ibeam"
 cursor_shape = block
-browser = chromium
+
+# $BROWSER is used by default if set, with xdg-open as a fallback
+#browser = xdg-open
+
+# set size hints for the window
+#size_hints = false
+
+# emit escape sequences for other keys modified by Control
+#modify_other_keys = false
 
 [colors]
+cursor = #C5C5C5
+foreground = #dee2e9
+foreground_bold = #dee1e9
+background = #191918
 
-# special
-foreground      = #c0b18b
-foreground_bold = #c0b18b
-cursor          = #c0b18b
-#background      = #1f1f1f
-background = rgba(31 ,31, 31, 0.85)
+# 20% background transparency (requires a compositor)
+#background = rgba(63, 63, 63, 0.8)
 
-# black
-color0  = #4a3637
-color8  = #4a3637
+# if unset, will reverse foreground and background
+#highlight = #2f2f2f
 
-# red 
-color1  = #d17b49
-color9  = #d17b49
+# colors from color0 to color254 can be set
+color0 = #1f1f1f
+color1 = #F81118
+color2 = #2dc55e
+color3 = #ecba0f
+color4 = #2a84d2
+color5 = #4e5ab7
+color6 = #1081d6
+color7 = #d6dbe5
+color8 = #d6dbe5
+color9 = #de352e
+color10 = #1dd361
+color11 = #f3bd09
+color12 = #1081D6
+color13 = #5350b9
+color14 = #0f7ddb
+color15 = #ffffff
 
-# green
-color2  = #7b8748
-color10 = #7b8748
+[hints]
+#font = Source Code Pro 12
+#foreground = #dee2ea
+#background = #191918
+#active_foreground = #dee2ea 
+#active_background = #191918
+#padding = 2
+#border = #3f3f3f
+#border_width = 0.5
+#roundness = 2.0
 
-# yellow
-color3  = #af865a
-color11 = #af865a
-
-# blue
-color4  = #535c5c
-color12 = #535c5c
-
-# magenta
-color5  = #775759
-color13 = #775759
-
-# cyan
-color6  = #6d715e
-color14 = #6d715e
-
-# white
-color7  = #c0b18b
-color15 = #c0b18b
+# vim: ft=dosini cms=#%s
