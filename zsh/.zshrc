@@ -5,7 +5,7 @@ export ZSH=/home/samtay/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="robbyrussell"
+ZSH_THEME="half-life"
 
 # Global constants
 GIT_DIR=$HOME/git
@@ -90,18 +90,16 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 export PATH="/usr/local/sbin:$PATH"
 export PATH="/etc/blueacorn/bin:$PATH"
-export PATH="$PATH:/usr/local/texlive/2016/bin/x86_64-linux"
+#export PATH="$PATH:/usr/local/texlive/2016/bin/x86_64-linux"
 export MACHINE_STORAGE_PATH="/etc/blueacorn/docker-machine"
-RVM_PATH="/home/samtay/.rvm/gems/ruby-2.0.0-p643/bin"
-export PATH="$RVM_PATH:$PATH"
 export VISUAL=vim
 export EDITOR="$VISUAL"
 export BLUEACORN_DIR="/etc/blueacorn"
-export BLUEACORN_BOOTSTRAP_DIR="/Users/samtay/devops-bootstrap"
 export BLUEACORN_PROJ_DIR="/Users/samtay"
-export BLUEACORN_SERVICE_CREDENTIALS="/Users/samtay/innovation/devops-docker/machines/service-credentials"
 #ulimit -n 65536
 #ulimit -u 2048
-export BLUEACORN_BOOTSTRAP_DIR="/home/samtay/bootstrap"
 export BLUEACORN_SERVICE_CREDENTIALS="/home/samtay/git/innovation/devops-docker/machines/service-credentials"
 export PATH="$PATH:/home/samtay/git/innovation/devops-docker/bin"
+export BLUEACORN_BOOTSTRAP_DIR="/home/samtay/git/innovation/bootstrap"
+NEWLINE=$'\n'
+PROMPT="$PROMPT$NEWLINE"
