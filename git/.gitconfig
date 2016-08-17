@@ -28,8 +28,8 @@
   branch = auto
 
 [core]
-  editor = some_editor
-  excludesfile = /home/yourname/.gitignore_global
+  editor = vim
+  excludesfile = /home/samtay/.gitignore_global
   whitespace = tabwidth=4
 
 [branch]
@@ -187,4 +187,5 @@
   # Stash operations
   sl = stash list
   sa = stash apply
+  pop = stash pop
   ss = stash save
