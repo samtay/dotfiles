@@ -43,15 +43,12 @@ find-process() {
   ps aux | grep "$@"
 }
 
-cli-xdebug-toggle() {
-  local XDEBUG_EXTENSION_ON="zend_extension=\/usr\/lib\/php5\/20131226\/xdebug.so"
-  local XDEBUG_EXTENSION_OFF=";$XDEBUG_EXTENSION_ON"
-  if grep -q $XDEBUG_EXTENSION_OFF "/etc/php5/cli/php.ini"; then
-    sudo sed -i "s/$XDEBUG_EXTENSION_OFF/$XDEBUG_EXTENSION_ON/g" /etc/php5/cli/php.ini
-    echo "CLI xdebug enabled"
-  else
-    sudo sed -i "s/$XDEBUG_EXTENSION_ON/$XDEBUG_EXTENSION_OFF/g" /etc/php5/cli/php.ini
-    echo "CLI xdebug disabled"
+xdebug-toggle() {
+  if [ -e /etc/php/conf.d/xdebug.ini ]; then
+    sudo mv /etc/php/conf.d/xdebug.ini /etc/php/conf.d/xdebug.ini.bak
+  elif [ -e /etc/php/conf.d/xdebug.ini.bak ]; then
+    sudo mv /etc/php/conf.d/xdebug.ini.bak /etc/php/conf.d/xdebug.ini
   fi
+}
 }
 
