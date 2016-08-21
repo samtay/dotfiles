@@ -101,5 +101,3 @@ export BLUEACORN_PROJ_DIR="/Users/samtay"
 export BLUEACORN_SERVICE_CREDENTIALS="/home/samtay/git/innovation/devops-docker/machines/service-credentials"
 export PATH="$PATH:/home/samtay/git/innovation/devops-docker/bin"
 export BLUEACORN_BOOTSTRAP_DIR="/home/samtay/git/innovation/bootstrap"
-NEWLINE=$'\n'
-PROMPT="$PROMPT$NEWLINE"
