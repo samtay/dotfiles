@@ -50,5 +50,4 @@ xdebug-toggle() {
     sudo mv /etc/php/conf.d/xdebug.ini.bak /etc/php/conf.d/xdebug.ini
   fi
 }
-}
 
