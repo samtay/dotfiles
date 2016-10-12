@@ -9,6 +9,8 @@ Plugin 'gmarik/Vundle.vim'
 
 """"""""""" Custom added plugins """"""""""""""""""""
 Plugin 'morhetz/gruvbox'
+Plugin 'neovimhaskell/haskell-vim'
+Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'StanAngeloff/php.vim'
 " Plugin 'zeis/vim-kolor'
 
@@ -37,6 +39,7 @@ set shiftwidth=2
 cmap w!! w !sudo tee > /dev/null %
 " Comment command with '#' by default
 cmap comment s/^/#/
+
 " New lines without insert mode
 map <Enter> o<ESC>
 " Damn this doesn't work
