@@ -46,8 +46,13 @@ find-process() {
 xdebug-toggle() {
   if [ -e /etc/php/conf.d/xdebug.ini ]; then
     sudo mv /etc/php/conf.d/xdebug.ini /etc/php/conf.d/xdebug.ini.bak
+    echo 'Xdebug disabled'
   elif [ -e /etc/php/conf.d/xdebug.ini.bak ]; then
     sudo mv /etc/php/conf.d/xdebug.ini.bak /etc/php/conf.d/xdebug.ini
+    echo 'Xdebug enabled'
   fi
 }
 
+fix-broken-symlinks() {
+  find -L . -type l -exec rm {} \;
+}
