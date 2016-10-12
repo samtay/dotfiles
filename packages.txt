@@ -1,4 +1,5 @@
 base-devel
+networkmanager
 dmenu
 tree
 infinality-bundle
@@ -6,12 +7,10 @@ git
 gpicview
 i3-wm
 i3lock
-i3session-git
 i3status
 nodejs
 npm
 openssh
-pulseaudio
 playerctl
 lxappearance
 stow
@@ -23,7 +22,10 @@ xclip
 scrot
 ranger
 zathura
+texlive-most
 evince
-cmus
 nodejs-tldr
-yaourt
+the_silver_searcher
+audacious
+xbacklight
+cmus
