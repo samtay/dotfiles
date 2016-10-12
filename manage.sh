@@ -37,17 +37,20 @@ type greadlink >/dev/null 2>&1 && CWD="$(dirname "$(greadlink -f "$0")")" || \
 # functions
 ###########
 link-config() {
+  echo "Linking configuration..."
   for d in $(ls -d */); do
     ( stow --target=$HOME --restow $d )
   done
 }
 
 install-packages() {
+  echo "Installing packages from packages.txt..."
   sudo pacman -Sy yaourt
-  yaourt -S `cat packages.txt`
+  yaourt -S --needed --noconfirm `cat packages.txt`
 }
 
 add-repositories() {
+  echo "Adding repositories from repositories.txt..."
   add-infinality-key
   cat repositories.txt | sudo tee -a /etc/pacman.conf
 }
@@ -60,17 +63,19 @@ add-infinality-key() {
 }
 
 enable-services() {
-  sudo systemctl enable tlp tlp-sleep
+  echo "Enabling systemctl services..."
+  sudo systemctl enable NetworkManager tlp tlp-sleep
   sudo systemctl disable systemd-rfkill
   sudo tlp start
 }
 
 set-shell() {
- chsh -s $(which zsh)
+  echo "Setting shell to zsh..."
+  chsh -s $(which zsh)
 }
 
 show-post-install() {
-  cat ./post-install.txt
+  echo "... bootstrapped successfully!"
 }
 
 bootstrap() {
@@ -79,7 +84,7 @@ bootstrap() {
   enable-services
   link-config
   set-shell
-  show-notes
+  show-post-install
 }
 
 # runtime
