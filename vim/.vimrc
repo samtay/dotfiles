@@ -9,7 +9,8 @@ Plugin 'gmarik/Vundle.vim'
 
 """"""""""" Custom added plugins """"""""""""""""""""
 Plugin 'morhetz/gruvbox'
-Plugin 'neovimhaskell/haskell-vim'
+Plugin 'scrooloose/syntastic'
+Plugin 'bitc/vim-hdevtools'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'StanAngeloff/php.vim'
 " Plugin 'zeis/vim-kolor'
@@ -71,3 +72,17 @@ let g:kolor_bold=1                      " Enable bold. Default: 1
 let g:kolor_underlined=0                " Enable underline. Default: 0
 let g:kolor_alternative_matchparen=0    " Gray 'MatchParen' color. Default: 0
 colorscheme brogrammer
+
+"""""" Syntastic
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+"""""""" vim-hdevtools
+au FileType haskell nnoremap <buffer> <F1> :HdevtoolsType<CR>
+au FileType haskell nnoremap <buffer> <silent> <F2> :HdevtoolsClear<CR>

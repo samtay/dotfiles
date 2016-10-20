@@ -99,5 +99,12 @@ export BLUEACORN_PROJ_DIR="/Users/samtay"
 #ulimit -n 65536
 #ulimit -u 2048
 export BLUEACORN_SERVICE_CREDENTIALS="/home/samtay/git/innovation/devops-docker/machines/service-credentials"
-export PATH="$PATH:/home/samtay/git/innovation/devops-docker/bin"
 export BLUEACORN_BOOTSTRAP_DIR="/home/samtay/git/innovation/bootstrap"
+export PATH="/home/samtay/.badevops/bin:$PATH"
+export BLUEACORN_SERVICE_CREDENTIALS="/home/samtay/.badevops/git/devops-docker/machines/service-credentials"
+
+# testing termite func
+if [[ $TERM == xterm-termite ]]; then
+  . /etc/profile.d/vte.sh
+  __vte_osc7
+fi
