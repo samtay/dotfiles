@@ -64,6 +64,14 @@ function! NumberToggle()
 endfunc
 nnoremap <C-n> :call NumberToggle()<CR>
 
+" Reload latex files
+" TODO cd to dir first, then issue !pdflatex [just filename no path]
+function ReloadLatex()
+  :w
+  :!pdflatex %
+endfunc
+cmap retex call ReloadLatex()
+
 """"""" Colors
 set t_Co=256
 set background=dark
