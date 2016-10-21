@@ -11,6 +11,7 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'morhetz/gruvbox'
 Plugin 'scrooloose/syntastic'
 Plugin 'bitc/vim-hdevtools'
+Plugin 'itchyny/vim-haskell-indent'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'StanAngeloff/php.vim'
 " Plugin 'zeis/vim-kolor'
@@ -26,13 +27,6 @@ set relativenumber
 
 " Don't auto comment for the love of god
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-
-" Set tabbing preferences
-filetype plugin indent on
-syntax on
-set expandtab
-set softtabstop=2
-set shiftwidth=2
 
 """""""" Aliases """""""
 
@@ -64,13 +58,6 @@ function! NumberToggle()
 endfunc
 nnoremap <C-n> :call NumberToggle()<CR>
 
-" Reload latex files
-" TODO cd to dir first, then issue !pdflatex [just filename no path]
-function ReloadLatex()
-  :w
-  :!pdflatex %
-endfunc
-cmap retex call ReloadLatex()
 
 """"""" Colors
 set t_Co=256
@@ -94,3 +81,22 @@ let g:syntastic_check_on_wq = 0
 """""""" vim-hdevtools
 au FileType haskell nnoremap <buffer> <F1> :HdevtoolsType<CR>
 au FileType haskell nnoremap <buffer> <silent> <F2> :HdevtoolsClear<CR>
+
+""""""""" latex
+" TODO cd to dir first, then issue !pdflatex [just filename no path]
+function ReloadLatex()
+  :w
+  :!pdflatex %
+endfunc
+au FileType latex cmap retex call ReloadLatex()
+
+""""""" Set tabbing preferences
+""""" default 2 spaces
+filetype plugin indent on
+syntax on
+set expandtab
+set softtabstop=2
+set shiftwidth=2
+
+""""" 4 spaces for haskell
+au FileType haskell setlocal sts=4 sw=4
