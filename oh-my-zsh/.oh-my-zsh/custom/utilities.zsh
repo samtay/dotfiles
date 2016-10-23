@@ -10,7 +10,6 @@ alias wifi-list="nmcli d wifi"
 alias wifi-connect="nmcli -a -p -s d wifi connect"
 alias displays-on="xrandr --output HDMI-0 --auto --right-of DP-0 && xrandr --output DP-2 --auto --right-of HDMI-0"
 alias displays-off="xrandr --output HDMI-0 --off && xrandr --output DP-2 --off && xrandr --output DP-0 --panning 1920x1080"
-alias screenshot-select="scrot -s -e 'mv \$f ~/screenshots/'"
 alias lt="l -t"
 
 # Functions to leverage autocomplete
@@ -27,12 +26,21 @@ g2site() {
   cd "$SITES_DIR/$1" && ll
 }
 
+backup() {
+  mv $1{,.bak}
+}
+
 copy-file(){
   cat $1 | xclip -sel clip
 }
 
 watch(){
   less +F $1
+}
+
+screenshot-select() {
+  mkdir -p $HOME/screenshots
+  sleep 0.2; scrot -s "$HOME/screenshots//%Y-%m-%d-%H%M%S_\$wx\$h.png" -e "xdg-open \$f"
 }
 
 mysql-command() {
