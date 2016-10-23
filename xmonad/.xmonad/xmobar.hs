@@ -1,33 +1,60 @@
+-- docs: http://projects.haskell.org/xmobar/
 Config {
     font = "xft:Fixed-8",
     bgColor = "#000000",
     fgColor = "#ffffff",
-    position = Top,--Static { xpos = 0, ypos = 0, width = 2560, height = 16 },
+    position = Top,
     lowerOnStart = True,
     commands = [
-        Run Weather "KPAO" ["-t","<tempF>F <skyCondition>","-L","64","-H","77","-n","#CEFFAC","-h","#FFB6B0","-l","#96CBFE"] 36000,
-        Run MultiCpu ["-t","Cpu: <total0> <total1> <total2> <total3>","-L","30","-H","60","-h","#FFB6B0","-l","#CEFFAC","-n","#FFFFCC","-w","3"] 10,
-        Run Memory ["-t","Mem: <usedratio>%","-H","8192","-L","4096","-h","#FFB6B0","-l","#CEFFAC","-n","#FFFFCC"] 10,
-        Run Swap ["-t","Swap: <usedratio>%","-H","1024","-L","512","-h","#FFB6B0","-l","#CEFFAC","-n","#FFFFCC"] 10,
-        Run Network "em1" ["-t","Net: <rx>, <tx>","-H","200","-L","10","-h","#FFB6B0","-l","#CEFFAC","-n","#FFFFCC"] 10,
-        Run Date "<fc=#FFFFCC>%F (%a) %T</fc>" "date" 10, --"%a %b %_d %l:%M" "date" 10,
-        Run Battery [ "--template" , "Batt: <acstatus>"
-                    , "--Low"      , "10"        -- units: %
-                    , "--High"     , "80"        -- units: %
-                    , "--low"      , "darkred"
-                    , "--normal"   , "darkorange"
-                    , "--high"     , "darkgreen"
-                    , "--" -- battery specific options
-                               -- discharging status
-                                , "-o"	, "<left>% (<timeleft>)"
-                                -- AC "on" status
-                                , "-O"	, "<fc=#f1c40f>Charging</fc>"
-                                -- charged status
-                                , "-i"	, "<fc=#2ecc71>Charged</fc>"
-                    ] 50,
-        Run StdinReader
-    ],
+            Run Weather "KCHS" ["--template", "<tempF>F <skyCondition>",
+                                      "--Low",      "64",
+                                      "--High",     "77",
+                                      "--normal",   "#e67e22",
+                                      "--high",     "#f1c40f",
+                                      "--low",      "#3498db"
+                                      ] 36000,
+            Run Memory ["--template", "Mem: <usedratio>%",
+                        "--High",     "8192",
+                        "--Low",      "4096",
+                        "--high",     "#FFB6B0",
+                        "--low",      "#CEFFAC",
+                        "--normal",   "#FFFFCC"
+                        ] 10,
+            Run Swap ["--template", "Swap: <usedratio>%",
+                      "--High",     "1024",
+                      "--Low",      "512",
+                      "--high",     "#FFB6B0",
+                      "--low",      "#CEFFAC",
+                      "--normal",   "#FFFFCC"
+                      ] 10,
+            Run Network "wlp3s0" ["--template", "Wifi: <rx> KB/s",
+                                  "--High",     "200",
+                                  "--Low",      "10",
+                                  "--high",     "#3498db",
+                                  "--low",      "#e74c3c",
+                                  "--normal",   "#3498db"
+                                  ] 10,
+            Run Battery [ "--template" , "<fc=#9b59b6>Batt: <acstatus></fc>"
+                        , "--Low"      , "10"
+                        , "--High"     , "80"
+                        , "--low"      , "#9f3a2c"
+                        , "--normal"   , "#e67e22"
+                        , "--high"     , "#5eebb8"
+                        , "--" -- battery specific options
+                            -- discharging status
+                            , "-o"	, "<left>% (<timeleft>)"
+                            -- AC "on" status
+                            , "-O"	, "Charging (<left>%)"
+                            -- charged status
+                            , "-i"	, "Charged"
+                            , "-l"      , "#9f3a2c" 
+                            , "-m"      , "#e67e22" 
+                            , "-h"      , "#2ecc71"
+                        ] 100,
+            Run Date "<fc=#e67e22>%F (%a) %T</fc>" "date" 10, --"%a %b %_d %l:%M" "date" 10,
+            Run StdinReader
+            ],
     sepChar = "%",
     alignSep = "}{",
-    template = "%StdinReader% }{ %battery%   %memory%   %swap%   %em1%   %KPAO%"
+    template = "%StdinReader% }{ %battery%    %memory%    %swap%    %wlp3s0%    %KCHS%    %date%"
 }

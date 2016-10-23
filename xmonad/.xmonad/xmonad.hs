@@ -77,15 +77,10 @@ myManageHook = composeAll
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayoutHook = avoidStruts (tabbed' ||| threeCol ||| tall ||| full) ||| distractionFree
+myLayoutHook = avoidStruts (tabbed' ||| threeCol) ||| distractionFree
     where tabbed' = tabbed shrinkText tabConfig
           threeCol = ThreeColMid 1 (3/100) (1/2)
-          tall = Tall 1 (3/100) (1/2)
-          full = Full
           distractionFree = noBorders (fullscreenFull Full)
-    --Mirror (Tall 1 (3/100) (1/2)) |||
-    -- spiral (6/7)) |||
-
 
 ------------------------------------------------------------------------
 -- Colors and borders
