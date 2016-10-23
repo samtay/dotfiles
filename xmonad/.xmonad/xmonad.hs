@@ -67,7 +67,6 @@ myManageHook = composeAll
     , className =? "stalonetray"    --> doIgnore
     , isFullscreen --> (doF W.focusDown <+> doFullFloat)]
 
-
 ------------------------------------------------------------------------
 -- Layouts
 -- You can specify and transform your layouts by modifying these values.
@@ -78,12 +77,12 @@ myManageHook = composeAll
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayoutHook = tabbed ||| threeCol ||| tall ||| full
-    where tabbed = tabbed shrinkText tabConfig
+myLayoutHook = avoidStruts (tabbed' ||| threeCol ||| tall ||| full) ||| distractionFree
+    where tabbed' = tabbed shrinkText tabConfig
           threeCol = ThreeColMid 1 (3/100) (1/2)
           tall = Tall 1 (3/100) (1/2)
           full = Full
-    --noBorders (fullscreenFull Full))
+          distractionFree = noBorders (fullscreenFull Full)
     --Mirror (Tall 1 (3/100) (1/2)) |||
     -- spiral (6/7)) |||
 
@@ -343,7 +342,6 @@ main = do
           , ppSep = "   "
       }
       , manageHook = manageDocks <+> myManageHook
-      , layoutHook = avoidStruts $ myLayoutHook
       , startupHook = setWMName "LG3D"
   }
 
@@ -371,7 +369,7 @@ defaults = defaultConfig {
     mouseBindings      = myMouseBindings,
 
     -- hooks, layouts
-    layoutHook         = myLayoutHook,
+    layoutHook         = smartBorders $ myLayoutHook,
     manageHook         = myManageHook,
     startupHook        = myStartupHook
 }
