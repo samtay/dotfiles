@@ -29,3 +29,9 @@ the_silver_searcher
 audacious
 xbacklight
 cmus
+archey-git
+ngrok
+haskell-stack-git
+xmonad
+xmonad-contrib
+xmobar
