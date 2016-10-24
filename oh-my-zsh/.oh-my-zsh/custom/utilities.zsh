@@ -40,7 +40,12 @@ watch(){
 
 screenshot-select() {
   mkdir -p $HOME/screenshots
-  sleep 0.2; scrot -s "$HOME/screenshots//%Y-%m-%d-%H%M%S_\$wx\$h.png" -e "xdg-open \$f"
+  sleep 0.2; scrot -s "$HOME/screenshots/%Y-%m-%d-%H%M%S_\$wx\$h.png"
+}
+
+screenshot() {
+  mkdir -p $HOME/screenshots
+  sleep 0.2; scrot -m "$HOME/screenshots/%Y-%m-%d-%H%M%S_\$wx\$h.png"
 }
 
 mysql-command() {

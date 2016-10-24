@@ -28,13 +28,6 @@ import qualified Data.Map        as M
 --
 myTerminal = "termite"
 
--- The command to take a selective screenshot, where you select
--- what you'd like to capture on the screen.
-mySelectScreenshot = "select-screenshot"
-
--- The command to take a fullscreen screenshot.
-myScreenshot = "screenshot"
-
 -- The command to use as a launcher, to launch commands that don't have
 -- preset keybindings.
 myLauncher = "$(yeganesh -x -- -fn '-*-terminus-*-r-normal-*-*-120-*-*-*-*-iso8859-*' -nb '#000000' -nf '#FFFFFF' -sb '#7C7C7C' -sf '#CEFFAC')"
@@ -77,8 +70,9 @@ myManageHook = composeAll
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayoutHook = avoidStruts (tabbed' ||| threeCol) ||| distractionFree
+myLayoutHook = avoidStruts (tabbed' ||| tall ||| threeCol) ||| distractionFree
     where tabbed' = tabbed shrinkText tabConfig
+          tall = Tall 1 (3/100) (1/2)
           threeCol = ThreeColMid 1 (3/100) (1/2)
           distractionFree = noBorders (fullscreenFull Full)
 
@@ -133,17 +127,25 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask, xK_p),
      spawn myLauncher)
 
-  -- Take a selective screenshot using the command specified by mySelectScreenshot.
-  , ((modMask .|. shiftMask, xK_p),
-     spawn mySelectScreenshot)
+  -- Take a selective screenshot.
+  , ((modMask .|. shiftMask, xK_y),
+     spawn "screenshot-select")
 
-  -- Take a full screenshot using the command specified by myScreenshot.
-  , ((modMask .|. controlMask .|. shiftMask, xK_p),
-     spawn myScreenshot)
+  -- Take a full screenshot.
+  , ((modMask, xK_y),
+     spawn "screenshot")
 
   -- Toggle status bar
   , ((modMask, xK_b),
      sendMessage ToggleStruts)
+
+  -- Increase brightness.
+  , ((0, xF86XK_MonBrightnessUp),
+     spawn "xbacklight -inc 10")
+
+  -- Decrease brightness.
+  , ((0, xF86XK_MonBrightnessDown),
+     spawn "xbacklight -dec 10")
 
   -- Mute volume.
   , ((0, xF86XK_AudioMute),
@@ -180,10 +182,6 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- Audio next.
   , ((0, 0x1008FF17),
      spawn "")
-
-  -- Eject CD tray.
-  , ((0, 0x1008FF2C),
-     spawn "eject -T")
 
   --------------------------------------------------------------------
   -- "Standard" xmonad key bindings
