@@ -56,7 +56,7 @@ SITES_DIR=$GIT_DIR/sites
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git n98-magerun n98-magerun2 docker docker-compose boot2docker m2 composer g2site g2module g2innovation g2etc dm)
+plugins=(git n98-magerun n98-magerun2 docker docker-compose boot2docker m2 composer g2 dm)
 
 # User configuration
 
@@ -109,3 +109,7 @@ if [[ $TERM == xterm-termite ]]; then
   . /etc/profile.d/vte.sh
   __vte_osc7
 fi
+
+# bash completions
+autoload -U +X bashcompinit && bashcompinit
+eval "$(stack --bash-completion-script stack)"
