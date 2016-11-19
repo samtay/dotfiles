@@ -14,6 +14,8 @@ Plugin 'bitc/vim-hdevtools'
 Plugin 'itchyny/vim-haskell-indent'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'StanAngeloff/php.vim'
+Plugin 'ElmCast/elm-vim'
+" Plugin 'lambdatoast/elm.vim'
 " Plugin 'zeis/vim-kolor'
 
 
