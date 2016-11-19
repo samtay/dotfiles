@@ -9,6 +9,8 @@ import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.SetWMName
+-- import XMonad.Actions.PhysicalScreens
+import XMonad.Layout.IndependentScreens
 import XMonad.Layout.Fullscreen
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Spiral
@@ -37,8 +39,7 @@ myLauncher = "$(yeganesh -x -- -fn '-*-terminus-*-r-normal-*-*-120-*-*-*-*-iso88
 -- Workspaces
 -- The default number of workspaces (virtual screens) and their names.
 --
-myWorkspaces = ["1:chat","2:code","3:web"] ++ map show [4..9]
-
+myWorkspaces n = withScreens n $ map show [1..9]
 
 ------------------------------------------------------------------------
 -- Window rules
@@ -263,15 +264,18 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- mod-[1..9], Switch to workspace N
   -- mod-shift-[1..9], Move client to workspace N
-  [((m .|. modMask, k), windows $ f i)
-      | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
-      , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+  [((m .|. modMask, k), windows $ onCurrentScreen f i)
+      | (i, k) <- zip (workspaces' conf) [xK_1 .. xK_9]
+      , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
   ++
 
   -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
   -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
+  {--[((m .|. modMask, key), f sc)
+      | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
+      | (f, modMask) <- [(viewScreen, 0), (sendToScreen, shiftMask)]]--}
   [((m .|. modMask, key), screenWorkspace sc >>= flip whenJust (windows . f))
-      | (key, sc) <- zip [xK_e, xK_w, xK_r] [0..]
+      | (key, sc) <- zip [xK_w, xK_e, xK_r] [1,0,2]
       , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
 
@@ -321,12 +325,12 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 -- By default, do nothing.
 myStartupHook = return ()
 
-
 ------------------------------------------------------------------------
 -- Run xmonad with all the defaults we set up.
 --
 main = do
   xmproc <- spawnPipe "xmobar ~/.xmonad/xmobar.hs"
+  nScreens <- countScreens
   xmonad $ defaults {
       logHook = dynamicLogWithPP $ xmobarPP {
             ppOutput = hPutStrLn xmproc
@@ -335,7 +339,7 @@ main = do
           , ppSep = "   "
       }
       , manageHook = manageDocks <+> myManageHook
-      , startupHook = setWMName "LG3D"
+      , workspaces = myWorkspaces nScreens
   }
 
 
@@ -353,7 +357,6 @@ defaults = defaultConfig {
     focusFollowsMouse  = myFocusFollowsMouse,
     borderWidth        = myBorderWidth,
     modMask            = myModMask,
-    workspaces         = myWorkspaces,
     normalBorderColor  = myNormalBorderColor,
     focusedBorderColor = myFocusedBorderColor,
 
