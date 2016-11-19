@@ -86,12 +86,11 @@ au FileType haskell nnoremap <buffer> <F1> :HdevtoolsType<CR>
 au FileType haskell nnoremap <buffer> <silent> <F2> :HdevtoolsClear<CR>
 
 """"""""" latex
-" TODO cd to dir first, then issue !pdflatex [just filename no path]
 function ReloadLatex()
   :w
   :!pdflatex %
 endfunc
-au FileType latex cmap retex call ReloadLatex()
+au FileType tex cmap retex call ReloadLatex()
 
 """"""" Set tabbing preferences
 """"" default 2 spaces
@@ -100,6 +99,3 @@ syntax on
 set expandtab
 set softtabstop=2
 set shiftwidth=2
-
-""""" 4 spaces for haskell
-au FileType haskell setlocal sts=4 sw=4
