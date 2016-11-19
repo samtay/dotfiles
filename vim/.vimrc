@@ -26,6 +26,7 @@ filetype plugin indent on    " required
 """""""""""""""""""""""""""" Personal Vim Settings """"""""""""""""""""
 " Show line numbers by default
 set relativenumber
+set number
 
 " Don't auto comment for the love of god
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
@@ -51,11 +52,11 @@ map <C-p> :r ~/.vimbuffer<CR>
 function! NumberToggle()
   if(&rnu == 0 && &nu == 0)
     set nu
-  elseif(&nu == 1)
-    set nonu
+  elseif(&rnu == 0 && &nu == 1)
     set rnu
   else
     set nornu
+    set nonu
   endif
 endfunc
 nnoremap <C-n> :call NumberToggle()<CR>
