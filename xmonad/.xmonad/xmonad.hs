@@ -71,7 +71,7 @@ myManageHook = composeAll
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayoutHook = avoidStruts (tabbed' ||| tall ||| threeCol) ||| distractionFree
+myLayoutHook = avoidStruts (tall ||| tabbed' ||| threeCol) ||| distractionFree
     where tabbed' = tabbed shrinkText tabConfig
           tall = Tall 1 (3/100) (1/2)
           threeCol = ThreeColMid 1 (3/100) (1/2)
@@ -128,13 +128,17 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask, xK_p),
      spawn myLauncher)
 
+  -- Spawn google chrome on mod + g
+  , ((modMask, xK_g),
+     spawn "google-chrome-stable")
+
   -- Take a selective screenshot.
-  , ((modMask .|. shiftMask, xK_y),
-     spawn "screenshot-select")
+  , ((modMask, xK_y),
+     spawn "sleep 0.2; scrot -s")
 
   -- Take a full screenshot.
-  , ((modMask, xK_y),
-     spawn "screenshot")
+  , ((modMask .|. shiftMask, xK_y),
+     spawn "scrot")
 
   -- Toggle status bar
   , ((modMask, xK_b),
