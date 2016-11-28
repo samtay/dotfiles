@@ -28,11 +28,20 @@ filetype plugin indent on    " required
 " Show line numbers by default
 set relativenumber
 set number
+set showcmd
 
 " Don't auto comment for the love of god
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 """""""" Aliases """""""
+" leader
+map <SPACE> <leader>
+" select all text in buffer
+map <Leader>a ggVG
+" edit vimrc quickly
+map <leader>v :sp ~/.vimrc<cr>
+" reload vimrc when saved
+au BufWritePost .vimrc so ~/.vimrc
 
 " Save read-only files easily
 cmap w!! w !sudo tee > /dev/null %
