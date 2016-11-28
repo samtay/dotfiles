@@ -10,6 +10,7 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.SetWMName
 -- import XMonad.Actions.PhysicalScreens
+import XMonad.Actions.CycleWS
 import XMonad.Layout.IndependentScreens
 import XMonad.Layout.Fullscreen
 import XMonad.Layout.NoBorders
@@ -123,6 +124,13 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   [ ((modMask .|. shiftMask, xK_Return),
      spawn $ XMonad.terminal conf)
 
+  -- Start editing xmonad.hs.
+  , ((modMask .|. shiftMask, xK_x),
+     spawn $ XMonad.terminal conf ++ " -e \"vim $HOME/.xmonad/xmonad.hs\"")
+
+  -- Start a terminal.  Terminal to start is specified by myTerminal variable.
+  --, ((modMask .|. shiftMask, xK_Return),
+
   -- Spawn the launcher using command specified by myLauncher.
   -- Use this to launch programs without a key binding.
   , ((modMask, xK_p),
@@ -209,10 +217,6 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
      refresh)
 
   -- Move focus to the next window.
-  , ((modMask, xK_Tab),
-     windows W.focusDown)
-
-  -- Move focus to the next window.
   , ((modMask, xK_j),
      windows W.focusDown)
 
@@ -255,6 +259,9 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- Decrement the number of windows in the master area.
   , ((modMask, xK_period),
      sendMessage (IncMasterN (-1)))
+
+  -- Move focus to the previously displayed workspace.
+  , ((modMask, xK_Tab), toggleWS)
 
   -- Quit xmonad.
   , ((modMask .|. shiftMask, xK_q),
