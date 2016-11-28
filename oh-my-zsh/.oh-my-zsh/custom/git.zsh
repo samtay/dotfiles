@@ -3,4 +3,4 @@ alias gpff='git pull --ff-only'
 alias gprb='git pull --rebase'
 alias git-log='git log --name-status'
 alias git-diff-staged='git diff --staged'
-
+alias gap='git add -p'
