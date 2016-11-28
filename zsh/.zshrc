@@ -1,5 +1,6 @@
 # Path to your oh-my-zsh installation.
 export ZSH=/home/samtay/.oh-my-zsh
+export _JAVA_AWT_WM_NONREPARENTING=1 # fix for phpstorm & xmonad
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -56,7 +57,7 @@ SITES_DIR=$GIT_DIR/sites
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git n98-magerun n98-magerun2 docker docker-compose boot2docker m2 composer g2 dm)
+plugins=(git n98-magerun n98-magerun2 docker docker-compose boot2docker m2 composer g2 dm skel)
 
 # User configuration
 
@@ -91,6 +92,7 @@ source $ZSH/oh-my-zsh.sh
 export PATH="/usr/local/sbin:$PATH"
 export PATH="/etc/blueacorn/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.npm-global/bin:$PATH"
 #export PATH="$PATH:/usr/local/texlive/2016/bin/x86_64-linux"
 export MACHINE_STORAGE_PATH="/etc/blueacorn/docker-machine"
 export VISUAL=vim
