@@ -10,6 +10,7 @@ alias wifi-list="nmcli d wifi"
 alias wifi-connect="nmcli -a -p -s d wifi connect"
 alias displays-on="xrandr --output HDMI-0 --auto --right-of DP-0 && xrandr --output DP-2 --auto --right-of HDMI-0"
 alias displays-off="xrandr --output HDMI-0 --off && xrandr --output DP-2 --off && xrandr --output DP-0 --panning 1920x1080"
+alias l="ls -lAh"
 alias lt="l -t"
 
 # Functions to leverage autocomplete
