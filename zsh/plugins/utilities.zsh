@@ -11,6 +11,11 @@ alias wifi-connect="nmcli -a -p -s d wifi connect"
 alias l="ls -lAh"
 alias lt="l -t"
 
+export ETC_DIR="$HOME/git/etc"
+export MODULES_DIR="$HOME/git/modules"
+export INNOVATION_DIR="$HOME/git/innovation"
+export SITES_DIR="$HOME/git/sites"
+
 # Functions to leverage autocomplete
 g2etc() {
   cd "$ETC_DIR/$1" && ll
