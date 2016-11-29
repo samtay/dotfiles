@@ -1,17 +1,17 @@
 -- docs: http://projects.haskell.org/xmobar/
 Config {
-    font = "xft:Fixed-8",
-    bgColor = "#000000",
-    fgColor = "#ffffff",
+    font = "xft:Fixed-9",
+    bgColor = "#2c2c2c",
+    fgColor = "#cccccc",
     position = Top,
     lowerOnStart = True,
     commands = [
             Run Weather "KCHS" ["--template", "<tempF>F <skyCondition>",
                                       "--Low",      "64",
                                       "--High",     "77",
-                                      "--normal",   "#e67e22",
-                                      "--high",     "#f1c40f",
-                                      "--low",      "#3498db"
+                                      "--high",     "#3498db",
+                                      "--low",      "#e74c3c",
+                                      "--normal",   "#3498db"
                                       ] 36000,
             Run Memory ["--template", "Mem: <usedratio>%",
                         "--High",     "8192",
@@ -34,12 +34,12 @@ Config {
                                   "--low",      "#e74c3c",
                                   "--normal",   "#3498db"
                                   ] 10,
-            Run Battery [ "--template" , "<fc=#9b59b6>Batt: <acstatus></fc>"
+            Run Battery [ "--template" , ("<fc=#6699cc>Batt: <acstatus></fc>")--light blue
                         , "--Low"      , "10"
                         , "--High"     , "80"
-                        , "--low"      , "#9f3a2c"
-                        , "--normal"   , "#e67e22"
-                        , "--high"     , "#5eebb8"
+                        , "--low"      , "#cc6666" -- bright red
+                        , "--normal"   , "#f0c674" -- bright yellow
+                        , "--high"     , "#b5bd68" -- bright green
                         , "--" -- battery specific options
                             -- discharging status
                             , "-o"	, "<left>% (<timeleft>)"
@@ -47,11 +47,11 @@ Config {
                             , "-O"	, "Charging (<left>%)"
                             -- charged status
                             , "-i"	, "Charged"
-                            , "-l"      , "#9f3a2c" 
-                            , "-m"      , "#e67e22" 
+                            , "-l"      , "#cc6666" 
+                            , "-m"      , "#f0c674" 
                             , "-h"      , "#2ecc71"
                         ] 100,
-            Run Date "<fc=#e67e22>%F (%a) %T</fc>" "date" 10, --"%a %b %_d %l:%M" "date" 10,
+            Run Date "<fc=#b294bb>%F (%a) %T</fc>" "date" 10, --"%a %b %_d %l:%M" "date" 10,
             Run StdinReader
             ],
     sepChar = "%",
