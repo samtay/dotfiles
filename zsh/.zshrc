@@ -1,4 +1,7 @@
-########## zplug
+#####################################################################
+# zplug
+#####################################################################
+
 # Check if zplug is installed
 if [[ ! -d ~/.zplug ]]; then
   git clone https://github.com/zplug/zplug ~/.zplug
@@ -6,66 +9,257 @@ if [[ ! -d ~/.zplug ]]; then
 fi
 source ~/.zplug/init.zsh
 
-########### functionality
-# load the good parts from oh-my-zsh lib/
-zplug "lib/completion",           from:oh-my-zsh
+# functionality
 zplug "lib/directories",          from:oh-my-zsh
-zplug "lib/theme-and-appearance", from:oh-my-zsh # used in theme
-zplug "lib/git",                  from:oh-my-zsh # used in theme
-# external plugins
 zplug "plugins/docker",           from:oh-my-zsh, nice:10
 zplug "plugins/docker-compose",   from:oh-my-zsh, nice:10
 zplug "plugins/composer",         from:oh-my-zsh, nice:10
-zplug "plugins/vi-mode",          from:oh-my-zsh, nice:10
 zplug "zsh-users/zsh-syntax-highlighting", nice:10
-zplug "zsh-users/zsh-history-substring-search", nice:11
-# local plugins
+zplug "zsh-users/zsh-history-substring-search", nice:11, hook-load:"__historyBinds"
 zplug "~/git/etc/dotfiles/zsh/plugins", from:local, nice:12
-# vim binding for history
-bindkey -M vicmd 'k' history-substring-search-up
-bindkey -M vicmd 'j' history-substring-search-down
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
+__historyBinds() {
+  bindkey -M vicmd 'k' history-substring-search-up
+  bindkey -M vicmd 'j' history-substring-search-down
+  bindkey '^[[A' history-substring-search-up
+  bindkey '^[[B' history-substring-search-down
+}
 
-########### theme
-zplug "SamTay/lambda-mod-zsh-theme", as:theme
+# theme
+zplug "mafredri/zsh-async"
+zplug "sindresorhus/pure", on:"mafredri/zsh-async"
 
-########### install packages
-if ! zplug check --verbose; then
-  printf "Install? [y/N]: "
-  if read -q; then
-    echo; zplug install
-  fi
-fi
-
+# install
+zplug check || zplug install
 zplug load
 
-########### globals
-# set up PATH
+
+#####################################################################
+# environment
+#####################################################################
+
+export EDITOR=vim
+export DOTFILES_DIR="$HOME/git/etc/dotfiles"
 export PATH=/usr/local/bin:$PATH
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.npm-global/bin:$PATH"
 export PATH="/home/samtay/.badevops/bin:$PATH"
-# others
-export VISUAL=vim
-export EDITOR="$VISUAL"
 # blueacorn shiz
 export BLUEACORN_BOOTSTRAP_DIR="/home/samtay/git/innovation/bootstrap"
 export BLUEACORN_SERVICE_CREDENTIALS="/home/samtay/.badevops/git/devops-docker/machines/service-credentials"
 
-########## misc tasks
+
+#####################################################################
+# completions
+#####################################################################
+
+# Enable completions
+if [ -d ~/.zsh/comp ]; then
+  fpath=(~/.zsh/comp $fpath)
+  autoload -U ~/.zsh/comp/*(:t)
+fi
+
+unsetopt menu_complete   # do not autoselect the first completion entry
+unsetopt flowcontrol
+setopt auto_menu         # show completion menu on succesive tab press
+setopt complete_in_word
+setopt always_to_end
+#zstyle ':completion:*' group-name ''
+zstyle ':completion:*:messages' format '%d'
+zstyle ':completion:*:descriptions' format '%d'
+zstyle ':completion:*:options' verbose yes
+zstyle ':completion:*:values' verbose yes
+zstyle ':completion:*:options' prefix-needed yes
+zstyle ':completion:*' use-cache true
+zstyle ':completion:*:default' menu select=1
+zstyle ':completion:*' matcher-list \
+  '' \
+  'm:{a-z}={A-Z}' \
+  'l:|=* e:|[.,_-]=* e:|=* m:{a-z}={A-Z}'
+# sudo completions
+zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin \
+  /usr/sbin /usr/bin /sbin /bin /usr/X11R6/bin
+zstyle ':completion:*' menu select
+zstyle ':completion:*' keep-prefix
+zstyle ':completion:*' completer _oldlist _complete _match _ignored \
+  _approximate _list _history
+zstyle ':completion:*' list-colors ''
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
+zstyle ':completion:*:processes' command "ps -u $USER -o pid,stat,%cpu,%mem,cputime,command"
+
+autoload -U compinit; compinit -d ~/.zcompdump
+
+# Original complete functions
+for f in $(find $DOTFILES_DIR/zsh/plugins/completion -name "*.zsh"); do
+  source "$f"
+done
+
+# cd search path
+cdpath=($HOME)
+
+# autocomplete hidden files
+# _comp_options+=(globdots)
+
+
+#####################################################################
+# colors
+#####################################################################
+
+# Color settings for zsh complete candidates
+alias ls='ls -F --show-control-chars --color=always'
+alias la='ls -aF --show-control-chars --color=always'
+alias ll='ls -lF --show-control-chars --color=always'
+alias l.='ls -dF .[a-zA-Z]* --color=always'
+export LSCOLORS=ExFxCxdxBxegedabagacad
+export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
+zstyle ':completion:*' list-colors 'di=;34;1' 'ln=;35;1' 'so=;32;1' 'ex=31;1' 'bd=46;34' 'cd=43;34'
+
+# use prompt colors feature
+autoload -U colors
+colors
+
+
+#####################################################################
+# options
+######################################################################
+
+#{{{
+setopt auto_resume
+# Ignore <C-d> logout
+setopt ignore_eof
+# Disable beeps
+setopt no_beep
+# {a-c} -> a b c
+setopt brace_ccl
+# Enable spellcheck
+setopt correct
+# Enable "=command" feature
+setopt equals
+# Disable flow control
+setopt no_flow_control
+# Ignore dups
+setopt hist_ignore_dups
+# Reduce spaces
+setopt hist_reduce_blanks
+# Ignore add history if space
+setopt hist_ignore_space
+# Save time stamp
+setopt extended_history
+# Expand history
+setopt hist_expand
+# Better jobs
+setopt long_list_jobs
+# Enable completion in "--option=arg"
+setopt magic_equal_subst
+# Add "/" if completes directory
+setopt mark_dirs
+# Disable menu complete for vimshell
+setopt no_menu_complete
+setopt list_rows_first
+# Expand globs when completion
+setopt glob_complete
+# Enable multi io redirection
+setopt multios
+# Can search subdirectory in $PATH
+setopt path_dirs
+# For multi byte
+setopt print_eightbit
+# Print exit value if return code is non-zero
+setopt print_exit_value
+setopt pushd_ignore_dups
+setopt pushd_silent
+# Short statements in for, repeat, select, if, function
+setopt short_loops
+# Ignore history (fc -l) command in history
+setopt hist_no_store
+setopt transient_rprompt
+unsetopt promptcr
+setopt hash_cmds
+setopt numeric_glob_sort
+# Enable comment string
+setopt interactive_comments
+# Improve rm *
+setopt rm_star_wait
+# Enable extended glob
+setopt extended_glob
+# Note: It is a lot of errors in script
+# setopt no_unset
+# Prompt substitution
+setopt prompt_subst
+if [[ ${VIMSHELL_TERM:-""} != "" ]]; then
+  setopt no_always_last_prompt
+else
+  setopt always_last_prompt
+fi
+# List completion
+setopt auto_list
+setopt auto_param_slash
+setopt auto_param_keys
+# List like "ls -F"
+setopt list_types
+# Compact completion
+setopt list_packed
+setopt auto_cd
+setopt auto_pushd
+setopt pushd_minus
+setopt pushd_ignore_dups
+# Check original command in alias completion
+setopt complete_aliases
+unsetopt hist_verify
+# }}}
+
+
+#####################################################################
+# keybinds
+######################################################################
+
+# vim keybinds
+bindkey -v
+
+# History completion
+# autoload history-search-end
+#zle -N history-beginning-search-backward-end history-search-end
+#zle -N history-beginning-search-forward-end history-search-end
+#bindkey "^p" history-beginning-search-backward-end
+#bindkey "^n" history-beginning-search-forward-end
+bindkey -M vicmd 'k' history-substring-search-up
+bindkey -M vicmd 'j' history-substring-search-down
+bindkey '^[[A'       history-substring-search-up
+bindkey '^[[B'       history-substring-search-down
+
+# Like bash
+bindkey "^u" backward-kill-line
+
+# Traversal in completions
+zmodload zsh/complist
+bindkey -M menuselect '^[[Z' reverse-menu-complete # shift tab for reverse completions
+
+
+#####################################################################
+# misc tasks
+#####################################################################
+
 # termite ctrl+shift+t
 if [[ $TERM == xterm-termite ]]; then
   . /etc/profile.d/vte.sh
   __vte_osc7
 fi
 # bash completions
-autoload -U +X bashcompinit && bashcompinit
+###autoload -U +X bashcompinit && bashcompinit
 # stack completion
-eval "$(stack --bash-completion-script stack)"
-# autocomplete hidden files
-_comp_options+=(globdots)
+###eval "$(stack --bash-completion-script stack)"
 
-####### doc links
-# https://github.com/zplug/zplug/wiki/Configurations
-# nice of 10 or higher results in plugins being loaded after compinit is called.
+HISTFILE=${HOME}/.zsh_history
+HISTSIZE=10000                   # The maximum number of events to save in the internal history.
+SAVEHIST=10000                   # The maximum number of events to save in the history file.
+setopt BANG_HIST                 # Treat the '!' character specially during expansion.
+setopt EXTENDED_HISTORY          # Write the history file in the ':start:elapsed;command' format.
+setopt INC_APPEND_HISTORY        # Write to the history file immediately, not when the shell exits.
+setopt SHARE_HISTORY             # Share history between all sessions.
+setopt HIST_EXPIRE_DUPS_FIRST    # Expire a duplicate event first when trimming history.
+setopt HIST_IGNORE_DUPS          # Do not record an event that was just recorded again.
+setopt HIST_IGNORE_ALL_DUPS      # Delete an old recorded event if a new event is a duplicate.
+setopt HIST_FIND_NO_DUPS         # Do not display a previously found event.
+setopt HIST_IGNORE_SPACE         # Do not record an event starting with a space.
+setopt HIST_SAVE_NO_DUPS         # Do not write a duplicate event to the history file.
+setopt HIST_VERIFY               # Do not execute immediately upon history expansion.
+bindkey -v
