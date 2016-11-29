@@ -105,10 +105,10 @@ cdpath=($HOME)
 #####################################################################
 
 # Color settings for zsh complete candidates
-alias ls='ls -F --show-control-chars --color=always'
-alias la='ls -aF --show-control-chars --color=always'
-alias ll='ls -lF --show-control-chars --color=always'
-alias l.='ls -dF .[a-zA-Z]* --color=always'
+alias ll='ls -lhF --show-control-chars --color=always'
+alias l='ls -A'
+alias lt='l -t'
+alias l.='l .[a-zA-Z]* --color=always'
 export LSCOLORS=ExFxCxdxBxegedabagacad
 export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
 zstyle ':completion:*' list-colors 'di=;34;1' 'ln=;35;1' 'so=;32;1' 'ex=31;1' 'bd=46;34' 'cd=43;34'
@@ -154,7 +154,8 @@ setopt magic_equal_subst
 setopt mark_dirs
 # Disable menu complete for vimshell
 setopt no_menu_complete
-setopt list_rows_first
+# List completions vertically
+unsetopt list_rows_first
 # Expand globs when completion
 setopt glob_complete
 # Enable multi io redirection
