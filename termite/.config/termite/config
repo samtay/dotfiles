@@ -17,7 +17,7 @@ search_wrap = true
 cursor_blink = system
 
 # "block", "underline" or "ibeam"
-cursor_shape = block
+cursor_shape = underline
 
 # $BROWSER is used by default if set, with xdg-open as a fallback
 #browser = xdg-open
@@ -29,34 +29,29 @@ cursor_shape = block
 #modify_other_keys = false
 
 [colors]
-cursor = #C5C5C5
-foreground = #dee2e9
-foreground_bold = #dee1e9
-background = #191918
+color0 = #000000
+color1 = #f27779
+color10 = #99cc99
+color12 = #6699cc
+color13 = #cc99cc
+color14 = #66cccc
+color2 = #99cc99
+color4 = #6699cc
+color5 = #cc99cc
+color6 = #66cccc
+color8 = #000000
+color9 = #f17779
+background = #2c2c2c
+foreground_bold = #cccccc
+cursor = #cccccc
+foreground = #cccccc
+highlight = #515151
 
-# 20% background transparency (requires a compositor)
-#background = rgba(63, 63, 63, 0.8)
+# The following variables (taken from iTerm Scheme) are not
+# available in termite
+# Cursor Text Color = #2c2c2c
+# Selected Text Color = #cccccc
 
-# if unset, will reverse foreground and background
-#highlight = #2f2f2f
-
-# colors from color0 to color254 can be set
-color0 = #1f1f1f
-color1 = #F81118
-color2 = #2dc55e
-color3 = #ecba0f
-color4 = #2a84d2
-color5 = #4e5ab7
-color6 = #1081d6
-color7 = #d6dbe5
-color8 = #d6dbe5
-color9 = #de352e
-color10 = #1dd361
-color11 = #f3bd09
-color12 = #1081D6
-color13 = #5350b9
-color14 = #0f7ddb
-color15 = #ffffff
 
 [hints]
 #font = Source Code Pro 12

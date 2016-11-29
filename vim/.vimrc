@@ -24,6 +24,7 @@ Plugin 'ElmCast/elm-vim'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
+
 """""""""""""""""""""""""""" Personal Vim Settings """"""""""""""""""""
 " Show line numbers by default
 set relativenumber
@@ -71,7 +72,6 @@ function! NumberToggle()
 endfunc
 nnoremap <C-n> :call NumberToggle()<CR>
 
-
 """"""" Colors
 set t_Co=256
 set background=dark
@@ -79,7 +79,7 @@ let g:kolor_italic=1                    " Enable italic. Default: 1
 let g:kolor_bold=1                      " Enable bold. Default: 1
 let g:kolor_underlined=0                " Enable underline. Default: 0
 let g:kolor_alternative_matchparen=0    " Gray 'MatchParen' color. Default: 0
-colorscheme brogrammer
+colorscheme Tomorrow-Night-Eighties
 
 """""" Syntastic
 set statusline+=%#warningmsg#
