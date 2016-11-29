@@ -40,7 +40,7 @@ myLauncher = "$(yeganesh -x -- -fn '-*-terminus-*-r-normal-*-*-120-*-*-*-*-iso88
 -- Workspaces
 -- The default number of workspaces (virtual screens) and their names.
 --
-myWorkspaces n = withScreens n $ map show [1..9]
+myWorkspaces = map show [1..9]
 
 ------------------------------------------------------------------------
 -- Window rules
@@ -128,8 +128,9 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask .|. shiftMask, xK_x),
      spawn $ XMonad.terminal conf ++ " -e \"vim $HOME/.xmonad/xmonad.hs\"")
 
-  -- Start a terminal.  Terminal to start is specified by myTerminal variable.
-  --, ((modMask .|. shiftMask, xK_Return),
+  -- Toggle multi monitor display (xrandr wrapper)
+  , ((modMask .|. shiftMask, xK_d),
+     spawn "displays-toggle")
 
   -- Spawn the launcher using command specified by myLauncher.
   -- Use this to launch programs without a key binding.
@@ -323,8 +324,12 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 --
 -- To emulate dwm's status bar
 --
--- > logHook = dynamicLogDzen
---
+myDefaultPP = xmobarPP
+  { ppTitle = xmobarColor xmobarTitleColor "" . shorten 100
+  , ppCurrent = xmobarColor xmobarCurrentWorkspaceColor ""
+  , ppSep = "   "
+  }
+
 
 
 ------------------------------------------------------------------------
@@ -340,19 +345,13 @@ myStartupHook = return ()
 -- Run xmonad with all the defaults we set up.
 --
 main = do
-  xmproc <- spawnPipe "xmobar ~/.xmonad/xmobar.hs"
   nScreens <- countScreens
-  xmonad $ defaults {
-      logHook = dynamicLogWithPP $ xmobarPP {
-            ppOutput = hPutStrLn xmproc
-          , ppTitle = xmobarColor xmobarTitleColor "" . shorten 100
-          , ppCurrent = xmobarColor xmobarCurrentWorkspaceColor ""
-          , ppSep = "   "
-      }
-      , manageHook = manageDocks <+> myManageHook
-      , workspaces = myWorkspaces nScreens
-  }
-
+  xmproc   <- spawnPipe "xmobar ~/.xmonad/xmobar.hs"
+  xmonad $ defaults
+    { workspaces = withScreens nScreens myWorkspaces
+    , logHook    = dynamicLogWithPP $ myDefaultPP { ppOutput = hPutStrLn xmproc }
+    , manageHook = manageDocks <+> myManageHook
+    }
 
 ------------------------------------------------------------------------
 -- Combine it all together

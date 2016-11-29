@@ -106,7 +106,7 @@ cdpath=($HOME)
 
 # Color settings for zsh complete candidates
 alias ll='ls -lhF --show-control-chars --color=always'
-alias l='ls -A'
+alias l='ll -A'
 alias lt='l -t'
 alias l.='l .[a-zA-Z]* --color=always'
 export LSCOLORS=ExFxCxdxBxegedabagacad
