@@ -80,10 +80,11 @@ myLayoutHook = avoidStruts (tall ||| tabbed' ||| threeCol) ||| distractionFree
 
 ------------------------------------------------------------------------
 -- Colors and borders
--- Currently based on the ir_black theme.
+-- Currently based on the tomorrow night eighties theme.
 --
-myNormalBorderColor  = foreground
+myNormalBorderColor  = currentline
 myFocusedBorderColor = green
+myBorderWidth = 2
 
 -- Colors for text and backgrounds of each tab when in "Tabbed" layout.
 tabConfig = defaultTheme {
@@ -101,9 +102,7 @@ xmobarTitleColor = green
 -- Color of current workspace in xmobar.
 xmobarCurrentWorkspaceColor = purple
 
--- Width of the window border in pixels.
-myBorderWidth = 2
-
+-- Tomorrow Night Eighties theme
 background = "#2d2d2d"
 currentline = "#393939"
 selection = "#515151"
