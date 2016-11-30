@@ -82,33 +82,40 @@ myLayoutHook = avoidStruts (tall ||| tabbed' ||| threeCol) ||| distractionFree
 -- Colors and borders
 -- Currently based on the ir_black theme.
 --
-myNormalBorderColor  = grey
-myFocusedBorderColor = brightGreen
+myNormalBorderColor  = foreground
+myFocusedBorderColor = green
 
 -- Colors for text and backgrounds of each tab when in "Tabbed" layout.
 tabConfig = defaultTheme {
-    activeBorderColor   = brightGreen,
-    activeTextColor     = brightGreen,
-    activeColor         = darkGrey,
-    inactiveBorderColor = grey,
-    inactiveTextColor   = grey,
-    inactiveColor       = darkGrey
+    activeBorderColor   = aqua,
+    activeTextColor     = foreground,
+    activeColor         = selection,
+    inactiveBorderColor = selection,
+    inactiveTextColor   = comment,
+    inactiveColor       = background
 }
 
 -- Color of current window title in xmobar.
-xmobarTitleColor = brightGreen
+xmobarTitleColor = green
 
 -- Color of current workspace in xmobar.
-xmobarCurrentWorkspaceColor = brightMagenta
+xmobarCurrentWorkspaceColor = purple
 
 -- Width of the window border in pixels.
 myBorderWidth = 2
 
-brightGreen   = "#b5bd68"
-magenta       = "#682a9b"
-brightMagenta = "#b294bb"
-grey          = "#969896"
-darkGrey      = "#2c2c2c"
+background = "#2d2d2d"
+currentline = "#393939"
+selection = "#515151"
+foreground = "#cccccc"
+comment = "#999999"
+red = "#f2777a"
+orange = "#f99157"
+yellow = "#ffcc66"
+green = "#99cc99"
+aqua = "#66cccc"
+blue = "#6699cc"
+purple = "#cc99cc"
 
 ------------------------------------------------------------------------
 -- Key bindings
