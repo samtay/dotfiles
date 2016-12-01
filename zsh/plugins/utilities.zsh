@@ -1,13 +1,11 @@
 # Aliases
-alias copy="xclip -sel clip"
+alias copy='xclip -sel clip'
 alias copy-ssh-key='copy-file ~/.ssh/id_rsa.pub'
 alias reload-zsh='source ~/.zshrc'
-alias ba-jump="ssh -o 'ProxyCommand ssh -W %h:%p jump'"
-alias ba-jump-scp="scp -o 'ProxyCommand ssh -W %h:%p jump'"
 alias ba-vpn="sudo openvpn --daemon /etc/openvpn/ba-client.conf"
-alias wifi-scan="sudo iwlist wlp3s0 scan | grep ESSID"
-alias wifi-list="nmcli d wifi"
-alias wifi-connect="nmcli -a -p -s d wifi connect"
+alias wifi-scan='sudo iwlist wlp3s0 scan | grep ESSID'
+alias wifi-list='nmcli d wifi'
+alias wifi-connect='nmcli -a -p -s d wifi connect'
 
 export ETC_DIR="$HOME/git/etc"
 export MODULES_DIR="$HOME/git/modules"
@@ -84,3 +82,4 @@ xdebug-toggle() {
 fix-broken-symlinks() {
   find -L . -type l -exec rm {} \;
 }
+
