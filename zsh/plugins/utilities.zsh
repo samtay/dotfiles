@@ -6,6 +6,7 @@ alias ba-vpn="sudo openvpn --daemon /etc/openvpn/ba-client.conf"
 alias wifi-scan='sudo iwlist wlp3s0 scan | grep ESSID'
 alias wifi-list='nmcli d wifi'
 alias wifi-connect='nmcli -a -p -s d wifi connect'
+alias get-simpsons-img='echo "http://imgur.com/a/T81t9copy" | copy'
 
 export ETC_DIR="$HOME/git/etc"
 export MODULES_DIR="$HOME/git/modules"
