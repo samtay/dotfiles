@@ -82,7 +82,7 @@ myLayoutHook = avoidStruts (tall ||| tabbed' ||| Grid) ||| distractionFree
 -- Currently based on the tomorrow night eighties theme.
 --
 myNormalBorderColor  = currentline
-myFocusedBorderColor = green
+myFocusedBorderColor = brightGreen
 myBorderWidth = 2
 
 -- Colors for text and backgrounds of each tab when in "Tabbed" layout.
@@ -111,6 +111,7 @@ red = "#f2777a"
 orange = "#f99157"
 yellow = "#ffcc66"
 green = "#99cc99"
+brightGreen = "#77ee77"
 aqua = "#66cccc"
 blue = "#6699cc"
 purple = "#cc99cc"
