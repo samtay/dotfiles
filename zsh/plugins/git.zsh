@@ -1,10 +1,23 @@
-alias gst='git status'
-alias gsl='gst | less'
-alias gap='git add -p'
-alias gco='git co'
-alias gd='git diff'
-alias gdc='gd --cached'
-alias gpff='git pull --ff-only'
-alias gprb='git pull --rebase'
-alias git-log='git log --name-status'
-alias git-diff-staged='git diff --staged'
+# status
+alias -g gst='git status'
+alias -g gsl='gst | less'
+alias -g gd='git diff'
+alias -g gdc='gd --cached'
+
+# adding
+alias -g gap='git add -p'
+
+# commiting
+alias -g gc='git commit'
+alias -g gca='git commit --amend'
+
+# moving/merging
+alias -g gco='git checkout'
+alias -g gpff='git pull --ff-only'
+alias -g gprb='git pull --rebase'
+alias -g grbi='git rebase --interactive'
+alias -g grbc='git rebase --continue'
+alias -g grba='git rebase --abort'
+
+# log
+alias -g gls='git ls'
