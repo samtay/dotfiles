@@ -9,7 +9,6 @@ import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.SetWMName
--- import XMonad.Actions.PhysicalScreens
 import XMonad.Actions.CycleWS
 import XMonad.Layout.IndependentScreens
 import XMonad.Layout.Fullscreen
@@ -17,6 +16,7 @@ import XMonad.Layout.NoBorders
 import XMonad.Layout.Spiral
 import XMonad.Layout.Tabbed
 import XMonad.Layout.ThreeColumns
+import XMonad.Layout.Grid
 import XMonad.Util.Run(spawnPipe)
 import XMonad.Util.EZConfig(additionalKeys)
 import Graphics.X11.ExtraTypes.XF86
@@ -40,7 +40,7 @@ myLauncher = "$(yeganesh -x -- -fn '-*-terminus-*-r-normal-*-*-120-*-*-*-*-iso88
 -- Workspaces
 -- The default number of workspaces (virtual screens) and their names.
 --
-myWorkspaces = map show [1..9]
+myWorkspaces = map show $ [1..9] ++ [0]
 
 ------------------------------------------------------------------------
 -- Window rules
@@ -72,10 +72,9 @@ myManageHook = composeAll
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayoutHook = avoidStruts (tall ||| tabbed' ||| threeCol) ||| distractionFree
+myLayoutHook = avoidStruts (tall ||| tabbed' ||| Grid) ||| distractionFree
     where tabbed' = tabbed shrinkText tabConfig
           tall = Tall 1 (3/100) (1/2)
-          threeCol = ThreeColMid 1 (3/100) (1/2)
           distractionFree = noBorders (fullscreenFull Full)
 
 ------------------------------------------------------------------------
@@ -288,7 +287,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- mod-[1..9], Switch to workspace N
   -- mod-shift-[1..9], Move client to workspace N
   [((m .|. modMask, k), windows $ onCurrentScreen f i)
-      | (i, k) <- zip (workspaces' conf) [xK_1 .. xK_9]
+    | (i, k) <- zip (workspaces' conf) $ [xK_1 .. xK_9] ++ [xK_0]
       , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
   ++
 
