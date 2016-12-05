@@ -10,14 +10,15 @@ Plugin 'gmarik/Vundle.vim'
 """"""""""" Custom added plugins """"""""""""""""""""
 Plugin 'morhetz/gruvbox'
 Plugin 'scrooloose/syntastic'
-Plugin 'bitc/vim-hdevtools'
-"Plugin 'itchyny/vim-haskell-indent'
-Plugin 'neovimhaskell/haskell-vim'
+Plugin 'ervandew/supertab'
+Plugin 'godlygeek/tabular'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'StanAngeloff/php.vim'
 Plugin 'ElmCast/elm-vim'
-" Plugin 'lambdatoast/elm.vim'
-" Plugin 'zeis/vim-kolor'
+Plugin 'Shougo/vimproc.vim'
+" haskell stuff
+Plugin 'eagletmt/ghcmod-vim'
+Plugin 'neovimhaskell/haskell-vim'
 
 
 """"""""" All of your Plugins must be added before the following line
@@ -95,9 +96,21 @@ let g:syntastic_check_on_wq = 0
 """"""" Ctrl P settings
 let g:ctrlp_show_hidden = 1
 
-"""""""" vim-hdevtools
+"""""""" haskell
+" hdevtools
 au FileType haskell nnoremap <buffer> <F1> :HdevtoolsType<CR>
 au FileType haskell nnoremap <buffer> <silent> <F2> :HdevtoolsClear<CR>
+" ghc-mod
+map <silent> tw :GhcModTypeInsert<CR>
+map <silent> ts :GhcModSplitFunCase<CR>
+map <silent> tq :GhcModType<CR>
+map <silent> te :GhcModTypeClear<CR>
+" tabularize
+let g:haskell_tabular = 1
+vmap a= :Tabularize /=<CR>
+vmap a; :Tabularize /::<CR>
+vmap a- :Tabularize /-><CR>
+vmap a, :Tabularize /,<CR>
 
 """"""""" latex
 function ReloadLatex()
