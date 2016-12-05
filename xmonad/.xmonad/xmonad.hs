@@ -10,6 +10,7 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.SetWMName
 import XMonad.Actions.CycleWS
+import XMonad.Actions.Submap
 import XMonad.Layout.IndependentScreens
 import XMonad.Layout.Fullscreen
 import XMonad.Layout.NoBorders
@@ -126,6 +127,8 @@ purple = "#cc99cc"
 --
 myModMask = mod1Mask
 
+editFile f = spawn $ myTerminal ++ " -e \"vim " ++ f ++ "\""
+
 myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   ----------------------------------------------------------------------
   -- Custom key bindings
@@ -135,13 +138,19 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   [ ((modMask .|. shiftMask, xK_Return),
      spawn $ XMonad.terminal conf)
 
-  -- Start editing xmonad.hs.
-  , ((modMask .|. shiftMask, xK_x),
-     spawn $ XMonad.terminal conf ++ " -e \"vim $HOME/.xmonad/xmonad.hs\"")
+  -- Start editing dotfiles
+  , ((modMask, xK_x), submap . M.fromList $
+      [ ((0, xK_x), editFile "$HOME/.xmonad/xmonad.hs")
+      , ((0, xK_v), editFile "$HOME/.vimrc")
+      , ((0, xK_z), editFile "$HOME/.zshrc")
+      ])
 
   -- Toggle multi monitor display (xrandr wrapper)
-  , ((modMask .|. shiftMask, xK_d),
-     spawn "displays-toggle")
+  , ((modMask .|. shiftMask, xK_d), submap . M.fromList $
+      [ ((0, xK_0), spawn "displays-toggle 0")
+      , ((0, xK_1), spawn "displays-toggle 1")
+      , ((0, xK_2), spawn "displays-toggle 2")
+      ])
 
   -- Spawn the launcher using command specified by myLauncher.
   -- Use this to launch programs without a key binding.
