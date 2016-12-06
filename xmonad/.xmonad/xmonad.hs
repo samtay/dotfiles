@@ -11,13 +11,14 @@ import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.SetWMName
 import XMonad.Actions.CycleWS
 import XMonad.Actions.Submap
-import XMonad.Layout.IndependentScreens
+import XMonad.Actions.GridSelect
 import XMonad.Layout.Fullscreen
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Spiral
 import XMonad.Layout.Tabbed
-import XMonad.Layout.ThreeColumns
 import XMonad.Layout.Grid
+import XMonad.Prompt
+import XMonad.Prompt.Shell
 import XMonad.Util.Run(spawnPipe)
 import XMonad.Util.EZConfig(additionalKeys)
 import Graphics.X11.ExtraTypes.XF86
@@ -62,6 +63,14 @@ myManageHook = composeAll
     , resource  =? "desktop_window" --> doIgnore
     , className =? "stalonetray"    --> doIgnore
     , isFullscreen --> (doF W.focusDown <+> doFullFloat)]
+
+------------------------------------------------------------------------
+-- XMonad Prompt
+--
+-- TODO explore
+myXPConfig = defaultXPConfig
+
+------------------------------------------------------------------------
 
 ------------------------------------------------------------------------
 -- Layouts
@@ -137,6 +146,10 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- Start a terminal.  Terminal to start is specified by myTerminal variable.
   [ ((modMask .|. shiftMask, xK_Return),
      spawn $ XMonad.terminal conf)
+
+  -- Shell prompt
+  , ((modMask .|. controlMask, xK_Return),
+     shellPrompt myXPConfig)
 
   -- Start editing dotfiles
   , ((modMask, xK_x), submap . M.fromList $
@@ -217,6 +230,10 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((0, 0x1008FF17),
      spawn "")
 
+  -- Grid select
+  , ((modMask, xK_Tab),
+      goToSelected defaultGSConfig)
+
   --------------------------------------------------------------------
   -- "Standard" xmonad key bindings
   --
@@ -281,9 +298,6 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask, xK_period),
      sendMessage (IncMasterN (-1)))
 
-  -- Move focus to the previously displayed workspace.
-  , ((modMask, xK_Tab), toggleWS)
-
   -- Quit xmonad.
   , ((modMask .|. shiftMask, xK_q),
      io (exitWith ExitSuccess))
@@ -292,20 +306,18 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask, xK_q),
      restart "xmonad" True)
   ]
+
   ++
 
   -- mod-[1..9], Switch to workspace N
   -- mod-shift-[1..9], Move client to workspace N
-  [((m .|. modMask, k), windows $ onCurrentScreen f i)
-    | (i, k) <- zip (workspaces' conf) $ [xK_1 .. xK_9] ++ [xK_0]
-      , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
+  [((m .|. modMask, k), windows $ f i)
+    | (i, k) <- zip (XMonad.workspaces conf) $ [xK_1 .. xK_9] ++ [xK_0]
+      , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
   ++
 
   -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
   -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
-  {--[((m .|. modMask, key), f sc)
-      | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
-      | (f, modMask) <- [(viewScreen, 0), (sendToScreen, shiftMask)]]--}
   [((m .|. modMask, key), screenWorkspace sc >>= flip whenJust (windows . f))
       | (key, sc) <- zip [xK_w, xK_e, xK_r] [1,0,2]
       , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
@@ -365,11 +377,9 @@ myStartupHook = return ()
 -- Run xmonad with all the defaults we set up.
 --
 main = do
-  nScreens <- countScreens
   xmproc   <- spawnPipe "xmobar ~/.xmonad/xmobar.hs"
   xmonad $ defaults
-    { workspaces = withScreens nScreens myWorkspaces
-    , logHook    = dynamicLogWithPP $ myDefaultPP { ppOutput = hPutStrLn xmproc }
+    { logHook    = dynamicLogWithPP $ myDefaultPP { ppOutput = hPutStrLn xmproc }
     , manageHook = manageDocks <+> myManageHook
     }
 
@@ -395,6 +405,7 @@ defaults = defaultConfig {
     mouseBindings      = myMouseBindings,
 
     -- hooks, layouts
+    workspaces         = myWorkspaces,
     layoutHook         = smartBorders $ myLayoutHook,
     manageHook         = myManageHook,
     startupHook        = myStartupHook
