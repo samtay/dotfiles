@@ -30,6 +30,13 @@ Config {
           , "--normal",   "#6699cc"
           , "--low",      "#99cc99"
           ] 20
+      , Run CoreTemp
+          [ "--High", "60"
+          , "--Low",  "40"
+          , "--high",     "#f2777a"
+          , "--normal",   "#6699cc"
+          , "--low",      "#99cc99"
+          ] 60
       , Run Network "wlp3s0"
           [ "--template", "Wifi: <rx> KB/s"
           , "--High",     "200"
@@ -37,7 +44,7 @@ Config {
           , "--high",     "#99cc99"
           , "--normal",   "#6699cc"
           , "--low",      "#f2777a"
-          ] 20
+          ] 40
       , Run Battery
           [ "--template" , ("<fc=#cc99cc>Batt: <acstatus></fc>")
           , "--Low"      , "10"
@@ -68,5 +75,5 @@ Config {
       ],
     sepChar = "%",
     alignSep = "}{",
-    template = "%StdinReader% }{%bright%    %battery%    %memory%    %swap%    %wlp3s0%    %KCHS%    %date%"
+    template = "%StdinReader% }{%bright%    %battery%    %memory%    %swap%    %coretemp%    %wlp3s0%    %KCHS%    %date%"
 }
