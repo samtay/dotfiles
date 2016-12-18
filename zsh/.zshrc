@@ -38,14 +38,11 @@ zplug load
 #####################################################################
 
 export EDITOR=vim
-export DOTFILES_DIR="$HOME/git/etc/dotfiles"
+export VISUAL=vim
+export DOTFILES_DIR="$HOME/git/dotfiles"
 export PATH=/usr/local/bin:$PATH
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.npm-global/bin:$PATH"
-export PATH="/home/samtay/.badevops/bin:$PATH"
-# blueacorn shiz
-export BLUEACORN_BOOTSTRAP_DIR="/home/samtay/git/innovation/bootstrap"
-export BLUEACORN_SERVICE_CREDENTIALS="/home/samtay/.badevops/git/devops-docker/machines/service-credentials"
 
 
 #####################################################################
