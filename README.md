@@ -2,10 +2,10 @@
 Personal configuration files
 
 ## todo
-1. Ensure battery is at top performance
-2. Figure out backlight
-3. Figure out sound
+0. Figure out launcher problem..
+4. Make zsh completion case insensitive
 4. Music manager such as beets
+1. Ensure battery is at top performance
 
 ## about `manage.sh`
 TODO
