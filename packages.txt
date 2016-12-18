@@ -20,7 +20,7 @@ evince
 nodejs-tldr
 the_silver_searcher
 # audacious
-xorg-xbacklight
+light-git
 # cmus
 archey-git
 ngrok
