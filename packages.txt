@@ -1,19 +1,13 @@
-base-devel
-networkmanager
+zsh
+stow
 dmenu
-tree
 infinality-bundle
-git
-gpicview
-i3-wm
-i3lock
-i3status
+xorg-server
+xorg-xinit
+tree
 nodejs
 npm
 openssh
-playerctl
-lxappearance
-stow
 tlp
 tmux
 vlc
@@ -21,17 +15,17 @@ termite
 xclip
 scrot
 ranger
-zathura
-texlive-most
+# zathura
 evince
 nodejs-tldr
 the_silver_searcher
-audacious
-xbacklight
-cmus
+# audacious
+xorg-xbacklight
+# cmus
 archey-git
 ngrok
 haskell-stack-git
 xmonad
 xmonad-contrib
 xmobar
+texlive-most

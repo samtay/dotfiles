@@ -64,8 +64,8 @@ add-infinality-key() {
 
 enable-services() {
   echo "Enabling systemctl services..."
-  sudo systemctl enable NetworkManager tlp tlp-sleep
-  sudo systemctl disable systemd-rfkill
+  sudo systemctl enable tlp tlp-sleep connman
+  # sudo systemctl disable systemd-rfkill
   sudo tlp start
 }
 
