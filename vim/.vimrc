@@ -11,9 +11,9 @@ Plug 'ctrlpvim/ctrlp.vim'
 " elm
 Plug 'ElmCast/elm-vim'
 " haskell
-Plug 'Shougo/vimproc.vim'
-Plug 'eagletmt/ghcmod-vim', { 'for': 'haskell' }
-Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }
+Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+Plug 'eagletmt/ghcmod-vim', {'for': 'haskell'}
+Plug 'neovimhaskell/haskell-vim', {'for': 'haskell'}
 
 
 """"""""""" End plugins """""""""""""""""""""""""""""
