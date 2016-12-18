@@ -28,5 +28,6 @@ haskell-stack-git
 xmonad
 xmonad-contrib
 xmobar
+vimb
 alsa-utils
 texlive-most

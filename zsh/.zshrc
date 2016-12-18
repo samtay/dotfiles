@@ -39,6 +39,7 @@ zplug load
 
 export EDITOR=vim
 export VISUAL=vim
+export BROWSER=vimb
 export DOTFILES_DIR="$HOME/git/dotfiles"
 export PATH=/usr/local/bin:$PATH
 export PATH="$HOME/.local/bin:$PATH"
