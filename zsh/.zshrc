@@ -11,12 +11,12 @@ source ~/.zplug/init.zsh
 
 # functionality
 zplug "lib/directories",          from:oh-my-zsh
-zplug "plugins/docker",           from:oh-my-zsh, nice:10
-zplug "plugins/docker-compose",   from:oh-my-zsh, nice:10
-zplug "plugins/composer",         from:oh-my-zsh, nice:10
-zplug "zsh-users/zsh-syntax-highlighting", nice:10
-zplug "zsh-users/zsh-history-substring-search", nice:11, hook-load:"__historyBinds"
-zplug "~/git/etc/dotfiles/zsh/plugins", from:local, nice:12
+zplug "plugins/docker",           from:oh-my-zsh, defer:1
+zplug "plugins/docker-compose",   from:oh-my-zsh, defer:1
+zplug "plugins/composer",         from:oh-my-zsh, defer:1
+zplug "zsh-users/zsh-syntax-highlighting", defer:1
+zplug "zsh-users/zsh-history-substring-search", defer:2, hook-load:"__historyBinds"
+zplug "~/git/dotfiles/zsh/plugins", from:local, defer:3
 __historyBinds() {
   bindkey -M vicmd 'k' history-substring-search-up
   bindkey -M vicmd 'j' history-substring-search-down
