@@ -243,9 +243,9 @@ if [[ $TERM == xterm-termite ]]; then
   __vte_osc7
 fi
 # bash completions
-###autoload -U +X bashcompinit && bashcompinit
+autoload -U +X bashcompinit && bashcompinit
 # stack completion
-###eval "$(stack --bash-completion-script stack)"
+eval "$(stack --bash-completion-script stack)"
 
 HISTFILE=${HOME}/.zsh_history
 HISTSIZE=10000                   # The maximum number of events to save in the internal history.
