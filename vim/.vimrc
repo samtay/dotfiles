@@ -1,32 +1,27 @@
-set nocompatible
-filetype off
-
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-
-" let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
+call plug#begin('~/.vim/plugged')
 
 """"""""""" Custom added plugins """"""""""""""""""""
-Plugin 'morhetz/gruvbox'
-Plugin 'scrooloose/syntastic'
-Plugin 'ervandew/supertab'
-Plugin 'godlygeek/tabular'
-Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'StanAngeloff/php.vim'
-Plugin 'ElmCast/elm-vim'
-Plugin 'Shougo/vimproc.vim'
-" haskell stuff
-Plugin 'eagletmt/ghcmod-vim'
-Plugin 'neovimhaskell/haskell-vim'
+Plug 'scrooloose/syntastic'
+" autocomplete tabs
+Plug 'ervandew/supertab'
+" tabular formatting
+Plug 'godlygeek/tabular'
+" fuzzy finder
+Plug 'ctrlpvim/ctrlp.vim'
+" elm
+Plug 'ElmCast/elm-vim'
+" haskell
+Plug 'Shougo/vimproc.vim'
+Plug 'eagletmt/ghcmod-vim', { 'for': 'haskell' }
+Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }
 
 
-""""""""" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
+""""""""""" End plugins """""""""""""""""""""""""""""
+call plug#end()
 
 
 """""""""""""""""""""""""""" Personal Vim Settings """"""""""""""""""""
+filetype plugin indent on
 " Show line numbers by default
 set relativenumber
 set number
