@@ -70,8 +70,7 @@ zstyle ':completion:*:options' prefix-needed yes
 zstyle ':completion:*' use-cache true
 zstyle ':completion:*:default' menu select=1
 zstyle ':completion:*' matcher-list \
-  '' \
-  'm:{a-z}={A-Z}' \
+  'm:{a-zA-Z}={A-Za-z}' \
   'l:|=* e:|[.,_-]=* e:|=* m:{a-z}={A-Z}'
 # sudo completions
 zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin \
@@ -79,7 +78,7 @@ zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin \
 zstyle ':completion:*' menu select
 zstyle ':completion:*' keep-prefix
 zstyle ':completion:*' completer _oldlist _complete _match _ignored \
-  _approximate _list _history
+  _approximate _list
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
 zstyle ':completion:*:processes' command "ps -u $USER -o pid,stat,%cpu,%mem,cputime,command"
