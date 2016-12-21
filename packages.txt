@@ -3,6 +3,7 @@ stow
 dmenu
 infinality-bundle
 xorg-server
+xorg-xinput
 xorg-xinit
 tree
 nodejs
@@ -15,13 +16,10 @@ termite
 xclip
 scrot
 ranger
-# zathura
 evince
 nodejs-tldr
 the_silver_searcher
-# audacious
 light-git
-# cmus
 archey-git
 ngrok
 haskell-stack-git
@@ -29,5 +27,9 @@ xmonad
 xmonad-contrib
 xmobar
 vimb
+gstreamer
+gst-libav
+gst-plugins-good
+gst-plugins-base
 alsa-utils
 texlive-most
