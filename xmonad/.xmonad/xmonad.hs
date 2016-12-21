@@ -170,9 +170,17 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask, xK_p),
      spawn myLauncher)
 
-  -- Spawn google chrome on mod + g
+  -- Spawn vimb on mod + v
+  , ((modMask, xK_v),
+     spawn "vimb")
+
+  -- Spawn firefox on mod + f
+  , ((modMask, xK_f),
+     spawn "firefox")
+
+  -- Spawn gmail on mod + g
   , ((modMask, xK_g),
-     spawn "google-chrome-stable")
+     spawn "vimb --cmd \"open https://mail.google.com/mail/u/0/#inbox\"")
 
   -- Take a selective screenshot.
   , ((modMask, xK_y),
@@ -180,7 +188,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- Take a full screenshot.
   , ((modMask .|. shiftMask, xK_y),
-     spawn "scrot")
+     spawn "sleep 0.2; scrot")
 
   -- Toggle status bar
   , ((modMask, xK_b),
@@ -232,7 +240,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- Grid select
   , ((modMask, xK_Tab),
-      goToSelected defaultGSConfig)
+      toggleWS)
 
   --------------------------------------------------------------------
   -- "Standard" xmonad key bindings
