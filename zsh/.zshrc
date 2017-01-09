@@ -15,15 +15,9 @@ zplug "plugins/docker",           from:oh-my-zsh, defer:1
 zplug "plugins/docker-compose",   from:oh-my-zsh, defer:1
 zplug "plugins/composer",         from:oh-my-zsh, defer:1
 zplug "zsh-users/zsh-syntax-highlighting", defer:1
-zplug "zsh-users/zsh-history-substring-search", defer:2, hook-load:"__historyBinds"
+zplug "zsh-users/zsh-history-substring-search", defer:2
 zplug "~/git/dotfiles/zsh/plugins", from:local, defer:3
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
-__historyBinds() {
-  bindkey -M vicmd 'k' history-substring-search-up
-  bindkey -M vicmd 'j' history-substring-search-down
-  bindkey '^[[A' history-substring-search-up
-  bindkey '^[[B' history-substring-search-down
-}
 
 # theme
 zplug "mafredri/zsh-async"
@@ -40,7 +34,8 @@ zplug load
 
 export EDITOR=vim
 export DOTFILES_DIR="$HOME/git/dotfiles"
-export PATH=/usr/local/bin:$PATH
+export PATH="$HOME/.dex/bin:$PATH"
+export PATH="/usr/local/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.npm-global/bin:$PATH"
 export PATH="/home/samtay/.badevops/bin:$PATH"
@@ -64,7 +59,6 @@ unsetopt flowcontrol
 setopt auto_menu         # show completion menu on succesive tab press
 setopt complete_in_word
 setopt always_to_end
-#zstyle ':completion:*' group-name ''
 zstyle ':completion:*:messages' format '%d'
 zstyle ':completion:*:descriptions' format '%d'
 zstyle ':completion:*:options' verbose yes
@@ -92,9 +86,6 @@ autoload -U compinit; compinit -d ~/.zcompdump
 for f in $(find $DOTFILES_DIR/zsh/plugins/completion -name "*.zsh"); do
   source "$f"
 done
-
-# cd search path
-cdpath=($HOME)
 
 # autocomplete hidden files
 # _comp_options+=(globdots)
@@ -245,9 +236,9 @@ if [[ $TERM == xterm-termite ]]; then
   __vte_osc7
 fi
 # bash completions
-autoload -U +X bashcompinit && bashcompinit
+# autoload -U +X bashcompinit && bashcompinit
 # stack completion
-eval "$(stack --bash-completion-script stack)"
+# eval "$(stack --bash-completion-script stack)"
 
 HISTFILE=${HOME}/.zsh_history
 HISTSIZE=10000                   # The maximum number of events to save in the internal history.
