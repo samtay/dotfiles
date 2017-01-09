@@ -1,0 +1,5 @@
+shortcut-default go
+shortcut-add gi=https://github.com/search?q=$0
+shortcut-add go=https://encrypted.google.com/search?q=$0
+shortcut-add ho=http://www.haskell.org/hoogle/?hoogle=$0
+shortcut-add ro=http://www.rottentomatoes.com/search/?search=$0

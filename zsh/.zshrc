@@ -11,12 +11,13 @@ source ~/.zplug/init.zsh
 
 # functionality
 zplug "lib/directories",          from:oh-my-zsh
-zplug "plugins/docker",           from:oh-my-zsh, nice:10
-zplug "plugins/docker-compose",   from:oh-my-zsh, nice:10
-zplug "plugins/composer",         from:oh-my-zsh, nice:10
-zplug "zsh-users/zsh-syntax-highlighting", nice:10
-zplug "zsh-users/zsh-history-substring-search", nice:11, hook-load:"__historyBinds"
-zplug "~/git/etc/dotfiles/zsh/plugins", from:local, nice:12
+zplug "plugins/docker",           from:oh-my-zsh, defer:1
+zplug "plugins/docker-compose",   from:oh-my-zsh, defer:1
+zplug "plugins/composer",         from:oh-my-zsh, defer:1
+zplug "zsh-users/zsh-syntax-highlighting", defer:1
+zplug "zsh-users/zsh-history-substring-search", defer:2, hook-load:"__historyBinds"
+zplug "~/git/dotfiles/zsh/plugins", from:local, defer:3
+zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 __historyBinds() {
   bindkey -M vicmd 'k' history-substring-search-up
   bindkey -M vicmd 'j' history-substring-search-down
@@ -38,7 +39,7 @@ zplug load
 #####################################################################
 
 export EDITOR=vim
-export DOTFILES_DIR="$HOME/git/etc/dotfiles"
+export DOTFILES_DIR="$HOME/git/dotfiles"
 export PATH=/usr/local/bin:$PATH
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.npm-global/bin:$PATH"
@@ -72,8 +73,7 @@ zstyle ':completion:*:options' prefix-needed yes
 zstyle ':completion:*' use-cache true
 zstyle ':completion:*:default' menu select=1
 zstyle ':completion:*' matcher-list \
-  '' \
-  'm:{a-z}={A-Z}' \
+  'm:{a-zA-Z}={A-Za-z}' \
   'l:|=* e:|[.,_-]=* e:|=* m:{a-z}={A-Z}'
 # sudo completions
 zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin \
@@ -81,7 +81,7 @@ zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin \
 zstyle ':completion:*' menu select
 zstyle ':completion:*' keep-prefix
 zstyle ':completion:*' completer _oldlist _complete _match _ignored \
-  _approximate _list _history
+  _approximate _list
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
 zstyle ':completion:*:processes' command "ps -u $USER -o pid,stat,%cpu,%mem,cputime,command"
@@ -245,9 +245,9 @@ if [[ $TERM == xterm-termite ]]; then
   __vte_osc7
 fi
 # bash completions
-###autoload -U +X bashcompinit && bashcompinit
+autoload -U +X bashcompinit && bashcompinit
 # stack completion
-###eval "$(stack --bash-completion-script stack)"
+eval "$(stack --bash-completion-script stack)"
 
 HISTFILE=${HOME}/.zsh_history
 HISTSIZE=10000                   # The maximum number of events to save in the internal history.
@@ -264,3 +264,23 @@ setopt HIST_IGNORE_SPACE         # Do not record an event starting with a space.
 setopt HIST_SAVE_NO_DUPS         # Do not write a duplicate event to the history file.
 setopt HIST_VERIFY               # Do not execute immediately upon history expansion.
 bindkey -v
+
+# vi mode inidicator
+VIM_PROMPT="❯"
+PROMPT='%(?.%F{magenta}.%F{red})${VIM_PROMPT}%f '
+
+prompt_pure_update_vim_prompt() {
+    zle || {
+        print "error: pure_update_vim_prompt must be called when zle is active"
+        return 1
+    }
+    VIM_PROMPT=${${KEYMAP/vicmd/❮}/(main|viins)/❯}
+    zle .reset-prompt
+}
+
+function zle-line-init zle-keymap-select {
+    prompt_pure_update_vim_prompt
+}
+zle -N zle-line-init
+zle -N zle-keymap-select
+

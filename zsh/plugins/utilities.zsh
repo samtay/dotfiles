@@ -8,23 +8,10 @@ alias wifi-list='nmcli d wifi'
 alias wifi-connect='nmcli -a -p -s d wifi connect'
 alias get-simpsons-img='echo "http://imgur.com/a/T81t9copy" | copy'
 
-export ETC_DIR="$HOME/git/etc"
-export MODULES_DIR="$HOME/git/modules"
-export INNOVATION_DIR="$HOME/git/innovation"
-export SITES_DIR="$HOME/git/sites"
+export MY_GIT_DIR="$HOME/git"
 
-# Functions to leverage autocomplete
-g2etc() {
-  cd "$ETC_DIR/$1" && ll
-}
-g2module() {
-  cd "$MODULES_DIR/$1" && ll
-}
-g2innovation() {
-  cd "$INNOVATION_DIR/$1" && ll
-}
-g2site() {
-  cd "$SITES_DIR/$1" && ll
+g2() {
+  cd "$MY_GIT_DIR/$1" && ll
 }
 
 backup() {
