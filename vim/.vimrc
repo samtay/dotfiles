@@ -14,6 +14,10 @@ Plug 'ElmCast/elm-vim'
 Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 Plug 'eagletmt/ghcmod-vim', {'for': 'haskell'}
 Plug 'neovimhaskell/haskell-vim', {'for': 'haskell'}
+" jinja
+Plug 'lepture/vim-jinja'
+" gfm
+Plug 'jtratner/vim-flavored-markdown'
 
 
 """"""""""" End plugins """""""""""""""""""""""""""""
@@ -56,6 +60,7 @@ nmap <C-c> :.w! ~/.vimbuffer<CR>
 " paste from buffer
 map <C-p> :r ~/.vimbuffer<CR>
 
+" quick number setting toggler
 function! NumberToggle()
   if(&rnu == 0 && &nu == 0)
     set nu
@@ -67,6 +72,14 @@ function! NumberToggle()
   endif
 endfunc
 nnoremap <C-n> :call NumberToggle()<CR>
+
+" better splits mgmt
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+set splitbelow
+set splitright
 
 """"""" Colors
 set t_Co=256
@@ -109,6 +122,12 @@ function ReloadLatex()
   :!pdflatex %
 endfunc
 au FileType tex cmap retex call ReloadLatex()
+
+""""""""" gfm
+augroup markdown
+  au!
+  au BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown
+augroup END
 
 """"""" Set tabbing preferences
 """"" default 2 spaces

@@ -102,14 +102,14 @@ alias lt='l -t'
 alias l.='l .[a-zA-Z]* --color=always'
 export LSCOLORS=ExFxCxdxBxegedabagacad
 export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
-zstyle ':completion:*' list-colors 'di=;34;1' 'ln=;35;1' 'so=;32;1' 'ex=31;1' 'bd=46;34' 'cd=43;34'
+# zstyle ':completion:*' list-colors 'di=;34;1' 'ln=;35;1' 'so=;32;1' 'ex=31;1' 'bd=46;34' 'cd=43;34'
 
 # use prompt colors feature
 autoload -U colors
 colors
 
 
-#####################################################################
+######################################################################
 # options
 ######################################################################
 
@@ -195,7 +195,7 @@ setopt auto_pushd
 setopt pushd_minus
 setopt pushd_ignore_dups
 # Check original command in alias completion
-setopt complete_aliases
+# setopt complete_aliases
 unsetopt hist_verify
 # }}}
 
@@ -236,9 +236,9 @@ if [[ $TERM == xterm-termite ]]; then
   __vte_osc7
 fi
 # bash completions
-# autoload -U +X bashcompinit && bashcompinit
+autoload -U +X bashcompinit && bashcompinit
 # stack completion
-# eval "$(stack --bash-completion-script stack)"
+eval "$(stack --bash-completion-script stack)"
 
 HISTFILE=${HOME}/.zsh_history
 HISTSIZE=10000                   # The maximum number of events to save in the internal history.
@@ -274,4 +274,3 @@ function zle-line-init zle-keymap-select {
 }
 zle -N zle-line-init
 zle -N zle-keymap-select
-
