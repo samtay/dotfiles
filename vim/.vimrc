@@ -48,13 +48,7 @@ cmap comment s/^/#/
 " New lines without insert mode
 map <Enter> o<ESC>
 " Damn this doesn't work
-map <S-Enter> O<ESC>
-
-" copy to buffer
-vmap <C-c> :w! ~/.vimbuffer<CR>
-nmap <C-c> :.w! ~/.vimbuffer<CR>
-" paste from buffer
-map <C-p> :r ~/.vimbuffer<CR>
+map <C-Enter> O<ESC>
 
 function! NumberToggle()
   if(&rnu == 0 && &nu == 0)
@@ -67,6 +61,14 @@ function! NumberToggle()
   endif
 endfunc
 nnoremap <C-n> :call NumberToggle()<CR>
+
+" better splits mgmt
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+set splitbelow
+set splitright
 
 """"""" Colors
 set t_Co=256
@@ -94,8 +96,12 @@ let g:ctrlp_show_hidden = 1
 """""""" haskell
 " ghc-mod
 map <Leader>q :GhcModType<CR>
+map <Leader>w :GhcModTypeInsert<CR>
 map <Leader>s :GhcModSplitFunCase<CR>
-map <Leader>e :GhcModTypeClear<CR>:SyntasticReset<CR>
+map <Leader>e :SyntasticReset<CR>:ccl<CR>:GhcModTypeClear<CR>
+"let g:ghcmod_hlint_options = []
+let g:ghcmod_hlint_options = ['--ignore=Move brackets to avoid $', '--ignore=Redundant $', '--ignore=Redundant bracket']
+autocmd BufWritePost *.hs GhcModCheckAndLintAsync
 " tabularize
 let g:haskell_tabular = 1
 vmap a= :Tabularize /=<CR>
@@ -108,7 +114,7 @@ function ReloadLatex()
   :w
   :!pdflatex %
 endfunc
-au FileType tex cmap retex call ReloadLatex()
+au FileType tex cmap rt call ReloadLatex()
 
 """"""" Set tabbing preferences
 """"" default 2 spaces
