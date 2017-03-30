@@ -3,3 +3,74 @@ shortcut-add gi=https://github.com/search?q=$0
 shortcut-add go=https://encrypted.google.com/search?q=$0
 shortcut-add ho=http://www.haskell.org/hoogle/?hoogle=$0
 shortcut-add ro=http://www.rottentomatoes.com/search/?search=$0
+shortcut-add yt=https://www.youtube.com/results?search_query=$0
+shortcut-add am=https://www.amazon.com/s/?url=search-alias%3Daps&field-keywords=$0
+
+set webinspector=true
+
+set editor-command='termite --exec vim %s'
+
+### other persons
+## Home
+#set home-page=http://github.com
+#
+## Downloads
+#set download-path=~/downloads
+#
+## UI
+#set hintkeys=asdfglkjh
+#set stylesheet=on
+#set smooth-scrolling=on
+#
+## Status bar
+#set statusbar=false
+#set status-color-bg=#002b36
+#set status-color-fg=#657b83
+#set status-font=terminus\ 15
+#set status-ssl-color-bg=#002b36
+#set status-ssl-color-fg=#657b83
+#set status-ssl-font=terminus\ 15
+#set status-sslinvalid-color-bg=#002b36
+#set status-sslinvalid-color-fg=#657b83
+#set status-sslinvalid-font=terminus\ 15
+#
+## Input bar
+#set input-bg-normal=#002b36
+#set input-fg-normal=#657b83
+#set input-font-normal=terminus\ 15
+#set input-bg-error=#002b36
+#set input-fg-error=#5f676a
+#set input-font-error=terminus\ 15
+#
+## Completion
+#set completion-bg-normal=#002b36
+#set completion-fg-normal=#657b83
+#set completion-bg-active=#002b36
+#set completion-fg-active=#5f676a
+#set completion-font=terminus\ 15
+#
+## Webkit
+#set accelerated-compositing=on
+#set defaultencoding=utf-8
+#set html5-database=on
+#set html5-local-storage=on
+#set images=on
+#set webgl=on
+#
+## SSL
+#set strict-ssl=false
+#
+## JS
+#set javascript-can-access-clipboard=off
+#set javascript-can-open-windows-automatically=off
+#
+## Editing
+#set editor-command=gvim -f %s
+#
+## Zoom in everything by default
+#aug zoom_all
+#  au LoadCommited * normal zz|8zI
+#aug end
+#
+## Try to speed things up
+#set proxy=off
