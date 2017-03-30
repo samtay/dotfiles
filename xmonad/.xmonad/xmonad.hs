@@ -11,7 +11,6 @@ import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.SetWMName
 import XMonad.Actions.CycleWS
 import XMonad.Actions.Submap
-import XMonad.Actions.GridSelect
 import XMonad.Layout.Fullscreen
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Spiral
@@ -35,7 +34,8 @@ myTerminal = "termite"
 
 -- The command to use as a launcher, to launch commands that don't have
 -- preset keybindings.
-myLauncher = "$(yeganesh -x -- -fn '-*-terminus-*-r-normal-*-*-120-*-*-*-*-iso8859-*' -nb '#000000' -nf '#FFFFFF' -sb '#7C7C7C' -sf '#CEFFAC')"
+--myLauncher = "$(yeganesh -x)"
+myLauncher = "dmenu_run -fn '-*-terminus-*-r-normal-*-*-120-*-*-*-*-iso8859-*' -nb '#000000' -nf '#FFFFFF' -sb '#2c2c2c' -sf '#99cc99'"
 
 
 ------------------------------------------------------------------------
@@ -82,7 +82,7 @@ myXPConfig = defaultXPConfig
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayoutHook = avoidStruts (tall ||| tabbed' ||| Grid) ||| distractionFree
+myLayoutHook = avoidStruts (tall ||| tabbed') ||| distractionFree
     where tabbed' = tabbed shrinkText tabConfig
           tall = Tall 1 (3/100) (1/2)
           distractionFree = noBorders (fullscreenFull Full)
@@ -163,6 +163,14 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
       [ ((0, xK_0), spawn "displays-toggle 0")
       , ((0, xK_1), spawn "displays-toggle 1")
       , ((0, xK_2), spawn "displays-toggle 2")
+      ])
+
+  -- Rotate screen
+  , ((modMask .|. shiftMask, xK_t), submap . M.fromList $
+      [ ((0, xK_l), spawn "xrandr --output eDP-1 --rotate left")
+      , ((0, xK_r), spawn "xrandr --output eDP-1 --rotate right")
+      , ((0, xK_i), spawn "xrandr --output eDP-1 --rotate inverted")
+      , ((0, xK_n), spawn "xrandr --output eDP-1 --rotate normal")
       ])
 
   -- Spawn the launcher using command specified by myLauncher.

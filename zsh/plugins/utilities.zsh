@@ -11,7 +11,7 @@ alias get-simpsons-img='echo "http://imgur.com/a/T81t9copy" | copy'
 export MY_GIT_DIR="$HOME/git"
 
 g2() {
-  cd "$MY_GIT_DIR/$1" && ll
+  cd "$MY_GIT_DIR/$1" && ls -lhF --show-control-chars --color=always
 }
 
 backup() {

@@ -5,7 +5,7 @@
 # Check if zplug is installed
 if [[ ! -d ~/.zplug ]]; then
   git clone https://github.com/zplug/zplug ~/.zplug
-  source ~/.zplug/init.zsh && zplug update --self
+  source ~/.zplug/init.zsh && zplug --self-manage
 fi
 source ~/.zplug/init.zsh
 
@@ -15,14 +15,8 @@ zplug "plugins/docker",           from:oh-my-zsh, defer:1
 zplug "plugins/docker-compose",   from:oh-my-zsh, defer:1
 zplug "plugins/composer",         from:oh-my-zsh, defer:1
 zplug "zsh-users/zsh-syntax-highlighting", defer:1
-zplug "zsh-users/zsh-history-substring-search", defer:2, hook-load:"__historyBinds"
+zplug "zsh-users/zsh-history-substring-search", defer:2
 zplug "~/git/dotfiles/zsh/plugins", from:local, defer:3
-__historyBinds() {
-  bindkey -M vicmd 'k' history-substring-search-up
-  bindkey -M vicmd 'j' history-substring-search-down
-  bindkey '^[[A' history-substring-search-up
-  bindkey '^[[B' history-substring-search-down
-}
 
 # theme
 zplug "mafredri/zsh-async"
@@ -89,9 +83,6 @@ autoload -U compinit; compinit -d ~/.zcompdump
 for f in $(find $DOTFILES_DIR/zsh/plugins/completion -name "*.zsh"); do
   source "$f"
 done
-
-# cd search path
-cdpath=($HOME)
 
 # autocomplete hidden files
 # _comp_options+=(globdots)
@@ -203,6 +194,8 @@ setopt pushd_ignore_dups
 # Check original command in alias completion
 setopt complete_aliases
 unsetopt hist_verify
+unsetopt RM_STAR_WAIT
+setopt nomatch
 # }}}
 
 
