@@ -1,19 +1,28 @@
 call plug#begin('~/.vim/plugged')
 
 """"""""""" Custom added plugins """"""""""""""""""""
+Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+" syntax checker
 Plug 'scrooloose/syntastic'
 " autocomplete tabs
 Plug 'ervandew/supertab'
-" tabular formatting
-Plug 'godlygeek/tabular'
-" fuzzy finder
+" fuzzy filesystem finder
 Plug 'ctrlpvim/ctrlp.vim'
+" airline
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+" uncomment after ctags
+Plug 'majutsushi/tagbar'
 " elm
 Plug 'ElmCast/elm-vim'
-" haskell
-Plug 'Shougo/vimproc.vim', {'do' : 'make'}
-Plug 'eagletmt/ghcmod-vim', {'for': 'haskell'}
+"" haskell
 Plug 'neovimhaskell/haskell-vim', {'for': 'haskell'}
+Plug 'enomsg/vim-haskellConcealPlus', { 'for': 'haskell' }
+Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
+Plug 'eagletmt/ghcmod-vim', {'for': 'haskell'}
+Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
+" tabular formatting
+Plug 'godlygeek/tabular'
 
 
 """"""""""" End plugins """""""""""""""""""""""""""""
@@ -26,15 +35,59 @@ filetype plugin indent on
 set relativenumber
 set number
 set showcmd
+" indenting
+set ai
+set si
 
 " Don't auto comment for the love of god
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
+" No swap
+set noswapfile
+
+" Return to last edit position when opening files (You want this!)
+augroup last_edit
+  autocmd!
+  autocmd BufReadPost *
+     \ if line("'\"") > 0 && line("'\"") <= line("$") |
+     \   exe "normal! g`\"" |
+     \ endif
+augroup END
+
+" Remember info about open buffers on close
+set viminfo^=%
+
+" Status line always shows
+set laststatus=2
+
+" Utility function to delete trailing white space
+func! DeleteTrailingWS()
+  exe "normal mz"
+  %s/\s\+$//ge
+  exe "normal `z"
+endfunc
+" use it on saving haskell files
+augroup whitespace
+  autocmd!
+  autocmd BufWrite *.hs :call DeleteTrailingWS()
+augroup END
+
+" Use powerline fonts for airline
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+let g:airline_powerline_fonts = 1
+let g:airline_symbols.space = "\ua0"
+" Set airline theme
+"let g:airline_theme='tomorrow'
+let g:airline_theme='base16_eighties'
+
+" Toggle tagbar
+nmap <leader>t :TagbarToggle<CR>
+
 """""""" Aliases """""""
 " leader
 map <SPACE> <leader>
-" select all text in buffer
-map <Leader>a ggVG
 " edit vimrc quickly
 map <leader>v :sp ~/.vimrc<cr>
 " reload vimrc when saved
@@ -44,6 +97,9 @@ au BufWritePost .vimrc so ~/.vimrc
 cmap w!! w !sudo tee > /dev/null %
 " Comment command with '#' by default
 cmap comment s/^/#/
+
+" Toggle spell checking
+map <leader>s :setlocal spell!<cr>
 
 " New lines without insert mode
 map <Enter> o<ESC>
@@ -70,6 +126,10 @@ nnoremap <C-H> <C-W><C-H>
 set splitbelow
 set splitright
 
+" find current selection
+vnoremap <silent> * :call VisualSelection('f', '')<CR>
+vnoremap <silent> # :call VisualSelection('b', '')<CR>
+
 """"""" Colors
 set t_Co=256
 set background=dark
@@ -89,32 +149,16 @@ let g:syntastic_auto_loc_list = 1
 let g:elm_syntastic_show_warnings = 1
 let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
+" Clear syntastic checks
+map <Leader>e :SyntasticReset<CR>:ccl<CR>
 
 """"""" Ctrl P settings
 let g:ctrlp_show_hidden = 1
-
-"""""""" haskell
-" ghc-mod
-map <Leader>q :GhcModType<CR>
-map <Leader>w :GhcModTypeInsert<CR>
-map <Leader>s :GhcModSplitFunCase<CR>
-map <Leader>e :SyntasticReset<CR>:ccl<CR>:GhcModTypeClear<CR>
-"let g:ghcmod_hlint_options = []
-let g:ghcmod_hlint_options = ['--ignore=Move brackets to avoid $', '--ignore=Redundant $', '--ignore=Redundant bracket']
-autocmd BufWritePost *.hs GhcModCheckAndLintAsync
-" tabularize
-let g:haskell_tabular = 1
-vmap a= :Tabularize /=<CR>
-vmap a; :Tabularize /::<CR>
-vmap a- :Tabularize /-><CR>
-vmap a, :Tabularize /,<CR>
-
-""""""""" latex
-function ReloadLatex()
-  :w
-  :!pdflatex %
-endfunc
-au FileType tex cmap rt call ReloadLatex()
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/.stack-work/*
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/]\.(git|stack-work)$',
+  \ 'file': '\v\.(exe|so|dll)$',
+  \ }
 
 """"""" Set tabbing preferences
 """"" default 2 spaces
