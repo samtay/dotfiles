@@ -3,7 +3,7 @@ let &l:statusline = '%{empty(getqflist()) ? "[No Errors]" : "[Errors Found]"}' .
 
 " necoghc
 let g:haskellmode_completion_ghc = 0
-autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+setlocal omnifunc=necoghc#omnifunc
 
 "" Conceal
 hi clear Conceal
@@ -76,7 +76,7 @@ nnoremap <silent> <leader>hz :HoogleClose<CR>
 
 "" Indenting
 " Use hindent instead of par for haskell buffers
-autocmd FileType haskell let &formatprg="hindent --tab-size 2 -XQuasiQuotes"
+let &formatprg="hindent --tab-size 2 -XQuasiQuotes"
 " Tabularizing
 let g:haskell_tabular = 1
 vmap a= :Tabularize /=<CR>
@@ -85,22 +85,18 @@ vmap a- :Tabularize /-><CR>
 vmap a, :Tabularize /,<CR>
 
 "" Completion / syntax / linting
-augroup haskell
-  autocmd!
-  autocmd FileType haskell map <silent> <leader>e :noh<cr>:GhcModTypeClear<cr>
-  autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
-augroup END
+nnoremap <silent> <leader>e :noh<cr>:GhcModTypeClear<cr>:ccl<cr>
+setlocal omnifunc=necoghc#omnifunc
 inoremap <Nul> <c-r>=SuperTabAlternateCompletion("\<lt>c-x>\<lt>c-o>")<cr>
 autocmd BufWritePost *.hs GhcModCheckAndLintAsync
 " ghc-mod
-map <Leader>q :GhcModType<CR>
-map <Leader>w :GhcModTypeInsert<CR>
+map <leader>q :GhcModType<CR>
+map <leader>w :GhcModTypeInsert<CR>
 let g:ghcmod_hlint_options = ['--ignore=Move brackets to avoid $', '--ignore=Redundant $', '--ignore=Redundant bracket']
 " Show types in completion suggestions
 let g:necoghc_enable_detailed_browse = 1
 " Resolve ghcmod base directory
-au FileType haskell let g:ghcmod_use_basedir = getcwd()
-
+let g:ghcmod_use_basedir = getcwd()
 " Fix path issues from vim.wikia.com/wiki/Set_working_directory_to_the_current_file
 let s:default_path = escape(&path, '\ ') " store default value of 'path'
 " Always add the current file's directory to the path and tags list if not

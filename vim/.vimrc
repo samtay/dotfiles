@@ -93,6 +93,16 @@ map <leader>v :sp ~/.vimrc<cr>
 " reload vimrc when saved
 au BufWritePost .vimrc so ~/.vimrc
 
+" Leader shortcuts for saving, opening, copy pasting
+nnoremap <leader>o :CtrlP<CR>
+nnoremap <leader>w :w<CR>
+vmap <leader>y "+y
+vmap <leader>d "+d
+nmap <leader>p "+p
+nmap <leader>P "+P
+vmap <leader>p "+p
+vmap <leader>P "+P
+
 " Save read-only files easily
 cmap w!! w !sudo tee > /dev/null %
 " Comment command with '#' by default
@@ -150,7 +160,7 @@ let g:elm_syntastic_show_warnings = 1
 let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
 " Clear syntastic checks
-map <Leader>e :SyntasticReset<CR>:ccl<CR>
+nnoremap <leader>e :SyntasticReset<CR>:ccl<CR>
 
 """"""" Ctrl P settings
 let g:ctrlp_show_hidden = 1
@@ -167,3 +177,10 @@ syntax on
 set expandtab
 set softtabstop=2
 set shiftwidth=2
+
+""""""" Autocompletion settings
+" Try omnifunc, else fallback to keywords
+autocmd FileType *
+      \ if &omnifunc != '' |
+      \   call SuperTabChain(&omnifunc, "<c-p>") |
+      \ endif
