@@ -2,5 +2,5 @@
 xrandr -s 0
 [[ -e ~/.Xresources ]] && xrdb -merge -I$HOME ~/.Xresources
 [[ -e ~/.Xmodmap ]] && xmodmap ~/.Xmodmap
-feh --bg-scale 8ceUm7i.png &
+feh --bg-fill ~/Images/space2.jpg &
 exec xmonad
