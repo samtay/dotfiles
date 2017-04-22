@@ -33,3 +33,6 @@ gst-plugins-good
 gst-plugins-base
 alsa-utils
 texlive-most
+beets
+cmus
+cmake
