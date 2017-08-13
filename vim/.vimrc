@@ -15,12 +15,15 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'majutsushi/tagbar'
 " elm
 Plug 'ElmCast/elm-vim'
-"" haskell
+" haskell
 Plug 'neovimhaskell/haskell-vim', {'for': 'haskell'}
 Plug 'enomsg/vim-haskellConcealPlus', { 'for': 'haskell' }
 Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
 Plug 'eagletmt/ghcmod-vim', {'for': 'haskell'}
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
+" coq
+Plug 'let-def/vimbufsync'
+Plug 'the-lambda-church/coquille'
 " tabular formatting
 Plug 'godlygeek/tabular'
 
@@ -184,3 +187,6 @@ autocmd FileType *
       \ if &omnifunc != '' |
       \   call SuperTabChain(&omnifunc, "<c-p>") |
       \ endif
+
+" Coquille commands
+au FileType coq call coquille#CoqideMapping()

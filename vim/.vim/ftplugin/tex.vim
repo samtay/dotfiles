@@ -1,5 +1,5 @@
 function! ReloadLatex()
   :w
-  :!pdflatex %
+  :!xelatex %
 endfunc
 nmap <leader><Enter> :call ReloadLatex()<CR>

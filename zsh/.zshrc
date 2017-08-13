@@ -38,6 +38,7 @@ export DOTFILES_DIR="$HOME/git/dotfiles"
 export PATH=/usr/local/bin:$PATH
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.npm-global/bin:$PATH"
+export PATH="$HOME/.dex/bin:$PATH"
 
 
 #####################################################################
@@ -238,6 +239,8 @@ fi
 autoload -U +X bashcompinit && bashcompinit
 # stack completion
 eval "$(stack --bash-completion-script stack)"
+#eval "$(dmc --bash-completion-script dmc)"
+#eval "$(dm --bash-completion-script dm)"
 
 HISTFILE=${HOME}/.zsh_history
 HISTSIZE=10000                   # The maximum number of events to save in the internal history.
@@ -273,4 +276,6 @@ function zle-line-init zle-keymap-select {
 }
 zle -N zle-line-init
 zle -N zle-keymap-select
+
+if [ -e /home/samtay/.nix-profile/etc/profile.d/nix.sh ]; then . /home/samtay/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 

@@ -74,6 +74,9 @@ nnoremap <leader>hI :HoogleInfo
 " Hoogle, close the Hoogle window
 nnoremap <silent> <leader>hz :HoogleClose<CR>
 
+"" Formatting
+xnoremap <leader>b <esc>:'<,'>:!brittany<cr>
+
 "" Indenting
 " Use hindent instead of par for haskell buffers
 let &formatprg="hindent --tab-size 2 -XQuasiQuotes"
@@ -85,14 +88,14 @@ vmap a- :Tabularize /-><CR>
 vmap a, :Tabularize /,<CR>
 
 "" Completion / syntax / linting
-nnoremap <silent> <leader>e :noh<cr>:GhcModTypeClear<cr>:ccl<cr>
+nnoremap <silent> <leader>e :noh<cr>:GhcModTypeClear<cr>:ccl<cr>:HoogleClose<cr>
 setlocal omnifunc=necoghc#omnifunc
 inoremap <Nul> <c-r>=SuperTabAlternateCompletion("\<lt>c-x>\<lt>c-o>")<cr>
 autocmd BufWritePost *.hs GhcModCheckAndLintAsync
 " ghc-mod
 map <leader>q :GhcModType<CR>
 map <leader>w :GhcModTypeInsert<CR>
-let g:ghcmod_hlint_options = ['--ignore=Move brackets to avoid $', '--ignore=Redundant $', '--ignore=Redundant bracket']
+let g:ghcmod_hlint_options = ['--ignore=Move brackets to avoid $', '--ignore=Redundant $', '--ignore=Redundant bracket', '--ignore=Use ***', '--ignore=Use newtype instead of data']
 " Show types in completion suggestions
 let g:necoghc_enable_detailed_browse = 1
 " Resolve ghcmod base directory
@@ -118,3 +121,15 @@ function! Pointful()
   call setline('.', split(system('pointful '.shellescape(join(getline(a:firstline, a:lastline), "\n"))), "\n"))
 endfunction
 vnoremap <silent> <leader>h> :call Pointful()<CR>
+
+nnoremap <leader>c :call ConcealToggle()<cr>
+
+nnoremap <leader>s :%!stylish-haskell<CR>
+
+function! ConcealToggle()
+  if &conceallevel
+    setlocal conceallevel=0
+  else
+    setlocal conceallevel=1
+  endif
+endfunction

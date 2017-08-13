@@ -1,6 +1,9 @@
 # config
 Personal configuration files
 
+## TODO
+1. read [spacemacs tutorial!!!](http://thume.ca/howto/2015/03/07/configuring-spacemacs-a-tutorial/)
+
 ## arch + f2fs
 When arch bails and I'm in `rootfs` all on my own, two commands to live by:
 ```bash

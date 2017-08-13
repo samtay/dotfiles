@@ -186,9 +186,9 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask, xK_f),
      spawn "firefox")
 
-  -- Spawn gmail on mod + g
+  -- Spawn chrome
   , ((modMask, xK_g),
-     spawn "vimb --cmd \"open https://mail.google.com/mail/u/0/#inbox\"")
+     spawn "google-chrome-stable")
 
   -- Take a selective screenshot.
   , ((modMask, xK_y),
@@ -393,6 +393,7 @@ main = do
   xmonad $ defaults
     { logHook    = dynamicLogWithPP $ myDefaultPP { ppOutput = hPutStrLn xmproc }
     , manageHook = manageDocks <+> myManageHook
+    , handleEventHook = docksEventHook
     }
 
 ------------------------------------------------------------------------
