@@ -30,10 +30,15 @@ values."
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(html
+   '(yaml
+     html
      javascript
      markdown
-     haskell
+     (haskell :variables
+              haskell-enable-hindent-style "johan-tibell"
+              haskell-completion-backend 'intero
+              ;; haskell-enable-ghc-mod-support nil
+              )
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
