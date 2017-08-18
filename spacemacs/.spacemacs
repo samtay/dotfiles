@@ -36,7 +36,7 @@ values."
      markdown
      (haskell :variables
               haskell-enable-hindent-style "johan-tibell"
-              haskell-completion-backend 'intero
+              haskell-completion-backend 'dante
               ;; haskell-enable-ghc-mod-support nil
               )
      ;; ----------------------------------------------------------------
@@ -46,7 +46,6 @@ values."
      ;; ----------------------------------------------------------------
      helm
      auto-completion
-      (haskell :variables haskell-completion-backend 'intero)
      ;; better-defaults
      emacs-lisp
      ;; git
@@ -318,15 +317,42 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
-  ;; Install dante
+  ;; TODO TRY PUTTING THESE IN USER-INIT
+  ;; update tag generator
+  (add-hook 'haskell-mode-hook
+            (setq projectile-tags-command "haskdogs -- --follow-symlinks"))
+  ;; install dante
   (use-package dante
     :ensure t
     :commands 'dante-mode
     :init
     (add-hook 'haskell-mode-hook 'dante-mode)
     (add-hook 'haskell-mode-hook 'flycheck-mode))
+  ;; taken from https://github.com/shajra/example-nix#dante
+  ;; however looking at dante/dante.el, this might be unnecessary/out-of-date
+  (setq-default
+   dante-repl-command-line-methods-alist
+   `(
+     (styx .
+           ,(lambda (root)
+              (dante-repl-by-file root '("styx.yaml")
+                                  '("styx" "repl"))))
+     (nix-new .
+              ,(lambda (root)
+                 (dante-repl-by-file
+                  (projectile-project-root)
+                  '("shell.nix")
+                  `("nix-shell" "--run" "cabal new-repl"
+                    ,(concat (projectile-project-root) "/shell.nix")))))
+     (stack .
+            ,(lambda (root)
+               (dante-repl-by-file root '("stack.yaml")
+                                   '("stack" "repl"))))
+     (bare  . ,(lambda (_) '("cabal" "repl")))))
+  ;; stylish on save
   (custom-set-variables
    '(haskell-stylish-on-save t))
+  ;; path issue, possibly can be removed TODO
   (setenv "PATH"
           (concat
            (getenv "HOME") "/.local/bin" ":"
@@ -334,6 +360,7 @@ you should place your code here."
            (getenv "PATH")
            )
           )
+  ;; custom keybindings
   (define-key evil-normal-state-map (kbd "RET") 'spacemacs/evil-insert-line-below)
   (define-key evil-normal-state-map (kbd "<S-return>") 'spacemacs/evil-insert-line-above)
   )
@@ -367,7 +394,7 @@ This function is called at the very end of Spacemacs initialization."
  '(evil-want-Y-yank-to-eol nil)
  '(package-selected-packages
    (quote
-    (company-web web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode impatient-mode htmlize helm-css-scss haml-mode emmet-mode web-completion-data helm-company helm-c-yasnippet fuzzy company-statistics company-cabal auto-yasnippet ac-ispell auto-complete mmm-mode markdown-toc markdown-mode gh-md dante intero flycheck hlint-refactor hindent helm-hoogle haskell-snippets yasnippet company-ghci company-ghc ghc company haskell-mode cmm-mode ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed dash aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))))
+    (yaml-mode company-web web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode impatient-mode htmlize helm-css-scss haml-mode emmet-mode web-completion-data helm-company helm-c-yasnippet fuzzy company-statistics company-cabal auto-yasnippet ac-ispell auto-complete mmm-mode markdown-toc markdown-mode gh-md dante intero flycheck hlint-refactor hindent helm-hoogle haskell-snippets yasnippet company-ghci company-ghc ghc company haskell-mode cmm-mode ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed dash aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
