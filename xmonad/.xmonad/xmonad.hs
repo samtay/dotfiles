@@ -188,11 +188,11 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- Spawn chrome
   , ((modMask, xK_g),
-     spawn "google-chrome-stable")
+     spawn "chromium")
 
   -- Spawn chrome
   , ((modMask .|. shiftMask, xK_g),
-     spawn "google-chrome-stable --incognito")
+     spawn "chromium --incognito")
 
   -- Take a selective screenshot.
   , ((modMask, xK_y),
