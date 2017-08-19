@@ -1,7 +1,8 @@
 call plug#begin('~/.vim/plugged')
 
 """"""""""" Custom added plugins """"""""""""""""""""
-Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+" Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+Plug 'LnL7/vim-nix'
 " syntax checker
 Plug 'scrooloose/syntastic'
 " autocomplete tabs

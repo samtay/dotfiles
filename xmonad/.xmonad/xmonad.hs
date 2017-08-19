@@ -97,6 +97,8 @@ myBorderWidth = 2
 
 -- Colors for text and backgrounds of each tab when in "Tabbed" layout.
 tabConfig = defaultTheme {
+    fontName = "xft:Source Code Pro:size=9",
+    decoHeight = 34,
     activeBorderColor   = aqua,
     activeTextColor     = foreground,
     activeColor         = selection,
@@ -208,11 +210,11 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- Increase brightness.
   , ((0, xF86XK_MonBrightnessUp),
-     spawn "light -A 5")
+     spawn "xbacklight + 5")
 
   -- Decrease brightness.
   , ((0, xF86XK_MonBrightnessDown),
-     spawn "light -U 5")
+     spawn "xbacklight - 5")
 
   -- Mute volume.
   , ((0, xF86XK_AudioMute),

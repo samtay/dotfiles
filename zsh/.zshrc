@@ -17,6 +17,7 @@ zplug "plugins/composer",         from:oh-my-zsh, defer:1
 zplug "zsh-users/zsh-syntax-highlighting", defer:1
 zplug "zsh-users/zsh-history-substring-search", defer:2
 zplug "~/git/dotfiles/zsh/plugins", from:local, defer:3
+zplug "spwhitt/nix-zsh-completions"
 
 # theme
 zplug "mafredri/zsh-async"
@@ -230,11 +231,6 @@ bindkey -M menuselect '^[[Z' reverse-menu-complete # shift tab for reverse compl
 # misc tasks
 #####################################################################
 
-# termite ctrl+shift+t
-if [[ $TERM == xterm-termite ]]; then
-  . /etc/profile.d/vte.sh
-  __vte_osc7
-fi
 # bash completions
 autoload -U +X bashcompinit && bashcompinit
 # stack completion

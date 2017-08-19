@@ -2,29 +2,13 @@
 Personal configuration files
 
 ## TODO
+1. rewrite manage.sh for nixos
+2. symlink /etc/nixos/configuration.nix
+3. clone spacemacs into ~/.emacs.d
+4. install vimplug:
+  ```
+  curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  ```
 1. read [spacemacs tutorial!!!](http://thume.ca/howto/2015/03/07/configuring-spacemacs-a-tutorial/)
 
-## arch + f2fs
-When arch bails and I'm in `rootfs` all on my own, two commands to live by:
-```bash
-$ fsck.f2fs -f /dev/nvme0n1p2
-$ echo b > /proc/sysrq-trigger
-```
-
-## todo
-1. Compile xmobar --with-alsa
-2. Music manager such as beets
-3. cmus is a CLI music player ftw
-
-## about `manage.sh`
-TODO
-
-## notes
-This assumes that during pacstrap, I have installed
-
-- base
-- base-devel
-- vim
-- git
-- openssh
-- connman

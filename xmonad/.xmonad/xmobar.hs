@@ -1,6 +1,6 @@
 -- docs: http://projects.haskell.org/xmobar/
 Config {
-    font = "xft:Terminus-9",
+    font = "xft:Source Code Pro-9",
     bgColor = "#2d2d2d",
     fgColor = "#cccccc",
     position = Top,
