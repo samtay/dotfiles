@@ -276,3 +276,7 @@ zle -N zle-keymap-select
 
 if [ -e /home/samtay/.nix-profile/etc/profile.d/nix.sh ]; then . /home/samtay/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 
+# trying out neovim
+alias -g vim='nvim'
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

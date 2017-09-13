@@ -1,32 +1,41 @@
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.local/share/nvim/plugged')
 
 """"""""""" Custom added plugins """"""""""""""""""""
-" Plug 'Shougo/vimproc.vim', {'do' : 'make'}
-Plug 'LnL7/vim-nix'
-" syntax checker
-Plug 'scrooloose/syntastic'
-" autocomplete tabs
-Plug 'ervandew/supertab'
-" fuzzy filesystem finder
-Plug 'ctrlpvim/ctrlp.vim'
-" airline
+" utils
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+Plug 'scrooloose/nerdtree'
+" spacemacs ?
+Plug 'hecal3/vim-leader-guide'
+Plug 'jimmay5469/vim-spacemacs'
+" color
+" Plug 'colepeters/spacemacs-theme.vim'
+Plug 'liuchengxu/space-vim-dark'
+" haskell
+Plug 'ndmitchell/ghcid', { 'rtp': 'plugins/nvim' }
+Plug 'enomsg/vim-haskellConcealPlus', { 'for': 'haskell' }
+Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
+Plug 'neovimhaskell/haskell-vim', {'for': 'haskell'}
+" nix
+Plug 'LnL7/vim-nix'
 " uncomment after ctags
 Plug 'majutsushi/tagbar'
 " elm
-Plug 'ElmCast/elm-vim'
-" haskell
-Plug 'neovimhaskell/haskell-vim', {'for': 'haskell'}
-Plug 'enomsg/vim-haskellConcealPlus', { 'for': 'haskell' }
-Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
-Plug 'eagletmt/ghcmod-vim', {'for': 'haskell'}
-Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
+" Plug 'ElmCast/elm-vim'
+" syntax checker
+" Plug 'scrooloose/syntastic'
+" autocomplete tabs
+" Plug 'ervandew/supertab'
+" fuzzy filesystem finder
+"Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
+"Plug 'eagletmt/ghcmod-vim', {'for': 'haskell'}
 " coq
-Plug 'let-def/vimbufsync'
-Plug 'the-lambda-church/coquille'
+" Plug 'let-def/vimbufsync'
+" Plug 'the-lambda-church/coquille'
 " tabular formatting
-Plug 'godlygeek/tabular'
+" Plug 'godlygeek/tabular'
 
 
 """"""""""" End plugins """""""""""""""""""""""""""""
@@ -42,6 +51,13 @@ set showcmd
 " indenting
 set ai
 set si
+
+""""" default 2 spaces
+filetype plugin indent on
+syntax on
+set expandtab
+set softtabstop=2
+set shiftwidth=2
 
 " Don't auto comment for the love of god
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
@@ -93,13 +109,11 @@ nmap <leader>t :TagbarToggle<CR>
 " leader
 map <SPACE> <leader>
 " edit vimrc quickly
-map <leader>v :sp ~/.vimrc<cr>
+map <leader>v :sp ~/.config/nvim/init.vim<cr>
 " reload vimrc when saved
 au BufWritePost .vimrc so ~/.vimrc
 
-" Leader shortcuts for saving, opening, copy pasting
-nnoremap <leader>o :CtrlP<CR>
-nnoremap <leader>w :w<CR>
+" Leader shortcuts for copy pasting
 vmap <leader>y "+y
 vmap <leader>d "+d
 nmap <leader>p "+p
@@ -145,49 +159,68 @@ vnoremap <silent> * :call VisualSelection('f', '')<CR>
 vnoremap <silent> # :call VisualSelection('b', '')<CR>
 
 """"""" Colors
+if (has("termguicolors"))
+  set termguicolors
+endif
 set t_Co=256
+" let g:kolor_italic=1                    " Enable italic. Default: 1
+" let g:kolor_bold=1                      " Enable bold. Default: 1
+" let g:kolor_underlined=0                " Enable underline. Default: 0
+" let g:kolor_alternative_matchparen=0    " Gray 'MatchParen' color. Default: 0
 set background=dark
-let g:kolor_italic=1                    " Enable italic. Default: 1
-let g:kolor_bold=1                      " Enable bold. Default: 1
-let g:kolor_underlined=0                " Enable underline. Default: 0
-let g:kolor_alternative_matchparen=0    " Gray 'MatchParen' color. Default: 0
-colorscheme Tomorrow-Night-Eighties
-
-"""""" Syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:elm_syntastic_show_warnings = 1
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
-" Clear syntastic checks
-nnoremap <leader>e :SyntasticReset<CR>:ccl<CR>
+colorscheme space-vim-dark
+hi Comment cterm=italic
 
 """"""" Ctrl P settings
+" ali's settings
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_lazy_update = 10
+nnoremap <C-o> :CtrlPBuffer<CR>
+inoremap <C-o> <Esc>:CtrlPBuffer<CR>
+" default hidden stuff
 let g:ctrlp_show_hidden = 1
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/.stack-work/*
 let g:ctrlp_custom_ignore = {
   \ 'dir':  '\v[\/]\.(git|stack-work)$',
   \ 'file': '\v\.(exe|so|dll)$',
   \ }
+" ag + aspen
+if executable('ag')
+  set grepprg=ag\ --nogroup\ --nocolor\ --smart-case
+  let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden --smart-case
+                              \ --ignore .git
+                              \ --ignore .svn
+                              \ --ignore .hg
+                              \ --ignore amazonka
+                              \ --ignore="*.dyn_hi"
+                              \ --ignore="*.dyn_o"
+                              \ --ignore="*.p_hi"
+                              \ --ignore="*.p_o"
+                              \ --ignore="*.hi"
+                              \ --ignore="*.o"
+                              \ -g ""'
+endif
 
-""""""" Set tabbing preferences
-""""" default 2 spaces
-filetype plugin indent on
-syntax on
-set expandtab
-set softtabstop=2
-set shiftwidth=2
+""""""" FZF settings
+let g:fzf_layout = { 'down': '~35%' }
+
+""""""" Spacemacs shiz
+let g:spacemacs#excludes = [
+  \ '^pf',
+  \ '^bf',
+  \ '^fr',
+  \ '^ff',
+  \ ]
+nnoremap <leader>pf :Files<CR>
+nnoremap <leader>fr :History<CR>
+nnoremap <leader>bf :Buffers<CR>
+
 
 """"""" Autocompletion settings
 " Try omnifunc, else fallback to keywords
-autocmd FileType *
-      \ if &omnifunc != '' |
-      \   call SuperTabChain(&omnifunc, "<c-p>") |
-      \ endif
-
-" Coquille commands
-au FileType coq call coquille#CoqideMapping()
+" autocmd FileType *
+"       \ if &omnifunc != '' |
+"       \   call SuperTabChain(&omnifunc, "<c-p>") |
+"       \ endif

@@ -156,7 +156,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- Start editing dotfiles
   , ((modMask, xK_x), submap . M.fromList $
       [ ((0, xK_x), editFile "$HOME/.xmonad/xmonad.hs")
-      , ((0, xK_v), editFile "$HOME/.vimrc")
+      , ((0, xK_v), editFile "$HOME/.config/nvim/init.vim")
       , ((0, xK_z), editFile "$HOME/.zshrc")
       ])
 

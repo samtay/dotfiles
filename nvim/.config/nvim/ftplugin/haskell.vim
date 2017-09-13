@@ -1,8 +1,8 @@
 " syntastic
-let &l:statusline = '%{empty(getqflist()) ? "[No Errors]" : "[Errors Found]"}' . (empty(&l:statusline) ? &statusline : &l:statusline)
+" let &l:statusline = '%{empty(getqflist()) ? "[No Errors]" : "[Errors Found]"}' . (empty(&l:statusline) ? &statusline : &l:statusline)
 
 " necoghc
-let g:haskellmode_completion_ghc = 0
+" let g:haskellmode_completion_ghc = 0
 setlocal omnifunc=necoghc#omnifunc
 
 "" Conceal
@@ -78,8 +78,8 @@ nnoremap <silent> <leader>hz :HoogleClose<CR>
 xnoremap <leader>b <esc>:'<,'>:!brittany<cr>
 
 "" Indenting
-" Use hindent instead of par for haskell buffers
-let &formatprg="hindent --tab-size 2 -XQuasiQuotes"
+" Use hindent instead of par for haskell buffers " nah
+" let &formatprg="hindent --tab-size 2 -XQuasiQuotes"
 " Tabularizing
 let g:haskell_tabular = 1
 vmap a= :Tabularize /=<CR>
@@ -91,15 +91,15 @@ vmap a, :Tabularize /,<CR>
 nnoremap <silent> <leader>e :noh<cr>:GhcModTypeClear<cr>:ccl<cr>:HoogleClose<cr>
 setlocal omnifunc=necoghc#omnifunc
 inoremap <Nul> <c-r>=SuperTabAlternateCompletion("\<lt>c-x>\<lt>c-o>")<cr>
-autocmd BufWritePost *.hs GhcModCheckAndLintAsync
+" autocmd BufWritePost *.hs GhcModCheckAndLintAsync
 " ghc-mod
 map <leader>q :GhcModType<CR>
-map <leader>w :GhcModTypeInsert<CR>
-let g:ghcmod_hlint_options = ['--ignore=Move brackets to avoid $', '--ignore=Redundant $', '--ignore=Redundant bracket', '--ignore=Use ***', '--ignore=Use newtype instead of data']
+" map <leader>w :GhcModTypeInsert<CR>
+" let g:ghcmod_hlint_options = ['--ignore=Move brackets to avoid $', '--ignore=Redundant $', '--ignore=Redundant bracket', '--ignore=Use ***', '--ignore=Use newtype instead of data']
 " Show types in completion suggestions
-let g:necoghc_enable_detailed_browse = 1
+" let g:necoghc_enable_detailed_browse = 1
 " Resolve ghcmod base directory
-let g:ghcmod_use_basedir = getcwd()
+" let g:ghcmod_use_basedir = getcwd()
 " Fix path issues from vim.wikia.com/wiki/Set_working_directory_to_the_current_file
 let s:default_path = escape(&path, '\ ') " store default value of 'path'
 " Always add the current file's directory to the path and tags list if not
