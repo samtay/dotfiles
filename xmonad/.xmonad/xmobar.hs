@@ -68,7 +68,7 @@ Config {
           , "--normal"   , "#6699cc"
           , "--low"      , "#99cc99"
           , "--" -- brightness specific options
-          , "-D"         , "intel_backlight"
+          , "-D"         , "acpi_video0"
           ] 40
       , Run Date "<fc=#66cccc>%F (%a) %T</fc>" "date" 10
       , Run StdinReader

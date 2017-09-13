@@ -42,7 +42,7 @@ myLauncher = "dmenu_run -fn '-*-terminus-*-r-normal-*-*-120-*-*-*-*-iso8859-*' -
 -- Workspaces
 -- The default number of workspaces (virtual screens) and their names.
 --
-myWorkspaces = map show $ [1..9] ++ [0]
+myWorkspaces = ["1:code", "2:repl", "3:chrome"] ++ map show ([4..9] ++ [0])
 
 ------------------------------------------------------------------------
 -- Window rules
@@ -250,7 +250,8 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- Grid select
   , ((modMask, xK_Tab),
-      toggleWS)
+      -- toggleWS) -- Temporarily use this for xrandr mgmt
+      nextScreen)
 
   --------------------------------------------------------------------
   -- "Standard" xmonad key bindings
@@ -327,8 +328,8 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   ++
 
-  -- mod-[1..9], Switch to workspace N
-  -- mod-shift-[1..9], Move client to workspace N
+  -- mod-[1..0], Switch to workspace N
+  -- mod-shift-[1..0], Move client to workspace N
   [((m .|. modMask, k), windows $ f i)
     | (i, k) <- zip (XMonad.workspaces conf) $ [xK_1 .. xK_9] ++ [xK_0]
       , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
@@ -337,7 +338,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
   -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
   [((m .|. modMask, key), screenWorkspace sc >>= flip whenJust (windows . f))
-      | (key, sc) <- zip [xK_w, xK_e, xK_r] [1,0,2]
+      | (key, sc) <- zip [xK_w, xK_e, xK_r] [2,1,0]
       , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
 

@@ -22,12 +22,10 @@ displays-toggle() {
 #  local displayCount=$(xrandr | grep " connected " | wc -l)
 #  if [[ $displayCount -gt 1 ]]; then
   case $1 in
-    0) xrandr --output HDMI-0 --off \
+    0) xrandr --output DP-4 --off \
               --output DP-2 --off \
-              --output DP-0 --panning 1920x1080 ;;
-    1) xrandr --output HDMI-0 --auto ;;
-    2) xrandr --output HDMI-0 --auto --right-of DP-0 \
-              --output DP-2 --auto --right-of HDMI-0 ;;
+              --output DP-3 --auto ;;
+    2) xrandr --output DP-3 --off --output DP-4 --auto --output DP-2 --auto --right-of DP-4
   esac
 }
 
@@ -71,3 +69,11 @@ fix-broken-symlinks() {
   find -L . -type l -exec rm {} \;
 }
 
+aspen-emacs() {
+  cd ~/git/aspen
+  nohup nix-shell -E \
+    'let this = import ./. {}; lib = import "${this.nixpkgs.path}/pkgs/development/haskell-modules/lib.nix" { pkgs = this.nixpkgs; }; in (lib.addBuildDepend this.frontendGhc "").env' \
+    --command "emacs" \
+    >/dev/null 2>&1 \
+    & \
+}

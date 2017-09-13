@@ -1,4 +1,5 @@
 ;; -*- mode: emacs-lisp -*-
+
 ;; This file is loaded by Spacemacs at startup.
 ;; It must be stored in your home directory.
 
@@ -34,10 +35,11 @@ values."
      html
      javascript
      markdown
+     nixos
      (haskell :variables
               haskell-enable-hindent-style "johan-tibell"
               haskell-completion-backend 'dante
-              ;; haskell-enable-ghc-mod-support nil
+              haskell-enable-ghc-mod-support nil
               )
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
@@ -48,7 +50,7 @@ values."
      auto-completion
      ;; better-defaults
      emacs-lisp
-     ;; git
+     git
      ;; markdown
      ;; org
      ;; (shell :variables
@@ -62,7 +64,7 @@ values."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(dante)
+   dotspacemacs-additional-packages '()
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
@@ -141,7 +143,7 @@ values."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 24
+                               :size 17
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
@@ -308,6 +310,51 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
+  (defconst aspen-path "/home/sam/git/aspen") ;; Where your code lives
+
+  ;; The basic infrastructure for calling ghci within a nix-shell
+  (defconst aspen-common-flags (concat "-i" aspen-path "/" "common/src" " -Wall "))
+  (defun aspen-haskell-wrapper (env flags c)
+    (append
+    (list "nix-shell" "-E" (concat "let this = import " aspen-path " {}; lib = import \"${this.nixpkgs.path}/pkgs/development/haskell-modules/lib.nix\" { pkgs = this.nixpkgs; }; in " env ".env") "--command")
+    (list (mapconcat 'identity (list (mapconcat 'identity c " ") aspen-common-flags flags) " "))))
+
+  ;; Add backend-specific dependencies and include-directories
+  (defun aspen-backend-shell (c)
+    "Nix-shell wrapper for backend work."
+    (aspen-haskell-wrapper
+    "this.backend"
+    (concat "-i" aspen-path "/" "backend/src" " " "-hide-package cryptonite")
+    c))
+
+  ;; Add frontend-specific dependencies and include-directories
+  (defun aspen-frontend-shell (c)
+    "Nix-shell wrapper for frontend work."
+    (aspen-haskell-wrapper
+    "(lib.addBuildDepend this.frontendGhc \"\")"
+    (concat "-i" aspen-path "/" "frontend/src")
+    c))
+
+  ;; Promise Emacs that the functions defined above don't do anything evil.
+  ;; You can skip this, but you'll get a confirmation dialog every time you
+  ;; open a Haskell file in the relevant directories.
+  (setq safe-local-variable-values
+    '((haskell-process-wrapper-function . aspen-backend-shell)
+      (haskell-process-wrapper-function . aspen-frontend-shell)))
+
+  ;; Set the haskell-process-wrapper-function to use the appropriate
+  ;; nix-shell for each directory.
+  (dir-locals-set-class-variables 'aspen-backend
+  '((haskell-mode (haskell-process-wrapper-function . aspen-backend-shell))))
+  (dir-locals-set-class-variables 'aspen-frontend
+  '((haskell-mode (haskell-process-wrapper-function . aspen-frontend-shell))))
+
+  (dir-locals-set-directory-class
+  (concat aspen-path "/" "backend") 'aspen-backend)
+  (dir-locals-set-directory-class
+  (concat aspen-path "/" "frontend") 'aspen-frontend)
+  (dir-locals-set-directory-class
+  (concat aspen-path "/" "common") 'aspen-backend)
   )
 
 (defun dotspacemacs/user-config ()
@@ -321,45 +368,46 @@ you should place your code here."
   ;; update tag generator
   (add-hook 'haskell-mode-hook
             (setq projectile-tags-command "haskdogs -- --follow-symlinks"))
-  ;; install dante
+  install dante
   (use-package dante
     :ensure t
+    :after haskell-mode
     :commands 'dante-mode
     :init
     (add-hook 'haskell-mode-hook 'dante-mode)
     (add-hook 'haskell-mode-hook 'flycheck-mode))
   ;; taken from https://github.com/shajra/example-nix#dante
   ;; however looking at dante/dante.el, this might be unnecessary/out-of-date
-  (setq-default
-   dante-repl-command-line-methods-alist
-   `(
-     (styx .
-           ,(lambda (root)
-              (dante-repl-by-file root '("styx.yaml")
-                                  '("styx" "repl"))))
-     (nix-new .
-              ,(lambda (root)
-                 (dante-repl-by-file
-                  (projectile-project-root)
-                  '("shell.nix")
-                  `("nix-shell" "--run" "cabal new-repl"
-                    ,(concat (projectile-project-root) "/shell.nix")))))
-     (stack .
-            ,(lambda (root)
-               (dante-repl-by-file root '("stack.yaml")
-                                   '("stack" "repl"))))
-     (bare  . ,(lambda (_) '("cabal" "repl")))))
-  ;; stylish on save
-  (custom-set-variables
-   '(haskell-stylish-on-save t))
+  ;; (setq-default
+  ;;  dante-repl-command-line-methods-alist
+  ;;  `(
+  ;;    (styx .
+  ;;          ,(lambda (root)
+  ;;             (dante-repl-by-file root '("styx.yaml")
+  ;;                                 '("styx" "repl"))))
+  ;;    (nix-new .
+  ;;             ,(lambda (root)
+  ;;                (dante-repl-by-file
+  ;;                 (projectile-project-root)
+  ;;                 '("shell.nix")
+  ;;                 `("nix-shell" "--run" "cabal repl"
+  ;;                   ,(concat (projectile-project-root) "/shell.nix")))))
+  ;;    (stack .
+  ;;           ,(lambda (root)
+  ;;              (dante-repl-by-file root '("stack.yaml")
+  ;;                                  '("stack" "repl"))))
+  ;;    (bare  . ,(lambda (_) '("cabal" "repl")))))
+  ;; stylish on save -- FALSE
+  ;; (custom-set-variables
+  ;;  '(haskell-stylish-on-save nil))
   ;; path issue, possibly can be removed TODO
-  (setenv "PATH"
-          (concat
-           (getenv "HOME") "/.local/bin" ":"
-           (getenv "HOME") "/.cabal/bin" ":"
-           (getenv "PATH")
-           )
-          )
+  ;; (setenv "PATH"
+  ;;         (concat
+  ;;          (getenv "HOME") "/.local/bin" ":"
+  ;;          (getenv "HOME") "/.cabal/bin" ":"
+  ;;          (getenv "PATH")
+  ;;          )
+  ;;         )
   ;; custom keybindings
   (define-key evil-normal-state-map (kbd "RET") 'spacemacs/evil-insert-line-below)
   (define-key evil-normal-state-map (kbd "<S-return>") 'spacemacs/evil-insert-line-above)
@@ -372,9 +420,10 @@ you should place your code here."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(haskell-stylish-on-save nil)
  '(package-selected-packages
    (quote
-    (yaml-mode web-mode web-beautify tagedit slim-mode scss-mode sass-mode pug-mode livid-mode skewer-mode simple-httpd less-css-mode json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc helm-css-scss haml-mode emmet-mode company-web web-completion-data company-tern dash-functional tern coffee-mode helm-company helm-c-yasnippet fuzzy company-statistics company-cabal auto-yasnippet ac-ispell auto-complete mmm-mode markdown-toc markdown-mode gh-md dante intero flycheck hlint-refactor hindent helm-hoogle haskell-snippets yasnippet company-ghci company-ghc ghc company haskell-mode cmm-mode ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed dash aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))))
+    (nix-mode helm-nixos-options company-nixos-options nixos-options yaml-mode web-mode web-beautify tagedit slim-mode scss-mode sass-mode pug-mode livid-mode skewer-mode simple-httpd less-css-mode json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc helm-css-scss haml-mode emmet-mode company-web web-completion-data company-tern dash-functional tern coffee-mode helm-company helm-c-yasnippet fuzzy company-statistics company-cabal auto-yasnippet ac-ispell auto-complete mmm-mode markdown-toc markdown-mode gh-md dante intero flycheck hlint-refactor hindent helm-hoogle haskell-snippets yasnippet company-ghci company-ghc ghc company haskell-mode cmm-mode ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed dash aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -391,10 +440,13 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(case-fold-search nil)
  '(evil-want-Y-yank-to-eol nil)
+ '(haskell-hasktags-path "/home/sam/git/aspen/hasktags")
+ '(haskell-stylish-on-save nil)
  '(package-selected-packages
    (quote
-    (yaml-mode company-web web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode impatient-mode htmlize helm-css-scss haml-mode emmet-mode web-completion-data helm-company helm-c-yasnippet fuzzy company-statistics company-cabal auto-yasnippet ac-ispell auto-complete mmm-mode markdown-toc markdown-mode gh-md dante intero flycheck hlint-refactor hindent helm-hoogle haskell-snippets yasnippet company-ghci company-ghc ghc company haskell-mode cmm-mode ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed dash aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))))
+    (smeargle magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit magit-popup git-commit with-editor nix-mode helm-nixos-options company-nixos-options nixos-options yaml-mode web-mode web-beautify tagedit slim-mode scss-mode sass-mode pug-mode livid-mode skewer-mode simple-httpd less-css-mode json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc helm-css-scss haml-mode emmet-mode company-web web-completion-data company-tern dash-functional tern coffee-mode helm-company helm-c-yasnippet fuzzy company-statistics company-cabal auto-yasnippet ac-ispell auto-complete mmm-mode markdown-toc markdown-mode gh-md dante intero flycheck hlint-refactor hindent helm-hoogle haskell-snippets yasnippet company-ghci company-ghc ghc company haskell-mode cmm-mode ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed dash aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
