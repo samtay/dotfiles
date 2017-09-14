@@ -7,9 +7,10 @@ setlocal omnifunc=necoghc#omnifunc
 
 "" Conceal
 hi clear Conceal
+set conceallevel=0
 let g:haskell_conceal_wide = 1
 let g:haskell_conceal_enumerations = 1
-let hscoptions="𝐒𝐓𝐄𝐌xRtB𝔻w"
+let hscoptions="𝐒𝐓𝐄𝐌xRtB𝔻wr↱"
 
 "" Tags
 set tags+=codex.tags;/
@@ -62,18 +63,6 @@ function! LoadHscope()
 endfunction
 au BufEnter /*.hs call LoadHscope()
 
-"" Hoogle
-" Hoogle the word under the cursor
-nnoremap <silent> <leader>hh :Hoogle<CR>
-" Hoogle and prompt for input
-nnoremap <leader>hp :Hoogle
-" Hoogle for detailed documentation (e.g. "Functor")
-nnoremap <silent> <leader>hi :HoogleInfo<CR>
-" Hoogle for detailed documentation and prompt for input
-nnoremap <leader>hI :HoogleInfo
-" Hoogle, close the Hoogle window
-nnoremap <silent> <leader>hz :HoogleClose<CR>
-
 "" Formatting
 xnoremap <leader>b <esc>:'<,'>:!brittany<cr>
 
@@ -122,14 +111,3 @@ function! Pointful()
 endfunction
 vnoremap <silent> <leader>h> :call Pointful()<CR>
 
-nnoremap <leader>c :call ConcealToggle()<cr>
-
-nnoremap <leader>s :%!stylish-haskell<CR>
-
-function! ConcealToggle()
-  if &conceallevel
-    setlocal conceallevel=0
-  else
-    setlocal conceallevel=1
-  endif
-endfunction

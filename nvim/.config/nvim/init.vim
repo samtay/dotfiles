@@ -15,27 +15,26 @@ Plug 'jimmay5469/vim-spacemacs'
 Plug 'liuchengxu/space-vim-dark'
 " haskell
 Plug 'ndmitchell/ghcid', { 'rtp': 'plugins/nvim' }
+Plug 'bitc/vim-hdevtools', { 'for': 'haskell' }
 Plug 'enomsg/vim-haskellConcealPlus', { 'for': 'haskell' }
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
 Plug 'neovimhaskell/haskell-vim', {'for': 'haskell'}
 " nix
 Plug 'LnL7/vim-nix'
-" uncomment after ctags
-Plug 'majutsushi/tagbar'
+" tabular formatting
+Plug 'godlygeek/tabular'
+" autocomplete tabs
+Plug 'ervandew/supertab'
 " elm
 " Plug 'ElmCast/elm-vim'
 " syntax checker
 " Plug 'scrooloose/syntastic'
-" autocomplete tabs
-" Plug 'ervandew/supertab'
 " fuzzy filesystem finder
 "Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
 "Plug 'eagletmt/ghcmod-vim', {'for': 'haskell'}
 " coq
 " Plug 'let-def/vimbufsync'
 " Plug 'the-lambda-church/coquille'
-" tabular formatting
-" Plug 'godlygeek/tabular'
 
 
 """"""""""" End plugins """""""""""""""""""""""""""""
@@ -64,6 +63,8 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 " No swap
 set noswapfile
+" Just hide buffers
+set hidden
 
 " Return to last edit position when opening files (You want this!)
 augroup last_edit
@@ -87,10 +88,10 @@ func! DeleteTrailingWS()
   exe "normal `z"
 endfunc
 " use it on saving haskell files
-augroup whitespace
-  autocmd!
-  autocmd BufWrite *.hs :call DeleteTrailingWS()
-augroup END
+" augroup whitespace
+"   autocmd!
+"   autocmd BufWrite *.hs :call DeleteTrailingWS()
+" augroup END
 
 " Use powerline fonts for airline
 if !exists('g:airline_symbols')
@@ -99,8 +100,7 @@ endif
 let g:airline_powerline_fonts = 1
 let g:airline_symbols.space = "\ua0"
 " Set airline theme
-"let g:airline_theme='tomorrow'
-let g:airline_theme='base16_eighties'
+let g:airline_theme='base16_spacemacs'
 
 " Toggle tagbar
 nmap <leader>t :TagbarToggle<CR>
@@ -181,7 +181,7 @@ nnoremap <C-o> :CtrlPBuffer<CR>
 inoremap <C-o> <Esc>:CtrlPBuffer<CR>
 " default hidden stuff
 let g:ctrlp_show_hidden = 1
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/.stack-work/*
+" set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/.stack-work/* TODO hopefully this fixes fucking nvim freezing
 let g:ctrlp_custom_ignore = {
   \ 'dir':  '\v[\/]\.(git|stack-work)$',
   \ 'file': '\v\.(exe|so|dll)$',
@@ -213,9 +213,48 @@ let g:spacemacs#excludes = [
   \ '^fr',
   \ '^ff',
   \ ]
+" fzf
 nnoremap <leader>pf :Files<CR>
 nnoremap <leader>fr :History<CR>
 nnoremap <leader>bf :Buffers<CR>
+nnoremap <leader>/ :execute 'Ag ' . input('Ag/')<CR>
+
+" window/split stuff
+nnoremap <leader>wH <C-W>H
+nnoremap <leader>wK <C-W>K
+nnoremap <leader>wL <C-W>L
+nnoremap <leader>wJ <C-W>J
+nnoremap <leader>w_ <C-W>\|
+nnoremap <leader>w\| <C-W>_
+
+" comment tools
+vnoremap <leader>cc :s/^/-- /<CR>:noh<CR>
+nnoremap <leader>cc :s/^/-- /<CR>:noh<CR>
+
+" align tools
+let g:haskell_tabular = 0
+vnoremap <leader>a= :Tabularize /=<CR>
+vnoremap <leader>a; :Tabularize /::<CR>
+vnoremap <leader>a- :Tabularize /-><CR>
+vnoremap <leader>a, :Tabularize /,<CR>
+
+" hdevtools
+let g:hdevtools_options = '-g -ifrontend/src -g -icommon/src -g -ibackend/src -g -Wall'
+au FileType haskell nnoremap <leader>ht :HdevtoolsType<CR>
+au FileType haskell nnoremap <leader>hc :HoogleClose<CR>:HdevtoolsClear<CR>
+au FileType haskell nnoremap <leader>hi :HdevtoolsInfo<CR>
+
+" hoogle
+au FileType haskell nnoremap <leader>hh :Hoogle<CR>
+au FileType haskell nnoremap <leader>hi :HoogleInfo<CR>
+
+" hs-conceal, hs-format
+nnoremap <leader>tc :call ConcealToggle()<cr>
+nnoremap <leader>sf :%!stylish-haskell<CR>
+
+" leader guide (broken)
+" nnoremap <silent> <leader> :<C-U>LeaderGuide '<SPACE>'<CR>
+" vnoremap <silent> <leader> :<C-U>LeaderGuideVisual '<SPACE>'<CR>
 
 
 """"""" Autocompletion settings
@@ -224,3 +263,11 @@ nnoremap <leader>bf :Buffers<CR>
 "       \ if &omnifunc != '' |
 "       \   call SuperTabChain(&omnifunc, "<c-p>") |
 "       \ endif
+
+function! ConcealToggle()
+  if &conceallevel
+    setlocal conceallevel=0
+  else
+    setlocal conceallevel=1
+  endif
+endfunction
