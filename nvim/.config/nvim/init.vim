@@ -7,7 +7,8 @@ Plug 'junegunn/fzf.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
-" spacemacs ?
+Plug 'scrooloose/nerdcommenter'
+" spacemacs
 Plug 'hecal3/vim-leader-guide'
 Plug 'jimmay5469/vim-spacemacs'
 " color
@@ -61,8 +62,8 @@ set shiftwidth=2
 " Don't auto comment for the love of god
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
-" No swap
-set noswapfile
+" No swap -- this was biting me
+" set noswapfile
 " Just hide buffers
 set hidden
 
@@ -100,7 +101,7 @@ endif
 let g:airline_powerline_fonts = 1
 let g:airline_symbols.space = "\ua0"
 " Set airline theme
-let g:airline_theme='base16_spacemacs'
+let g:airline_theme='angr'
 
 " Toggle tagbar
 nmap <leader>t :TagbarToggle<CR>
@@ -126,25 +127,10 @@ cmap w!! w !sudo tee > /dev/null %
 " Comment command with '#' by default
 cmap comment s/^/#/
 
-" Toggle spell checking
-map <leader>s :setlocal spell!<cr>
-
 " New lines without insert mode
 map <Enter> o<ESC>
 " Damn this doesn't work
 map <C-Enter> O<ESC>
-
-function! NumberToggle()
-  if(&rnu == 0 && &nu == 0)
-    set nu
-  elseif(&rnu == 0 && &nu == 1)
-    set rnu
-  else
-    set nornu
-    set nonu
-  endif
-endfunc
-nnoremap <C-n> :call NumberToggle()<CR>
 
 " better splits mgmt
 nnoremap <C-J> <C-W><C-J>
@@ -212,10 +198,14 @@ let g:spacemacs#excludes = [
   \ '^bf',
   \ '^fr',
   \ '^ff',
+  \ '^ft',
+  \ '^tn',
+  \ '^cc',
   \ ]
 " fzf
 nnoremap <leader>pf :Files<CR>
 nnoremap <leader>fr :History<CR>
+nnoremap <leader>ft :call NERDTreeToggleInCurDir()<CR>
 nnoremap <leader>bf :Buffers<CR>
 nnoremap <leader>/ :execute 'Ag ' . input('Ag/')<CR>
 
@@ -224,12 +214,17 @@ nnoremap <leader>wH <C-W>H
 nnoremap <leader>wK <C-W>K
 nnoremap <leader>wL <C-W>L
 nnoremap <leader>wJ <C-W>J
-nnoremap <leader>w_ <C-W>\|
-nnoremap <leader>w\| <C-W>_
+nnoremap <leader>w_ <C-W>_
+nnoremap <leader>w\| <C-W>\|
 
 " comment tools
-vnoremap <leader>cc :s/^/-- /<CR>:noh<CR>
-nnoremap <leader>cc :s/^/-- /<CR>:noh<CR>
+nnoremap <leader>cc :call NERDComment('n', "Toggle")<CR>
+vnoremap <leader>cc :call NERDComment('v', "Toggle")<CR>
+
+" toggles
+nnoremap <leader>tn :call NumberToggle()<CR>
+nnoremap <leader>tc :call ConcealToggle()<cr>
+nnoremap <leader>ts :setlocal spell!<cr>
 
 " align tools
 let g:haskell_tabular = 0
@@ -237,6 +232,8 @@ vnoremap <leader>a= :Tabularize /=<CR>
 vnoremap <leader>a; :Tabularize /::<CR>
 vnoremap <leader>a- :Tabularize /-><CR>
 vnoremap <leader>a, :Tabularize /,<CR>
+" format stylish haskell
+nnoremap <leader>ash :%!stylish-haskell<CR>
 
 " hdevtools
 let g:hdevtools_options = '-g -ifrontend/src -g -icommon/src -g -ibackend/src -g -Wall'
@@ -247,10 +244,6 @@ au FileType haskell nnoremap <leader>hi :HdevtoolsInfo<CR>
 " hoogle
 au FileType haskell nnoremap <leader>hh :Hoogle<CR>
 au FileType haskell nnoremap <leader>hi :HoogleInfo<CR>
-
-" hs-conceal, hs-format
-nnoremap <leader>tc :call ConcealToggle()<cr>
-nnoremap <leader>sf :%!stylish-haskell<CR>
 
 " leader guide (broken)
 " nnoremap <silent> <leader> :<C-U>LeaderGuide '<SPACE>'<CR>
@@ -269,5 +262,25 @@ function! ConcealToggle()
     setlocal conceallevel=0
   else
     setlocal conceallevel=1
+  endif
+endfunction
+
+function! NumberToggle()
+  if(&rnu == 0 && &nu == 0)
+    set nu
+  elseif(&rnu == 0 && &nu == 1)
+    set rnu
+  else
+    set nornu
+    set nonu
+  endif
+endfunc
+
+function! NERDTreeToggleInCurDir()
+  " If NERDTree is open in the current buffer
+  if (exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1)
+    exe ":NERDTreeClose"
+  else
+    exe ":NERDTreeFind"
   endif
 endfunction
