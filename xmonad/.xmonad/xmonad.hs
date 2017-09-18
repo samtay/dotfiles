@@ -248,10 +248,13 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((0, 0x1008FF17),
      spawn "")
 
-  -- Grid select
-  , ((modMask, xK_Tab),
-      -- toggleWS) -- Temporarily use this for xrandr mgmt
+  -- Toggle screen
+  , ((modMask, xK_quoteleft),
       nextScreen)
+
+  -- Toggle window
+  , ((modMask, xK_Tab),
+      toggleWS)
 
   --------------------------------------------------------------------
   -- "Standard" xmonad key bindings
