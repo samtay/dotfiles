@@ -14,10 +14,8 @@ Plug 'jimmay5469/vim-spacemacs'
 " color
 " Plug 'colepeters/spacemacs-theme.vim'
 Plug 'liuchengxu/space-vim-dark'
-" haskell
-Plug 'ndmitchell/ghcid', { 'rtp': 'plugins/nvim' }
-Plug 'bitc/vim-hdevtools', { 'for': 'haskell' }
-Plug 'enomsg/vim-haskellConcealPlus', { 'for': 'haskell' }
+Plug 'vim-scripts/mayansmoke'
+" Plug 'urso/haskell_syntax.vim' UNCOMMENT FOR vim, COMMENT FOR nvim
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
 Plug 'neovimhaskell/haskell-vim', {'for': 'haskell'}
 " nix
@@ -26,6 +24,10 @@ Plug 'LnL7/vim-nix'
 Plug 'godlygeek/tabular'
 " autocomplete tabs
 Plug 'ervandew/supertab'
+" haskell (might be more suitable for personal projects)
+" Plug 'ndmitchell/ghcid', { 'rtp': 'plugins/nvim' }
+" Plug 'bitc/vim-hdevtools', { 'for': 'haskell' }
+" Plug 'enomsg/vim-haskellConcealPlus', { 'for': 'haskell' }
 " elm
 " Plug 'ElmCast/elm-vim'
 " syntax checker
@@ -249,6 +251,13 @@ au FileType haskell nnoremap <leader>hi :HoogleInfo<CR>
 " nnoremap <silent> <leader> :<C-U>LeaderGuide '<SPACE>'<CR>
 " vnoremap <silent> <leader> :<C-U>LeaderGuideVisual '<SPACE>'<CR>
 
+""""""" Haskell stuff
+" conceal
+hi clear Conceal
+let g:haskell_conceal_wide = 1
+let g:haskell_conceal_enumerations = 1
+let hscoptions="𝐒𝐓𝐄𝐌xRtB𝔻wr↱"
+set conceallevel=0
 
 """"""" Autocompletion settings
 " Try omnifunc, else fallback to keywords
@@ -284,3 +293,6 @@ function! NERDTreeToggleInCurDir()
     exe ":NERDTreeFind"
   endif
 endfunction
+
+set cole=0
+au FileType * setl cole=0
