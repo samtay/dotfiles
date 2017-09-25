@@ -138,7 +138,7 @@ purple = "#cc99cc"
 --
 myModMask = mod1Mask
 
-editFile f = spawn $ myTerminal ++ " -e \"vim " ++ f ++ "\""
+editFile f = spawn $ myTerminal ++ " -e \"nvim " ++ f ++ "\""
 
 myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   ----------------------------------------------------------------------

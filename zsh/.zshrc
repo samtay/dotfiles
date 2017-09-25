@@ -276,7 +276,8 @@ zle -N zle-keymap-select
 
 if [ -e /home/samtay/.nix-profile/etc/profile.d/nix.sh ]; then . /home/samtay/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 
-# trying out neovim
-alias -g vim='nvim'
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+alias -g vim='nvim'
+alias -g agl='ag --pager="less -XFR"'
