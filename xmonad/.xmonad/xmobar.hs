@@ -46,19 +46,19 @@ Config {
           , "--low",      "#f2777a"
           ] 40
       , Run Battery
-          [ "--template" , ("<fc=#cc99cc>Batt: <acstatus></fc>")
+          [ "--template" , "<fc=#cc99cc>Batt: <acstatus></fc>"
           , "--Low"      , "10"
           , "--High"     , "80"
           , "--high"     , "#99cc99"
           , "--normal"   , "#6699cc"
           , "--low"      , "#f2777a"
           , "--" -- battery specific options
-          , "-o"	, "<left>% (<timeleft>)" -- discharging status
-          , "-O"	, "Charging (<left>%)" -- AC "on" status
-          , "-i"	, "Charged" -- charged status
-          , "-l"      , "#f2777a"
-          , "-m"      , "#6699cc"
-          , "-h"      , "#99cc99"
+          , "-o"         , "<left>% (<timeleft>)" -- discharging status
+          , "-O"         , "Charging (<left>%)" -- AC "on" status
+          , "-i"         , "Charged" -- charged status
+          , "-l"         , "#f2777a"
+          , "-m"         , "#6699cc"
+          , "-h"         , "#99cc99"
           ] 100
       , Run Brightness
           [ "--template" , "<fc=#66cccc>Light: <percent>%</fc>"
@@ -70,10 +70,19 @@ Config {
           , "--" -- brightness specific options
           , "-D"         , "intel_backlight"
           ] 40
+      , Run Volume "default" "Master"
+          [ "--template", "<fc=#cc99cc>Volume: <volumevbar> <status></fc>"
+          , "--high"     , "#f2777a"
+          , "--normal"   , "#6699cc"
+          , "--low"      , "#99cc99"
+          , "--" -- volume specific options
+          , "--onc",      "#99cc99"
+          , "--offc",     "#f2777a"
+          ] 25
       , Run Date "<fc=#66cccc>%F (%a) %T</fc>" "date" 10
       , Run StdinReader
       ],
     sepChar = "%",
     alignSep = "}{",
-    template = "%StdinReader% }{%bright%    %battery%    %memory%    %coretemp%    %KCHS%    %date%"
+    template = "%StdinReader% }{%default:Master%    %bright%    %battery%    %memory%    %coretemp%    %KCHS%    %date%"
 }
