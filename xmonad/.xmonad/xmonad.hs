@@ -183,9 +183,9 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask, xK_p),
      spawn myLauncher)
 
-  -- Spawn vimb on mod + v
-  , ((modMask, xK_v),
-     spawn "vimb")
+  -- Spawn washout cam on mod + s
+  , ((modMask, xK_s),
+     spawn "vlc https://cams.cdn-surfline.com/wsc-east/ec-washoutcam.stream/chunklist.m3u8")
 
   -- Spawn firefox on mod + f
   , ((modMask, xK_f),
