@@ -16,6 +16,7 @@ import XMonad.Layout.NoBorders
 import XMonad.Layout.Spiral
 import XMonad.Layout.Tabbed
 import XMonad.Layout.Grid
+import XMonad.Layout.ThreeColumns
 import XMonad.Prompt
 import XMonad.Prompt.Shell
 import XMonad.Util.Run(spawnPipe)
@@ -82,9 +83,11 @@ myXPConfig = defaultXPConfig
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayoutHook = avoidStruts (tall ||| tabbed') ||| distractionFree
+myLayoutHook = avoidStruts (threecol ||| tall ||| tabbed') ||| distractionFree
     where tabbed' = tabbed shrinkText tabConfig
-          tall = Tall 1 (3/100) (1/2)
+          threecol = ThreeColMid 1 (3/100) (1/3)
+          tall = Tall 1 (3/100) (2/3)
+          grid = GridRatio (5/2)
           distractionFree = noBorders (fullscreenFull Full)
 
 ------------------------------------------------------------------------
@@ -248,11 +251,11 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((0, 0x1008FF17),
      spawn "")
 
-  -- Toggle screen
-  , ((modMask, xK_quoteleft),
-      nextScreen)
+  -- Toggle screen TODO UNCOMMENT WITH NEW MONITOR
+  --, ((modMask, xK_quoteleft),
+  --    nextScreen)
 
-  -- Toggle window
+  -- Toggle workspace
   , ((modMask, xK_Tab),
       toggleWS)
 
@@ -341,8 +344,8 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
   -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
   [((m .|. modMask, key), screenWorkspace sc >>= flip whenJust (windows . f))
-      | (key, sc) <- zip [xK_w, xK_e, xK_r] [2,1,0]
-      , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+    | (key, sc) <- zip [xK_e, xK_r] [1, 0]
+    , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
 
 ------------------------------------------------------------------------
@@ -352,7 +355,6 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 -- True if your focus should follow your mouse cursor.
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = True
-
 myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
   [
     -- mod-button1, Set the window to floating mode and move by dragging

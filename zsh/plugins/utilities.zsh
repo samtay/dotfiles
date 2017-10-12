@@ -22,10 +22,9 @@ displays-toggle() {
 #  local displayCount=$(xrandr | grep " connected " | wc -l)
 #  if [[ $displayCount -gt 1 ]]; then
   case $1 in
-    0) xrandr --output DP-4 --off \
-              --output DP-2 --off \
+    0) xrandr --output DP-0 --off \
               --output DP-3 --auto ;;
-    2) xrandr --output DP-3 --off --output DP-4 --auto --output DP-2 --auto --right-of DP-4
+    1) xrandr --output DP-3 --off --output DP-0 --auto
   esac
 }
 
