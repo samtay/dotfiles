@@ -28,7 +28,7 @@
   branch = auto
 
 [core]
-  editor = vim
+  editor = nvim
   excludesfile = /home/samtay/.gitignore_global
   whitespace = tabwidth=4
 

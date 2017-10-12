@@ -8,6 +8,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
+Plug 'tpope/vim-surround'
 " spacemacs
 Plug 'hecal3/vim-leader-guide'
 Plug 'jimmay5469/vim-spacemacs'
@@ -64,8 +65,8 @@ set shiftwidth=2
 " Don't auto comment for the love of god
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
-" No swap -- this was biting me
-" set noswapfile
+" No swap
+set noswapfile
 " Just hide buffers
 set hidden
 
@@ -218,6 +219,9 @@ nnoremap <leader>wL <C-W>L
 nnoremap <leader>wJ <C-W>J
 nnoremap <leader>w_ <C-W>_
 nnoremap <leader>w\| <C-W>\|
+nnoremap <leader>w<CR> <C-W>o
+
+nnoremap <leader>t :tag<space>
 
 " comment tools
 nnoremap <leader>cc :call NERDComment('n', "Toggle")<CR>
