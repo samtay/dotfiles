@@ -94,10 +94,10 @@ done
 #####################################################################
 
 # Color settings for zsh complete candidates
-alias ll='ls -lhF --show-control-chars --color=always'
+alias ll='ls -lhF'
 alias l='ll -A'
 alias lt='l -t'
-alias l.='l .[a-zA-Z]* --color=always'
+alias l.='l .[a-zA-Z]*'
 export LSCOLORS=ExFxCxdxBxegedabagacad
 export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
 zstyle ':completion:*' list-colors 'di=;34;1' 'ln=;35;1' 'so=;32;1' 'ex=31;1' 'bd=46;34' 'cd=43;34'
@@ -238,7 +238,7 @@ fi
 # bash completions
 autoload -U +X bashcompinit && bashcompinit
 # stack completion
-eval "$(stack --bash-completion-script stack)"
+# eval "$(stack --bash-completion-script stack)"
 #eval "$(dmc --bash-completion-script dmc)"
 #eval "$(dm --bash-completion-script dm)"
 
@@ -278,8 +278,5 @@ zle -N zle-line-init
 zle -N zle-keymap-select
 
 alias -g vim='nvim'
-
-if [ -e /home/samtay/.nix-profile/etc/profile.d/nix.sh ]; then . /home/samtay/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
-
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

@@ -12,7 +12,7 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'hecal3/vim-leader-guide'
 Plug 'jimmay5469/vim-spacemacs'
 " color
-" Plug 'colepeters/spacemacs-theme.vim'
+Plug 'colepeters/spacemacs-theme.vim'
 Plug 'liuchengxu/space-vim-dark'
 Plug 'vim-scripts/mayansmoke'
 " Plug 'urso/haskell_syntax.vim' UNCOMMENT FOR vim, COMMENT FOR nvim
@@ -156,7 +156,7 @@ set t_Co=256
 " let g:kolor_underlined=0                " Enable underline. Default: 0
 " let g:kolor_alternative_matchparen=0    " Gray 'MatchParen' color. Default: 0
 set background=dark
-colorscheme space-vim-dark
+colorscheme spacemacs-theme
 hi Comment cterm=italic
 
 """"""" Ctrl P settings

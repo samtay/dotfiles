@@ -1,5 +1,5 @@
 # Aliases
-alias copy='xclip -sel clip'
+alias copy='pbcopy'
 alias copy-ssh-key='copy-file ~/.ssh/id_rsa.pub'
 alias reload-zsh='source ~/.zshrc'
 alias ba-vpn="sudo openvpn --daemon /etc/openvpn/ba-client.conf"
@@ -7,11 +7,12 @@ alias wifi-scan='sudo iwlist wlp3s0 scan | grep ESSID'
 alias wifi-list='nmcli d wifi'
 alias wifi-connect='nmcli -a -p -s d wifi connect'
 alias get-simpsons-img='echo "http://imgur.com/a/T81t9copy" | copy'
+alias copy-team-id='echo "3H86669ENH" | pbcopy'
 
 export MY_GIT_DIR="$HOME/git"
 
 g2() {
-  cd "$MY_GIT_DIR/$1" && ls -lhF --show-control-chars --color=always
+  cd "$MY_GIT_DIR/$1" && ls -lhF
 }
 
 backup() {
@@ -32,7 +33,7 @@ displays-toggle() {
 }
 
 copy-file(){
-  cat $1 | xclip -sel clip
+  cat $1 | pbcopy
 }
 
 watch(){
