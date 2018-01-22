@@ -1,0 +1,4 @@
+#! /usr/bin/env bash
+
+echo '["https:","test.wrinkl.com",""]' > config/route
+sed -i '' 's/com.wrinkl.ios/com.wrinkl.develop/' default.nix
