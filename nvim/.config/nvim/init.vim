@@ -226,7 +226,7 @@ vnoremap <leader>cc :call NERDComment('v', "Toggle")<CR>
 " toggles
 nnoremap <leader>tn :call NumberToggle()<CR>
 nnoremap <leader>tc :call ConcealToggle()<cr>
-nnoremap <leader>ts :setlocal spell!<cr>
+nnoremap <leader>ts :noh<cr>
 
 " align tools
 let g:haskell_tabular = 0
@@ -234,6 +234,7 @@ vnoremap <leader>a= :Tabularize /=<CR>
 vnoremap <leader>a; :Tabularize /::<CR>
 vnoremap <leader>a- :Tabularize /-><CR>
 vnoremap <leader>a, :Tabularize /,<CR>
+vnoremap <leader>ac :Tabularize /--<CR>
 " format stylish haskell
 nnoremap <leader>ash :%!stylish-haskell<CR>
 
