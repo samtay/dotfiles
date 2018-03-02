@@ -2,13 +2,14 @@
 Personal configuration files
 
 ## TODO
-1. rewrite manage.sh for nixos
+1. rewrite manage for nixos
 2. symlink /etc/nixos/configuration.nix
-3. clone spacemacs into ~/.emacs.d
-4. install vimplug:
+3. See if alt+shift+t toggle theme can target existing shells and make them
+   reload. termite already supports this with ctrl+shift+r so possibly
+   triggered externally
+4. install vimplug during bootstrap:
   ```
   curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   ```
-1. read [spacemacs tutorial!!!](http://thume.ca/howto/2015/03/07/configuring-spacemacs-a-tutorial/)
 
