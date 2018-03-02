@@ -41,6 +41,7 @@ export PATH="$HOME/.cabal/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.npm-global/bin:$PATH"
 export PATH="$HOME/.dex/bin:$PATH"
+export PATH="$HOME/git/aspen/tools/bin:$PATH"
 
 
 #####################################################################

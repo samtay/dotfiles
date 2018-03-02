@@ -2,6 +2,7 @@
 -- Author: Sam Tay
 -- http://github.com/samtay/dotfiles
 
+import Data.Semigroup ((<>))
 import System.IO
 import System.Exit
 import XMonad
@@ -143,6 +144,16 @@ myModMask = mod1Mask
 
 editFile f = spawn $ myTerminal ++ " -e \"nvim " ++ f ++ "\""
 
+aspen ghcid = do
+  let cd = myTerminal ++ " -d \"$HOME/git/aspen\""
+      run script = cd ++ " -e \"sh " ++ script ++ "\""
+  spawn $ run "ghci-frontend-mobile"
+  spawn $ run "focus/ghci-backend"
+  maybe (return ()) (spawn . run . ("focus/ghcid-" <>)) ghcid
+  -- Two extra terminals for good measure, nvim, git, etc.
+  -- spawn cd
+  -- spawn cd
+
 myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   ----------------------------------------------------------------------
   -- Custom key bindings
@@ -161,6 +172,13 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
       [ ((0, xK_x), editFile "$HOME/.xmonad/xmonad.hs")
       , ((0, xK_v), editFile "$HOME/.config/nvim/init.vim")
       , ((0, xK_z), editFile "$HOME/.zshrc")
+      ])
+
+  -- Start aspen stuff
+  , ((modMask, xK_a), submap . M.fromList $
+      [ ((0, xK_f), aspen $ Just "frontend")
+      , ((0, xK_b), aspen $ Just "backend")
+      , ((0, xK_a), aspen $ Nothing)
       ])
 
   -- Toggle multi monitor display (xrandr wrapper)
@@ -186,6 +204,17 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- Spawn washout cam on mod + s
   , ((modMask, xK_s),
      spawn "vlc https://cams.cdn-surfline.com/wsc-east/ec-washoutcam.stream/chunklist.m3u8")
+
+  -- Spawn other cams
+  , ((modMask .|. shiftMask, xK_s), submap . M.fromList $
+      let w = spawn "vlc https://cams.cdn-surfline.com/wsc-east/ec-washoutcam.stream/chunklist.m3u8"
+          n = spawn "vlc https://cams.cdn-surfline.com/wsc-east/ec-follypiernorthcam.stream/playlist.m3u8"
+          s = spawn "vlc https://cams.cdn-surfline.com/wsc-east/ec-follypiersouthcam.stream/playlist.m3u8"
+      in [ ((0, xK_w), w)
+         , ((0, xK_n), n)
+         , ((0, xK_s), s)
+         , ((0, xK_a), w >> n >> s)
+         ])
 
   -- Spawn firefox on mod + f
   , ((modMask, xK_f),

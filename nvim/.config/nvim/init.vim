@@ -127,8 +127,6 @@ vmap <leader>P "+P
 
 " Save read-only files easily
 cmap w!! w !sudo tee > /dev/null %
-" Comment command with '#' by default
-cmap comment s/^/#/
 
 " New lines without insert mode
 map <Enter> o<ESC>
@@ -230,7 +228,7 @@ vnoremap <leader>cc :call NERDComment('v', "Toggle")<CR>
 " toggles
 nnoremap <leader>tn :call NumberToggle()<CR>
 nnoremap <leader>tc :call ConcealToggle()<cr>
-nnoremap <leader>ts :setlocal spell!<cr>
+nnoremap <leader>ts :noh<cr>
 
 " align tools
 let g:haskell_tabular = 0
@@ -238,8 +236,9 @@ vnoremap <leader>a= :Tabularize /=<CR>
 vnoremap <leader>a; :Tabularize /::<CR>
 vnoremap <leader>a- :Tabularize /-><CR>
 vnoremap <leader>a, :Tabularize /,<CR>
-" format stylish haskell
+" formatting
 nnoremap <leader>ash :%!stylish-haskell<CR>
+nnoremap <leader>ase :DeleteTrailingWS<CR>
 
 " hdevtools
 let g:hdevtools_options = '-g -ifrontend/src -g -icommon/src -g -ibackend/src -g -Wall'
@@ -262,6 +261,9 @@ let g:haskell_conceal_wide = 1
 let g:haskell_conceal_enumerations = 1
 let hscoptions="𝐒𝐓𝐄𝐌xRtB𝔻wr↱"
 set conceallevel=0
+" indent
+let g:haskell_indent_if = 0
+let g:haskell_indent_in = 0
 
 """"""" Autocompletion settings
 " Try omnifunc, else fallback to keywords
