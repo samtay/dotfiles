@@ -13,9 +13,9 @@ Plug 'tpope/vim-surround'
 Plug 'hecal3/vim-leader-guide'
 Plug 'jimmay5469/vim-spacemacs'
 " color
-" Plug 'colepeters/spacemacs-theme.vim'
 Plug 'liuchengxu/space-vim-dark'
 Plug 'vim-scripts/mayansmoke'
+Plug 'altercation/vim-colors-solarized'
 " Plug 'urso/haskell_syntax.vim' UNCOMMENT FOR vim, COMMENT FOR nvim
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
 Plug 'neovimhaskell/haskell-vim', {'for': 'haskell'}
@@ -104,7 +104,7 @@ endif
 let g:airline_powerline_fonts = 1
 let g:airline_symbols.space = "\ua0"
 " Set airline theme
-let g:airline_theme='angr'
+let g:airline_theme='solarized'
 
 " Toggle tagbar
 nmap <leader>t :TagbarToggle<CR>
@@ -149,13 +149,10 @@ vnoremap <silent> # :call VisualSelection('b', '')<CR>
 if (has("termguicolors"))
   set termguicolors
 endif
-set t_Co=256
-" let g:kolor_italic=1                    " Enable italic. Default: 1
-" let g:kolor_bold=1                      " Enable bold. Default: 1
-" let g:kolor_underlined=0                " Enable underline. Default: 0
-" let g:kolor_alternative_matchparen=0    " Gray 'MatchParen' color. Default: 0
-set background=dark
-colorscheme space-vim-dark
+
+set background=light
+colorscheme solarized
+
 hi Comment cterm=italic
 
 """"""" Ctrl P settings

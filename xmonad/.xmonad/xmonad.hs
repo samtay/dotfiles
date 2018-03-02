@@ -189,13 +189,9 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
       ])
 
   -- Rotate screen
-  , ((modMask .|. shiftMask, xK_t), submap . M.fromList $
-      [ ((0, xK_l), spawn "xrandr --output eDP-1 --rotate left")
-      , ((0, xK_r), spawn "xrandr --output eDP-1 --rotate right")
-      , ((0, xK_i), spawn "xrandr --output eDP-1 --rotate inverted")
-      , ((0, xK_n), spawn "xrandr --output eDP-1 --rotate normal")
-      ])
-
+  , ((modMask .|. shiftMask, xK_t),
+      spawn "/home/sam/git/dotfiles/toggle-theme"
+    )
   -- Spawn the launcher using command specified by myLauncher.
   -- Use this to launch programs without a key binding.
   , ((modMask, xK_p),

@@ -10,3 +10,5 @@ vim/.vim/autoload/
 vim/.vim/plugged/
 xmonad/.xmonad/history
 ghc/.ghc/ghci_history
+theme
+termite/.config/termite/config

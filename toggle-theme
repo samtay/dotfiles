@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+# clean
+cd $HOME/git/dotfiles
+rm -f termite/.config/termite/config
+
+if grep -q light theme; then
+  # make dark
+  ln -s tomorrow-night termite/.config/termite/config
+  sed -i 's/set background=light/set background=dark/' nvim/.config/nvim/init.vim
+  sed -i 's/colorscheme solarized/colorscheme space-vim-dark/' nvim/.config/nvim/init.vim
+  sed -i "s/airline_theme='solarized'/airline_theme='angr'/" nvim/.config/nvim/init.vim
+  echo 'dark' > theme
+  echo 'Toggled to dark theme'
+else
+  # make light
+  ln -s solarized-light termite/.config/termite/config
+  sed -i 's/set background=dark/set background=light/' nvim/.config/nvim/init.vim
+  sed -i 's/colorscheme space-vim-dark/colorscheme solarized/' nvim/.config/nvim/init.vim
+  sed -i "s/airline_theme='angr'/airline_theme='solarized'/" nvim/.config/nvim/init.vim
+  echo 'light' > theme
+  echo 'Toggled to light theme'
+fi
+
