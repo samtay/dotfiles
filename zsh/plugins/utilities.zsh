@@ -7,7 +7,6 @@ alias wifi-scan='sudo iwlist wlp3s0 scan | grep ESSID'
 alias wifi-list='nmcli d wifi'
 alias wifi-connect='nmcli -a -p -s d wifi connect'
 alias get-simpsons-img='echo "http://imgur.com/a/T81t9copy" | copy'
-alias surfcam='vlc https://cams.cdn-surfline.com/wsc-east/ec-washoutcam.stream/chunklist.m3u8'
 alias aspen='g2 aspen'
 export MY_GIT_DIR="$HOME/git"
 
@@ -71,4 +70,19 @@ xdebug-toggle() {
 
 fix-broken-symlinks() {
   find -L . -type l -exec rm {} \;
+}
+
+surfcam() {
+  local cam="$1"
+  if [ -z "$cam" ]; then
+    read "cam?w: washout
+f: frisco
+Pick one: "
+  fi
+  case $cam in
+    w|washout) url='https://cams.cdn-surfline.com/wsc-east/ec-washoutcam.stream/playlist.m3u8' ;;
+    f|frisco) url='https://cams.cdn-surfline.com/wsc-east/ec-friscopiercam.stream/playlist.m3u8' ;;
+    h|hatteras) url='https://cams.cdn-surfline.com/wsc-east/ec-capehatterascam.stream/playlist.m3u8' ;;
+  esac
+  vlc $url
 }
