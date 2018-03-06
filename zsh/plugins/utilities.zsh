@@ -77,12 +77,19 @@ surfcam() {
   if [ -z "$cam" ]; then
     read "cam?w: washout
 f: frisco
+h: hatteras
+r: rockaway
+j: jacksonville
+ns: new-smyrna
 Pick one: "
   fi
   case $cam in
     w|washout) url='https://cams.cdn-surfline.com/wsc-east/ec-washoutcam.stream/playlist.m3u8' ;;
     f|frisco) url='https://cams.cdn-surfline.com/wsc-east/ec-friscopiercam.stream/playlist.m3u8' ;;
     h|hatteras) url='https://cams.cdn-surfline.com/wsc-east/ec-capehatterascam.stream/playlist.m3u8' ;;
+    r|rockaway) url='https://cams.cdn-surfline.com/wsc-east/ec-rockaway90thcam.stream/playlist.m3u8' ;;
+    j|jacksonville) url='https://cams.cdn-surfline.com/wsc-east/ec-jacksonvillepiercam.stream/playlist.m3u8' ;;
+    ns|new-smyrna) url='https://cams.cdn-surfline.com/wsc-east/ec-newsmycam.stream/playlist.m3u8' ;;
   esac
   vlc $url
 }
