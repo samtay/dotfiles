@@ -11,6 +11,7 @@ if grep -q light theme; then
   sed -i 's/colorscheme solarized/colorscheme space-vim-dark/' nvim/.config/nvim/init.vim
   sed -i "s/airline_theme='solarized'/airline_theme='angr'/" nvim/.config/nvim/init.vim
   echo 'dark' > theme
+  killall -USR1 termite
   echo 'Toggled to dark theme'
 else
   # make light
@@ -19,6 +20,7 @@ else
   sed -i 's/colorscheme space-vim-dark/colorscheme solarized/' nvim/.config/nvim/init.vim
   sed -i "s/airline_theme='angr'/airline_theme='solarized'/" nvim/.config/nvim/init.vim
   echo 'light' > theme
+  killall -USR1 termite
   echo 'Toggled to light theme'
 fi
 
