@@ -68,7 +68,7 @@ Config {
           , "--normal"   , "#6699cc"
           , "--low"      , "#99cc99"
           , "--" -- brightness specific options
-          , "-D"         , "acpi_video0"
+          , "-D"         , "intel_backlight"
           ] 40
       , Run Volume "default" "Master"
           [ "--template", "<fc=#cc99cc>Volume: <volumevbar> <status></fc>"

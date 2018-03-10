@@ -84,11 +84,9 @@ myXPConfig = defaultXPConfig
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayoutHook = avoidStruts (threecol ||| tall ||| tabbed') ||| distractionFree
+myLayoutHook = avoidStruts (tall ||| tabbed') ||| distractionFree
     where tabbed' = tabbed shrinkText tabConfig
-          threecol = ThreeColMid 1 (3/100) (1/3)
-          tall = Tall 1 (3/100) (2/3)
-          grid = GridRatio (5/2)
+          tall = Tall 1 (3/100) (1/2)
           distractionFree = noBorders (fullscreenFull Full)
 
 ------------------------------------------------------------------------
@@ -102,7 +100,6 @@ myBorderWidth = 2
 -- Colors for text and backgrounds of each tab when in "Tabbed" layout.
 tabConfig = defaultTheme {
     fontName = "xft:Source Code Pro:size=9",
-    decoHeight = 34,
     activeBorderColor   = aqua,
     activeTextColor     = foreground,
     activeColor         = selection,
@@ -188,9 +185,9 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
       , ((0, xK_2), spawn "displays-toggle 2")
       ])
 
-  -- Rotate screen
+  -- Toggle theme
   , ((modMask .|. shiftMask, xK_t),
-      spawn "/home/sam/git/dotfiles/toggle-theme"
+      spawn "$HOME/git/dotfiles/toggle-theme"
     )
   -- Spawn the launcher using command specified by myLauncher.
   -- Use this to launch programs without a key binding.
