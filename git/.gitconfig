@@ -28,7 +28,7 @@
   branch = auto
 
 [core]
-  editor = vim
+  editor = nvim
   excludesfile = /home/samtay/.gitignore_global
   whitespace = tabwidth=4
 
@@ -142,7 +142,7 @@
   branch-name = "!git rev-parse --abbrev-ref HEAD"
 
   # Create a new working branch
-  mk-working = checkout -b working production
+  mk-branch = "!f() { git fetch origin; git checkout -b $1 origin/develop; }; f"
 
   # Update working with your current branch
   merge-working = "!f() { BRANCH_NAME=$(git branch-name); git checkout working; git merge $BRANCH_NAME --no-ff; git checkout $BRANCH_NAME; }; f"

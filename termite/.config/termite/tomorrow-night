@@ -1,0 +1,33 @@
+[options]
+scroll_on_output = false
+scroll_on_keystroke = true
+audible_bell = false
+mouse_autohide = false
+allow_bold = true
+dynamic_title = true
+urgent_on_bell = true
+clickable_url = true
+font = Monospace 8
+scrollback_lines = 10000
+search_wrap = true
+cursor_blink = system
+cursor_shape = block
+
+[colors]
+color0 = #000000
+color1 = #f27779
+color10 = #99cc99
+color12 = #6699cc
+color13 = #cc99cc
+color14 = #66cccc
+color2 = #99cc99
+color4 = #6699cc
+color5 = #cc99cc
+color6 = #66cccc
+color8 = #000000
+color9 = #f17779
+background = #2c2c2c
+foreground_bold = #cccccc
+cursor = #cccccc
+foreground = #cccccc
+highlight = #515151

@@ -8,7 +8,8 @@ alias wifi-rescan='nmcli d wifi rescan'
 alias wifi-list='nmcli d wifi'
 alias wifi-connect='nmcli -a -p -s d wifi connect'
 alias get-simpsons-img='echo "http://imgur.com/a/T81t9copy" | copy'
-
+alias surfcam='vlc https://cams.cdn-surfline.com/wsc-east/ec-washoutcam.stream/chunklist.m3u8'
+alias aspen='g2 aspen'
 export MY_GIT_DIR="$HOME/git"
 
 g2() {
@@ -23,13 +24,14 @@ displays-toggle() {
 #  local displayCount=$(xrandr | grep " connected " | wc -l)
 #  if [[ $displayCount -gt 1 ]]; then
   case $1 in
-    0) xrandr --output HDMI-0 --off \
-              --output DP-2 --off \
-              --output DP-0 --panning 1920x1080 ;;
-    1) xrandr --output HDMI-0 --auto ;;
-    2) xrandr --output HDMI-0 --auto --right-of DP-0 \
-              --output DP-2 --auto --right-of HDMI-0 ;;
+    0) xrandr --output DP-0 --off --output DP-3 --auto
+       sudo sed -i 's|fontconfig.dpi = 96|fontconfig.dpi = 192|' \
+         /etc/nixos/configuration.nix ;;
+    1) xrandr --output DP-3 --off --output DP-0 --auto
+       sudo sed -i 's|fontconfig.dpi = 192|fontconfig.dpi = 96|' \
+         /etc/nixos/configuration.nix ;;
   esac
+  sudo nixos-rebuild switch && reboot
 }
 
 copy-file(){
@@ -71,4 +73,3 @@ xdebug-toggle() {
 fix-broken-symlinks() {
   find -L . -type l -exec rm {} \;
 }
-

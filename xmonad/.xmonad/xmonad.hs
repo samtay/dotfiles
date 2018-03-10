@@ -2,6 +2,7 @@
 -- Author: Sam Tay
 -- http://github.com/samtay/dotfiles
 
+import Data.Semigroup ((<>))
 import System.IO
 import System.Exit
 import XMonad
@@ -16,6 +17,7 @@ import XMonad.Layout.NoBorders
 import XMonad.Layout.Spiral
 import XMonad.Layout.Tabbed
 import XMonad.Layout.Grid
+import XMonad.Layout.ThreeColumns
 import XMonad.Prompt
 import XMonad.Prompt.Shell
 import XMonad.Util.Run(spawnPipe)
@@ -42,7 +44,7 @@ myLauncher = "dmenu_run -fn '-*-terminus-*-r-normal-*-*-120-*-*-*-*-iso8859-*' -
 -- Workspaces
 -- The default number of workspaces (virtual screens) and their names.
 --
-myWorkspaces = map show $ [1..9] ++ [0]
+myWorkspaces = ["1:code", "2:repl", "3:chrome"] ++ map show ([4..9] ++ [0])
 
 ------------------------------------------------------------------------
 -- Window rules
@@ -82,9 +84,11 @@ myXPConfig = defaultXPConfig
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayoutHook = avoidStruts (tall ||| tabbed') ||| distractionFree
+myLayoutHook = avoidStruts (threecol ||| tall ||| tabbed') ||| distractionFree
     where tabbed' = tabbed shrinkText tabConfig
-          tall = Tall 1 (3/100) (1/2)
+          threecol = ThreeColMid 1 (3/100) (1/3)
+          tall = Tall 1 (3/100) (2/3)
+          grid = GridRatio (5/2)
           distractionFree = noBorders (fullscreenFull Full)
 
 ------------------------------------------------------------------------
@@ -97,6 +101,8 @@ myBorderWidth = 2
 
 -- Colors for text and backgrounds of each tab when in "Tabbed" layout.
 tabConfig = defaultTheme {
+    fontName = "xft:Source Code Pro:size=9",
+    decoHeight = 34,
     activeBorderColor   = aqua,
     activeTextColor     = foreground,
     activeColor         = selection,
@@ -136,7 +142,17 @@ purple = "#cc99cc"
 --
 myModMask = mod1Mask
 
-editFile f = spawn $ myTerminal ++ " -e \"vim " ++ f ++ "\""
+editFile f = spawn $ myTerminal ++ " -e \"nvim " ++ f ++ "\""
+
+aspen ghcid = do
+  let cd = myTerminal ++ " -d \"$HOME/git/aspen\""
+      run script = cd ++ " -e \"sh " ++ script ++ "\""
+  spawn $ run "ghci-frontend-mobile"
+  spawn $ run "focus/ghci-backend"
+  maybe (return ()) (spawn . run . ("focus/ghcid-" <>)) ghcid
+  -- Two extra terminals for good measure, nvim, git, etc.
+  -- spawn cd
+  -- spawn cd
 
 myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   ----------------------------------------------------------------------
@@ -154,8 +170,15 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- Start editing dotfiles
   , ((modMask, xK_x), submap . M.fromList $
       [ ((0, xK_x), editFile "$HOME/.xmonad/xmonad.hs")
-      , ((0, xK_v), editFile "$HOME/.vimrc")
+      , ((0, xK_v), editFile "$HOME/.config/nvim/init.vim")
       , ((0, xK_z), editFile "$HOME/.zshrc")
+      ])
+
+  -- Start aspen stuff
+  , ((modMask, xK_a), submap . M.fromList $
+      [ ((0, xK_f), aspen $ Just "frontend")
+      , ((0, xK_b), aspen $ Just "backend")
+      , ((0, xK_a), aspen $ Nothing)
       ])
 
   -- Toggle multi monitor display (xrandr wrapper)
@@ -166,21 +189,28 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
       ])
 
   -- Rotate screen
-  , ((modMask .|. shiftMask, xK_t), submap . M.fromList $
-      [ ((0, xK_l), spawn "xrandr --output eDP-1 --rotate left")
-      , ((0, xK_r), spawn "xrandr --output eDP-1 --rotate right")
-      , ((0, xK_i), spawn "xrandr --output eDP-1 --rotate inverted")
-      , ((0, xK_n), spawn "xrandr --output eDP-1 --rotate normal")
-      ])
-
+  , ((modMask .|. shiftMask, xK_t),
+      spawn "/home/sam/git/dotfiles/toggle-theme"
+    )
   -- Spawn the launcher using command specified by myLauncher.
   -- Use this to launch programs without a key binding.
   , ((modMask, xK_p),
      spawn myLauncher)
 
-  -- Spawn vimb on mod + v
-  , ((modMask, xK_v),
-     spawn "vimb")
+  -- Spawn washout cam on mod + s
+  , ((modMask, xK_s),
+     spawn "vlc https://cams.cdn-surfline.com/wsc-east/ec-washoutcam.stream/chunklist.m3u8")
+
+  -- Spawn other cams
+  , ((modMask .|. shiftMask, xK_s), submap . M.fromList $
+      let w = spawn "vlc https://cams.cdn-surfline.com/wsc-east/ec-washoutcam.stream/chunklist.m3u8"
+          n = spawn "vlc https://cams.cdn-surfline.com/wsc-east/ec-follypiernorthcam.stream/playlist.m3u8"
+          s = spawn "vlc https://cams.cdn-surfline.com/wsc-east/ec-follypiersouthcam.stream/playlist.m3u8"
+      in [ ((0, xK_w), w)
+         , ((0, xK_n), n)
+         , ((0, xK_s), s)
+         , ((0, xK_a), w >> n >> s)
+         ])
 
   -- Spawn firefox on mod + f
   , ((modMask, xK_f),
@@ -188,11 +218,11 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- Spawn chrome
   , ((modMask, xK_g),
-     spawn "google-chrome-stable")
+     spawn "chromium")
 
   -- Spawn chrome
   , ((modMask .|. shiftMask, xK_g),
-     spawn "google-chrome-stable --incognito")
+     spawn "chromium --incognito")
 
   -- Take a selective screenshot.
   , ((modMask, xK_y),
@@ -208,11 +238,11 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- Increase brightness.
   , ((0, xF86XK_MonBrightnessUp),
-     spawn "light -A 5")
+     spawn "xbacklight + 5")
 
   -- Decrease brightness.
   , ((0, xF86XK_MonBrightnessDown),
-     spawn "light -U 5")
+     spawn "xbacklight - 5")
 
   -- Mute volume.
   , ((0, xF86XK_AudioMute),
@@ -246,7 +276,11 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((0, 0x1008FF17),
      spawn "")
 
-  -- Grid select
+  -- Toggle screen TODO UNCOMMENT WITH NEW MONITOR
+  --, ((modMask, xK_quoteleft),
+  --    nextScreen)
+
+  -- Toggle workspace
   , ((modMask, xK_Tab),
       toggleWS)
 
@@ -325,8 +359,8 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   ++
 
-  -- mod-[1..9], Switch to workspace N
-  -- mod-shift-[1..9], Move client to workspace N
+  -- mod-[1..0], Switch to workspace N
+  -- mod-shift-[1..0], Move client to workspace N
   [((m .|. modMask, k), windows $ f i)
     | (i, k) <- zip (XMonad.workspaces conf) $ [xK_1 .. xK_9] ++ [xK_0]
       , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
@@ -335,8 +369,8 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
   -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
   [((m .|. modMask, key), screenWorkspace sc >>= flip whenJust (windows . f))
-      | (key, sc) <- zip [xK_w, xK_e, xK_r] [1,0,2]
-      , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+    | (key, sc) <- zip [xK_e, xK_r] [1, 0]
+    , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
 
 ------------------------------------------------------------------------
@@ -346,7 +380,6 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 -- True if your focus should follow your mouse cursor.
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = True
-
 myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
   [
     -- mod-button1, Set the window to floating mode and move by dragging

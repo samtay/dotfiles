@@ -8,13 +8,14 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
+Plug 'tpope/vim-surround'
 " spacemacs
 Plug 'hecal3/vim-leader-guide'
 Plug 'jimmay5469/vim-spacemacs'
 " color
-" Plug 'colepeters/spacemacs-theme.vim'
 Plug 'liuchengxu/space-vim-dark'
 Plug 'vim-scripts/mayansmoke'
+Plug 'altercation/vim-colors-solarized'
 " Plug 'urso/haskell_syntax.vim' UNCOMMENT FOR vim, COMMENT FOR nvim
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
 Plug 'neovimhaskell/haskell-vim', {'for': 'haskell'}
@@ -64,8 +65,7 @@ set shiftwidth=2
 " Don't auto comment for the love of god
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
-" No swap -- this was biting me
-" set noswapfile
+set noswapfile
 " Just hide buffers
 set hidden
 
@@ -103,7 +103,7 @@ endif
 let g:airline_powerline_fonts = 1
 let g:airline_symbols.space = "\ua0"
 " Set airline theme
-let g:airline_theme='angr'
+let g:airline_theme='solarized'
 
 " Toggle tagbar
 nmap <leader>t :TagbarToggle<CR>
@@ -126,8 +126,6 @@ vmap <leader>P "+P
 
 " Save read-only files easily
 cmap w!! w !sudo tee > /dev/null %
-" Comment command with '#' by default
-cmap comment s/^/#/
 
 " New lines without insert mode
 map <Enter> o<ESC>
@@ -150,13 +148,10 @@ vnoremap <silent> # :call VisualSelection('b', '')<CR>
 if (has("termguicolors"))
   set termguicolors
 endif
-set t_Co=256
-" let g:kolor_italic=1                    " Enable italic. Default: 1
-" let g:kolor_bold=1                      " Enable bold. Default: 1
-" let g:kolor_underlined=0                " Enable underline. Default: 0
-" let g:kolor_alternative_matchparen=0    " Gray 'MatchParen' color. Default: 0
-set background=dark
-colorscheme space-vim-dark
+
+set background=light
+colorscheme solarized
+
 hi Comment cterm=italic
 
 """"""" Ctrl P settings
@@ -218,6 +213,9 @@ nnoremap <leader>wL <C-W>L
 nnoremap <leader>wJ <C-W>J
 nnoremap <leader>w_ <C-W>_
 nnoremap <leader>w\| <C-W>\|
+nnoremap <leader>w<CR> <C-W>o
+
+nnoremap <leader>t :tag<space>
 
 " comment tools
 nnoremap <leader>cc :call NERDComment('n', "Toggle")<CR>
@@ -235,8 +233,9 @@ vnoremap <leader>a; :Tabularize /::<CR>
 vnoremap <leader>a- :Tabularize /-><CR>
 vnoremap <leader>a, :Tabularize /,<CR>
 vnoremap <leader>ac :Tabularize /--<CR>
-" format stylish haskell
+" formatting
 nnoremap <leader>ash :%!stylish-haskell<CR>
+nnoremap <leader>ase :DeleteTrailingWS<CR>
 
 " hdevtools
 let g:hdevtools_options = '-g -ifrontend/src -g -icommon/src -g -ibackend/src -g -Wall'
@@ -259,6 +258,9 @@ let g:haskell_conceal_wide = 1
 let g:haskell_conceal_enumerations = 1
 let hscoptions="𝐒𝐓𝐄𝐌xRtB𝔻wr↱"
 set conceallevel=0
+" indent
+let g:haskell_indent_if = 0
+let g:haskell_indent_in = 0
 
 """"""" Autocompletion settings
 " Try omnifunc, else fallback to keywords

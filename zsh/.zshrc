@@ -17,6 +17,7 @@ zplug "plugins/composer",         from:oh-my-zsh, defer:1
 zplug "zsh-users/zsh-syntax-highlighting", defer:1
 zplug "zsh-users/zsh-history-substring-search", defer:2
 zplug "~/git/dotfiles/zsh/plugins", from:local, defer:3
+zplug "spwhitt/nix-zsh-completions"
 
 # theme
 zplug "mafredri/zsh-async"
@@ -36,9 +37,11 @@ export VISUAL=vim
 export BROWSER=vimb
 export DOTFILES_DIR="$HOME/git/dotfiles"
 export PATH=/usr/local/bin:$PATH
+export PATH="$HOME/.cabal/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.npm-global/bin:$PATH"
 export PATH="$HOME/.dex/bin:$PATH"
+export PATH="$HOME/git/aspen/tools/bin:$PATH"
 
 
 #####################################################################
@@ -230,11 +233,6 @@ bindkey -M menuselect '^[[Z' reverse-menu-complete # shift tab for reverse compl
 # misc tasks
 #####################################################################
 
-# termite ctrl+shift+t
-if [[ $TERM == xterm-termite ]]; then
-  . /etc/profile.d/vte.sh
-  __vte_osc7
-fi
 # bash completions
 autoload -U +X bashcompinit && bashcompinit
 # stack completion
@@ -281,5 +279,8 @@ alias -g vim='nvim'
 
 if [ -e /home/samtay/.nix-profile/etc/profile.d/nix.sh ]; then . /home/samtay/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 
-
+export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+alias -g vim='nvim'
+alias -g agl='ag --pager="less -XFR"'

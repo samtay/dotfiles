@@ -1,6 +1,6 @@
 -- docs: http://projects.haskell.org/xmobar/
 Config {
-    font = "xft:Terminus-9",
+    font = "xft:Source Code Pro-9",
     bgColor = "#2d2d2d",
     fgColor = "#cccccc",
     position = Top,
@@ -68,7 +68,7 @@ Config {
           , "--normal"   , "#6699cc"
           , "--low"      , "#99cc99"
           , "--" -- brightness specific options
-          , "-D"         , "intel_backlight"
+          , "-D"         , "acpi_video0"
           ] 40
       , Run Volume "default" "Master"
           [ "--template", "<fc=#cc99cc>Volume: <volumevbar> <status></fc>"
