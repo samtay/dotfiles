@@ -81,15 +81,19 @@ h: hatteras
 r: rockaway
 j: jacksonville
 ns: new-smyrna
+sa: st-augustine
+pi: ponce-inlet
 Pick one: "
   fi
   case $cam in
-    w|washout) url='https://cams.cdn-surfline.com/wsc-east/ec-washoutcam.stream/playlist.m3u8' ;;
-    f|frisco) url='https://cams.cdn-surfline.com/wsc-east/ec-friscopiercam.stream/playlist.m3u8' ;;
-    h|hatteras) url='https://cams.cdn-surfline.com/wsc-east/ec-capehatterascam.stream/playlist.m3u8' ;;
-    r|rockaway) url='https://cams.cdn-surfline.com/wsc-east/ec-rockaway90thcam.stream/playlist.m3u8' ;;
-    j|jacksonville) url='https://cams.cdn-surfline.com/wsc-east/ec-jacksonvillepiercam.stream/playlist.m3u8' ;;
-    ns|new-smyrna) url='https://cams.cdn-surfline.com/wsc-east/ec-newsmycam.stream/playlist.m3u8' ;;
+    w|washout) url='wsc-east/ec-washoutcam.stream/playlist.m3u8' ;;
+    f|frisco) url='wsc-east/ec-friscopiercam.stream/playlist.m3u8' ;;
+    h|hatteras) url='wsc-east/ec-capehatterascam.stream/playlist.m3u8' ;;
+    r|rockaway) url='wsc-east/ec-rockaway90thcam.stream/playlist.m3u8' ;;
+    j|jacksonville) url='wsc-east/ec-jacksonvillepiercam.stream/playlist.m3u8' ;;
+    ns|new-smyrna) url='wsc-east/ec-newsmycam.stream/playlist.m3u8' ;;
+    sa|st-augustine) url='wsc-east/ec-staugustinecam.stream/playlist.m3u8' ;;
+    pi|ponce-inlet) url='wsc-east/ec-ponceinletcam.stream/playlist.m3u8' ;;
   esac
-  vlc $url
+  vlc "https://cams.cdn-surfline.com/$url"
 }

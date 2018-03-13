@@ -233,6 +233,7 @@ vnoremap <leader>a= :Tabularize /=<CR>
 vnoremap <leader>a; :Tabularize /::<CR>
 vnoremap <leader>a- :Tabularize /-><CR>
 vnoremap <leader>a, :Tabularize /,<CR>
+vnoremap <leader>ac :Tabularize /--<CR>
 " formatting
 nnoremap <leader>ash :%!stylish-haskell<CR>
 nnoremap <leader>ase :DeleteTrailingWS<CR>
