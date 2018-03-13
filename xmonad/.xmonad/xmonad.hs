@@ -188,9 +188,9 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
       , ((0, xK_2), spawn "displays-toggle 2")
       ])
 
-  -- Rotate screen
+  -- Toggle theme
   , ((modMask .|. shiftMask, xK_t),
-      spawn "/home/sam/git/dotfiles/toggle-theme"
+      spawn "$HOME/git/dotfiles/toggle-theme"
     )
   -- Spawn the launcher using command specified by myLauncher.
   -- Use this to launch programs without a key binding.

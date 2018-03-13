@@ -65,7 +65,6 @@ set shiftwidth=2
 " Don't auto comment for the love of god
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
-" No swap
 set noswapfile
 " Just hide buffers
 set hidden

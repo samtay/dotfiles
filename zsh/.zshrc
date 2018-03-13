@@ -274,6 +274,8 @@ function zle-line-init zle-keymap-select {
 zle -N zle-line-init
 zle -N zle-keymap-select
 
+alias -g vim='nvim'
+
 if [ -e /home/samtay/.nix-profile/etc/profile.d/nix.sh ]; then . /home/samtay/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
