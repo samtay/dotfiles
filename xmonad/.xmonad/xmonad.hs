@@ -6,7 +6,7 @@ import Data.Semigroup ((<>))
 import System.IO
 import System.Exit
 import XMonad
-import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.SetWMName
@@ -32,19 +32,18 @@ import qualified Data.Map        as M
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
 --
-myTerminal = "termite"
+myTerminal = "rofi-sensible-terminal"
 
 -- The command to use as a launcher, to launch commands that don't have
 -- preset keybindings.
 --myLauncher = "$(yeganesh -x)"
-myLauncher = "dmenu_run -fn '-*-terminus-*-r-normal-*-*-120-*-*-*-*-iso8859-*' -nb '#000000' -nf '#FFFFFF' -sb '#2c2c2c' -sf '#99cc99'"
-
+myLauncher = "rofi -matching fuzzy -show run"
 
 ------------------------------------------------------------------------
 -- Workspaces
 -- The default number of workspaces (virtual screens) and their names.
 --
-myWorkspaces = ["1:code", "2:repl", "3:chrome"] ++ map show ([4..9] ++ [0])
+myWorkspaces = map show ([1..9] ++ [0])
 
 ------------------------------------------------------------------------
 -- Window rules
@@ -60,17 +59,20 @@ myWorkspaces = ["1:code", "2:repl", "3:chrome"] ++ map show ([4..9] ++ [0])
 -- To match on the WM_NAME, you can use 'title' in the same way that
 -- 'className' and 'resource' are used below.
 --
+{-
 myManageHook = composeAll
     [ className =? "Google-chrome"  --> doShift "3:web"
     , resource  =? "desktop_window" --> doIgnore
     , className =? "stalonetray"    --> doIgnore
     , isFullscreen --> (doF W.focusDown <+> doFullFloat)]
+-}
+myManageHook = def
 
 ------------------------------------------------------------------------
 -- XMonad Prompt
 --
 -- TODO explore
-myXPConfig = defaultXPConfig
+myXPConfig = def
 
 ------------------------------------------------------------------------
 
@@ -84,7 +86,7 @@ myXPConfig = defaultXPConfig
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayoutHook = avoidStruts (tall ||| tabbed') ||| distractionFree
+myLayoutHook = avoidStruts $ (tall ||| tabbed') ||| distractionFree
     where tabbed' = tabbed shrinkText tabConfig
           tall = Tall 1 (3/100) (1/2)
           distractionFree = noBorders (fullscreenFull Full)
@@ -98,7 +100,7 @@ myFocusedBorderColor = brightGreen
 myBorderWidth = 2
 
 -- Colors for text and backgrounds of each tab when in "Tabbed" layout.
-tabConfig = defaultTheme {
+tabConfig = def {
     fontName = "xft:Source Code Pro:size=9",
     activeBorderColor   = aqua,
     activeTextColor     = foreground,
@@ -107,12 +109,6 @@ tabConfig = defaultTheme {
     inactiveTextColor   = comment,
     inactiveColor       = background
 }
-
--- Color of current window title in xmobar.
-xmobarTitleColor = green
-
--- Color of current workspace in xmobar.
-xmobarCurrentWorkspaceColor = purple
 
 -- Tomorrow Night Eighties theme
 background = "#2d2d2d"
@@ -141,16 +137,6 @@ myModMask = mod1Mask
 
 editFile f = spawn $ myTerminal ++ " -e \"nvim " ++ f ++ "\""
 
-aspen ghcid = do
-  let cd = myTerminal ++ " -d \"$HOME/git/aspen\""
-      run script = cd ++ " -e \"sh " ++ script ++ "\""
-  spawn $ run "ghci-frontend-mobile"
-  spawn $ run "focus/ghci-backend"
-  maybe (return ()) (spawn . run . ("focus/ghcid-" <>)) ghcid
-  -- Two extra terminals for good measure, nvim, git, etc.
-  -- spawn cd
-  -- spawn cd
-
 myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   ----------------------------------------------------------------------
   -- Custom key bindings
@@ -171,12 +157,9 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
       , ((0, xK_z), editFile "$HOME/.zshrc")
       ])
 
-  -- Start aspen stuff
-  , ((modMask, xK_a), submap . M.fromList $
-      [ ((0, xK_f), aspen $ Just "frontend")
-      , ((0, xK_b), aspen $ Just "backend")
-      , ((0, xK_a), aspen $ Nothing)
-      ])
+  -- XFCE settings
+  , ((modMask .|. shiftMask, xK_comma),
+     spawn "xfce4-settings-manager")
 
   -- Toggle multi monitor display (xrandr wrapper)
   , ((modMask .|. shiftMask, xK_d), submap . M.fromList $
@@ -215,11 +198,11 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- Spawn chrome
   , ((modMask, xK_g),
-     spawn "chromium")
+     spawn "google-chrome")
 
   -- Spawn chrome
   , ((modMask .|. shiftMask, xK_g),
-     spawn "chromium --incognito")
+     spawn "google-chrome --incognito")
 
   -- Take a selective screenshot.
   , ((modMask, xK_y),
@@ -347,11 +330,11 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- Quit xmonad.
   , ((modMask .|. shiftMask, xK_q),
-     io (exitWith ExitSuccess))
+     spawn "xfce4-session-logout")
 
   -- Restart xmonad.
   , ((modMask, xK_q),
-     restart "xmonad" True)
+     spawn "xmonad --recompile" >> restart "xmonad" True)
   ]
 
   ++
@@ -394,66 +377,25 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
     -- you may also bind events to the mouse scroll wheel (button4 and button5)
   ]
 
-
-------------------------------------------------------------------------
--- Status bars and logging
--- Perform an arbitrary action on each internal state change or X event.
--- See the 'DynamicLog' extension for examples.
---
--- To emulate dwm's status bar
---
-myDefaultPP = xmobarPP
-  { ppTitle = xmobarColor xmobarTitleColor "" . shorten 100
-  , ppCurrent = xmobarColor xmobarCurrentWorkspaceColor ""
-  , ppSep = "   "
-  }
-
-
-
-------------------------------------------------------------------------
--- Startup hook
--- Perform an arbitrary action each time xmonad starts or is restarted
--- with mod-q.  Used by, e.g., XMonad.Layout.PerWorkspace to initialize
--- per-workspace layout choices.
---
--- By default, do nothing.
-myStartupHook = return ()
-
 ------------------------------------------------------------------------
 -- Run xmonad with all the defaults we set up.
 --
-main = do
-  xmproc   <- spawnPipe "xmobar ~/.xmonad/xmobar.hs"
-  xmonad $ defaults
-    { logHook    = dynamicLogWithPP $ myDefaultPP { ppOutput = hPutStrLn xmproc }
-    , manageHook = manageDocks <+> myManageHook
-    , handleEventHook = docksEventHook
-    }
-
-------------------------------------------------------------------------
--- Combine it all together
--- A structure containing your configuration settings, overriding
--- fields in the default config. Any you don't override, will
--- use the defaults defined in xmonad/XMonad/Config.hs
---
--- No need to modify this.
---
-defaults = defaultConfig {
-    -- simple stuff
-    terminal           = myTerminal,
-    focusFollowsMouse  = myFocusFollowsMouse,
-    borderWidth        = myBorderWidth,
-    modMask            = myModMask,
-    normalBorderColor  = myNormalBorderColor,
-    focusedBorderColor = myFocusedBorderColor,
-
+main = xmonad $ def
+  { -- simple stuff
+    terminal           = myTerminal
+  , focusFollowsMouse  = myFocusFollowsMouse
+  , borderWidth        = myBorderWidth
+  , modMask            = myModMask
+  , normalBorderColor  = myNormalBorderColor
+  , focusedBorderColor = myFocusedBorderColor
     -- key bindings
-    keys               = myKeys,
-    mouseBindings      = myMouseBindings,
-
+  , keys               = myKeys
+  , mouseBindings      = myMouseBindings
     -- hooks, layouts
-    workspaces         = myWorkspaces,
-    layoutHook         = smartBorders $ myLayoutHook,
-    manageHook         = myManageHook,
-    startupHook        = myStartupHook
-}
+  , workspaces         = myWorkspaces
+  , layoutHook         = smartBorders $ myLayoutHook
+  , manageHook         = manageDocks <+> myManageHook
+  , startupHook        = ewmhDesktopsStartup
+  , logHook            = ewmhDesktopsLogHook
+  , handleEventHook    = docksEventHook
+  }

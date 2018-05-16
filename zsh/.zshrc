@@ -237,8 +237,6 @@ bindkey -M menuselect '^[[Z' reverse-menu-complete # shift tab for reverse compl
 autoload -U +X bashcompinit && bashcompinit
 # stack completion
 eval "$(stack --bash-completion-script stack)"
-#eval "$(dmc --bash-completion-script dmc)"
-#eval "$(dm --bash-completion-script dm)"
 
 HISTFILE=${HOME}/.zsh_history
 HISTSIZE=10000                   # The maximum number of events to save in the internal history.
@@ -274,8 +272,6 @@ function zle-line-init zle-keymap-select {
 }
 zle -N zle-line-init
 zle -N zle-keymap-select
-
-alias -g vim='nvim'
 
 if [ -e /home/samtay/.nix-profile/etc/profile.d/nix.sh ]; then . /home/samtay/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 
