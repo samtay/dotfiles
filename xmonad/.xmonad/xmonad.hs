@@ -32,7 +32,7 @@ import qualified Data.Map        as M
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
 --
-myTerminal = "rofi-sensible-terminal"
+myTerminal = "xfce4-terminal"
 
 -- The command to use as a launcher, to launch commands that don't have
 -- preset keybindings.
