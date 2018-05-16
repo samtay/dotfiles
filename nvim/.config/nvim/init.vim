@@ -16,6 +16,7 @@ Plug 'jimmay5469/vim-spacemacs'
 Plug 'liuchengxu/space-vim-dark'
 Plug 'vim-scripts/mayansmoke'
 Plug 'altercation/vim-colors-solarized'
+Plug 'morhetz/gruvbox'
 " Plug 'urso/haskell_syntax.vim' UNCOMMENT FOR vim, COMMENT FOR nvim
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
 Plug 'neovimhaskell/haskell-vim', {'for': 'haskell'}
@@ -100,10 +101,10 @@ endfunc
 if !exists('g:airline_symbols')
   let g:airline_symbols = {}
 endif
-let g:airline_powerline_fonts = 1
+let g:airline_powerline_fonts = 0
 let g:airline_symbols.space = "\ua0"
 " Set airline theme
-let g:airline_theme='solarized'
+let g:airline_theme='gruvbox'
 
 " Toggle tagbar
 nmap <leader>t :TagbarToggle<CR>
@@ -149,8 +150,9 @@ if (has("termguicolors"))
   set termguicolors
 endif
 
-set background=light
-colorscheme solarized
+let g:gruvbox_italic=1
+set background=dark
+colorscheme gruvbox
 
 hi Comment cterm=italic
 
