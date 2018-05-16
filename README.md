@@ -2,14 +2,7 @@
 Personal configuration files
 
 ## TODO
-1. rewrite manage for nixos
-2. symlink /etc/nixos/configuration.nix
-3. See if alt+shift+t toggle theme can target existing shells and make them
-   reload. termite already supports this with ctrl+shift+r so possibly
-   triggered externally
-4. install vimplug during bootstrap:
-  ```
-  curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  ```
+1. Update alt+shift+t to cycle through list of themes
+2. https://github.com/addy-dclxvi/almighty-dotfiles steal this guy's awesome stuff
+3. grab modified fzf shell config from nixos and commit it here
 
