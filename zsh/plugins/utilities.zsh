@@ -1,5 +1,5 @@
 # Aliases
-alias copy='xclip -sel clip'
+alias copy='pbcopy'
 alias copy-ssh-key='copy-file ~/.ssh/id_rsa.pub'
 alias reload-zsh='source ~/.zshrc'
 alias ba-vpn="sudo openvpn --daemon /etc/openvpn/ba-client.conf"
@@ -12,7 +12,7 @@ alias aspen='g2 aspen'
 export MY_GIT_DIR="$HOME/git"
 
 g2() {
-  cd "$MY_GIT_DIR/$1" && ls -lhF --show-control-chars --color=always
+  cd "$MY_GIT_DIR/$1" && ls -lhF
 }
 
 backup() {
@@ -34,7 +34,7 @@ displays-toggle() {
 }
 
 copy-file(){
-  cat $1 | xclip -sel clip
+  cat $1 | pbcopy
 }
 
 watch(){
