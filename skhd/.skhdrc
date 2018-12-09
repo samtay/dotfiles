@@ -199,4 +199,4 @@ alt - e : chunkc tiling::window --toggle split
 
 # change layout of desktop
 alt - space : curr=$(chunkc tiling::query --desktop mode);\
-              chunkc tiling::desktop --layout $(if bsp then monocle if monocle then float if float then bsp)
+              chunkc tiling::desktop --layout $(if [[ $curr == "bsp" ]]; then echo "monocle";  else echo "bsp"; fi)
