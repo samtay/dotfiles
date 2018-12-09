@@ -1,0 +1,202 @@
+#  NOTE(koekeishiya): A list of all built-in modifier and literal keywords can
+#                     be found at https://github.com/koekeishiya/skhd/issues/1
+#
+#                     A hotkey is written according to the following rules:
+#
+#                       hotkey       = <mode> '<' <action> | <action>
+#
+#                       mode         = 'name of mode' | <mode> ',' <mode>
+#
+#                       action       = <keysym> '[' <proc_map_lst> ']' | <keysym> '->' '[' <proc_map_lst> ']'
+#                                      <keysym> ':' <command>          | <keysym> '->' ':' <command>
+#                                      <keysym> ';' <mode>             | <keysym> '->' ';' <mode>
+#
+#                       keysym       = <mod> '-' <key> | <key>
+#
+#                       mod          = 'modifier keyword' | <mod> '+' <mod>
+#
+#                       key          = <literal> | <keycode>
+#
+#                       literal      = 'single letter or built-in keyword'
+#
+#                       keycode      = 'apple keyboard kVK_<Key> values (0x3C)'
+#
+#                       proc_map_lst = * <proc_map>
+#
+#                       proc_map     = <string> ':' <command>
+#
+#                       string       = '"' 'sequence of characters' '"'
+#
+#                       command      = command is executed through '$SHELL -c' and
+#                                      follows valid shell syntax. if the $SHELL environment
+#                                      variable is not set, it will default to '/bin/bash'.
+#                                      when bash is used, the ';' delimeter can be specified
+#                                      to chain commands.
+#
+#                                      to allow a command to extend into multiple lines,
+#                                      prepend '\' at the end of the previous line.
+#
+#                                      an EOL character signifies the end of the bind.
+#
+#                       ->           = keypress is not consumed by skhd
+#
+#  NOTE(koekeishiya): A mode is declared according to the following rules:
+#
+#                       mode_decl = '::' <name> '@' ':' <command> | '::' <name> ':' <command> |
+#                                   '::' <name> '@'               | '::' <name>
+#
+#                       name      = desired name for this mode,
+#
+#                       @         = capture keypresses regardless of being bound to an action
+#
+#                       command   = command is executed through '$SHELL -c' and
+#                                   follows valid shell syntax. if the $SHELL environment
+#                                   variable is not set, it will default to '/bin/bash'.
+#                                   when bash is used, the ';' delimeter can be specified
+#                                   to chain commands.
+#
+#                                   to allow a command to extend into multiple lines,
+#                                   prepend '\' at the end of the previous line.
+#
+#                                   an EOL character signifies the end of the bind.
+
+# add an on_enter command to the default mode
+# :: default : chunkc border::color 0xff775759
+#
+# defines a new mode 'test' with an on_enter command, that captures keypresses
+# :: test @ : chunkc border::color 0xff24ccaa
+#
+# from 'default' mode, activate mode 'test'
+# cmd - x ; test
+#
+# from 'test' mode, activate mode 'default'
+# test < cmd - x ; default
+#
+# launch a new terminal instance when in either 'default' or 'test' mode
+# default, test < cmd - return : open -na /Applications/Terminal.app
+
+# application specific bindings
+#
+# cmd - n [
+#     "kitty"       : echo "hello kitty"
+#     "qutebrowser" : echo "hello qutebrowser"
+#     "finder"      : false
+# ]
+
+# TODO open surf vlc
+
+# open apps
+shift + alt - return : open /Applications/Hyper.app
+alt - g : open /Applications/Google\ Chrome.app
+
+# restart wm
+shift + alt - q : brew services restart skhd;\
+                  brew services restart koekeishiya/formulae/chunkwm
+
+# close focused window
+shift + alt - c : chunkc tiling::window --close
+
+# close desktop
+shift + alt - w : chunkc tiling::desktop --annihilate
+
+# focus window
+
+## cardinals
+alt - h : chunkc tiling::window --focus west
+alt - j : chunkc tiling::window --focus south
+alt - k : chunkc tiling::window --focus north
+alt - l : chunkc tiling::window --focus east
+
+## cycle
+alt - i : chunkc tiling::window --focus prev
+alt - u : chunkc tiling::window --focus next
+
+# increase region size
+shift + ctrl - l : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge east;\
+                   chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge west
+shift + ctrl - h : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge west;\
+                   chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge east
+shift + ctrl - j : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge south;\
+                   chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge north
+shift + ctrl - k : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge north;\
+                   chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge south
+
+# equalize size of windows
+shift + alt - space : chunkc tiling::desktop --equalize
+
+# swap window
+shift + alt - h : chunkc tiling::window --swap west
+shift + alt - j : chunkc tiling::window --swap south
+shift + alt - k : chunkc tiling::window --swap north
+shift + alt - l : chunkc tiling::window --swap east
+
+# move window
+#shift + cmd - h : chunkc tiling::window --warp west
+#shift + cmd - j : chunkc tiling::window --warp south
+#shift + cmd - k : chunkc tiling::window --warp north
+#shift + cmd - l : chunkc tiling::window --warp east
+
+# create desktop, move window and follow focus
+shift + alt - n : chunkc tiling::desktop --create;\
+                  id=$(chunkc tiling::query --desktops-for-monitor $(chunkc tiling::query --monitor-for-desktop $(chunkc tiling::query --desktop id)));\
+                  chunkc tiling::window --send-to-desktop $(echo ${id##* });\
+                  chunkc tiling::desktop --focus $(echo ${id##* })
+
+# create desktop and follow focus
+alt - n : chunkc tiling::desktop --create;\
+                id=$(chunkc tiling::query --desktops-for-monitor $(chunkc tiling::query --monitor-for-desktop $(chunkc tiling::query --desktop id)));\
+                chunkc tiling::desktop --focus $(echo ${id##* })
+
+# focus desktop
+alt - tab : chunkc tiling::desktop --focus $(chunkc get _last_active_desktop)
+alt - 1 : chunkc tiling::desktop --focus 1
+alt - 2 : chunkc tiling::desktop --focus 2
+alt - 3 : chunkc tiling::desktop --focus 3
+alt - 4 : chunkc tiling::desktop --focus 4
+alt - 5 : chunkc tiling::desktop --focus 5
+alt - 6 : chunkc tiling::desktop --focus 6
+alt - 7 : chunkc tiling::desktop --focus 7
+alt - 8 : chunkc tiling::desktop --focus 8
+alt - 9 : chunkc tiling::desktop --focus 9
+
+# send window to desktop
+shift + alt - tab : chunkc tiling::window --send-to-desktop $(chunkc get _last_active_desktop)
+shift + alt - 1 : chunkc tiling::window --send-to-desktop 1
+shift + alt - 2 : chunkc tiling::window --send-to-desktop 2
+shift + alt - 3 : chunkc tiling::window --send-to-desktop 3
+shift + alt - 4 : chunkc tiling::window --send-to-desktop 4
+shift + alt - 5 : chunkc tiling::window --send-to-desktop 5
+shift + alt - 6 : chunkc tiling::window --send-to-desktop 6
+shift + alt - 7 : chunkc tiling::window --send-to-desktop 7
+shift + alt - 8 : chunkc tiling::window --send-to-desktop 8
+shift + alt - 9 : chunkc tiling::window --send-to-desktop 9
+
+# send window to desktop and follow focus
+# TODO determine if this is worth it, or should be the default
+#shift + cmd - x : chunkc tiling::window --send-to-desktop $(chunkc get _last_active_desktop); chunkc tiling::desktop --focus $(chunkc get _last_active_desktop)
+#shift + cmd - 1 : chunkc tiling::window --send-to-desktop 1; chunkc tiling::desktop --focus 1
+#shift + cmd - 2 : chunkc tiling::window --send-to-desktop 2; chunkc tiling::desktop --focus 2
+#shift + cmd - 3 : chunkc tiling::window --send-to-desktop 3; chunkc tiling::desktop --focus 3
+
+# focus monitor
+alt - t  : chunkc tiling::monitor -f 1
+alt - g  : chunkc tiling::monitor -f 2
+alt - b  : chunkc tiling::monitor -f 3
+
+# send window to monitor and follow focus
+shift + alt - t  : chunkc tiling::window --send-to-monitor 1; chunkc tiling::monitor -f 1
+shift + alt - g  : chunkc tiling::window --send-to-monitor 2; chunkc tiling::monitor -f 2
+shift + alt - b  : chunkc tiling::window --send-to-monitor 3; chunkc tiling::monitor -f 3
+
+# toggle window fullscreen
+alt - f : chunkc tiling::window --toggle fullscreen
+
+# toggle window native fullscreen
+shift + alt - f : chunkc tiling::window --toggle native-fullscreen
+
+# toggle window split type
+alt - e : chunkc tiling::window --toggle split
+
+# change layout of desktop
+alt - space : curr=$(chunkc tiling::query --desktop mode);\
+              chunkc tiling::desktop --layout $(if bsp then monocle if monocle then float if float then bsp)
