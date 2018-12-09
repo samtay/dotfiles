@@ -159,24 +159,17 @@ alt - 7 : chunkc tiling::desktop --focus 7
 alt - 8 : chunkc tiling::desktop --focus 8
 alt - 9 : chunkc tiling::desktop --focus 9
 
-# send window to desktop
-shift + alt - tab : chunkc tiling::window --send-to-desktop $(chunkc get _last_active_desktop)
-shift + alt - 1 : chunkc tiling::window --send-to-desktop 1
-shift + alt - 2 : chunkc tiling::window --send-to-desktop 2
-shift + alt - 3 : chunkc tiling::window --send-to-desktop 3
-shift + alt - 4 : chunkc tiling::window --send-to-desktop 4
-shift + alt - 5 : chunkc tiling::window --send-to-desktop 5
-shift + alt - 6 : chunkc tiling::window --send-to-desktop 6
-shift + alt - 7 : chunkc tiling::window --send-to-desktop 7
-shift + alt - 8 : chunkc tiling::window --send-to-desktop 8
-shift + alt - 9 : chunkc tiling::window --send-to-desktop 9
-
-# send window to desktop and follow focus
-# TODO determine if this is worth it, or should be the default
-#shift + cmd - x : chunkc tiling::window --send-to-desktop $(chunkc get _last_active_desktop); chunkc tiling::desktop --focus $(chunkc get _last_active_desktop)
-#shift + cmd - 1 : chunkc tiling::window --send-to-desktop 1; chunkc tiling::desktop --focus 1
-#shift + cmd - 2 : chunkc tiling::window --send-to-desktop 2; chunkc tiling::desktop --focus 2
-#shift + cmd - 3 : chunkc tiling::window --send-to-desktop 3; chunkc tiling::desktop --focus 3
+# send window to desktop (and follow focus)
+shift + alt - tab : chunkc tiling::window --send-to-desktop $(chunkc get _last_active_desktop); chunkc tiling::desktop --focus $(chunkc get _last_active_desktop)
+shift + alt - 1 : chunkc tiling::window --send-to-desktop 1; chunkc tiling::desktop --focus 1
+shift + alt - 2 : chunkc tiling::window --send-to-desktop 2; chunkc tiling::desktop --focus 2
+shift + alt - 3 : chunkc tiling::window --send-to-desktop 3; chunkc tiling::desktop --focus 3
+shift + alt - 4 : chunkc tiling::window --send-to-desktop 4; chunkc tiling::desktop --focus 4
+shift + alt - 5 : chunkc tiling::window --send-to-desktop 5; chunkc tiling::desktop --focus 5
+shift + alt - 6 : chunkc tiling::window --send-to-desktop 6; chunkc tiling::desktop --focus 6
+shift + alt - 7 : chunkc tiling::window --send-to-desktop 7; chunkc tiling::desktop --focus 7
+shift + alt - 8 : chunkc tiling::window --send-to-desktop 8; chunkc tiling::desktop --focus 8
+shift + alt - 9 : chunkc tiling::window --send-to-desktop 9; chunkc tiling::desktop --focus 9
 
 # focus monitor
 alt - t  : chunkc tiling::monitor -f 1
