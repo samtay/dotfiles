@@ -19,6 +19,7 @@ Plug 'altercation/vim-colors-solarized'
 " Plug 'urso/haskell_syntax.vim' UNCOMMENT FOR vim, COMMENT FOR nvim
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
 Plug 'neovimhaskell/haskell-vim', {'for': 'haskell'}
+Plug 'sbdchd/neoformat'
 " nix
 Plug 'LnL7/vim-nix'
 " tabular formatting
@@ -198,6 +199,7 @@ let g:spacemacs#excludes = [
   \ '^ft',
   \ '^tn',
   \ '^cc',
+  \ '^gd',
   \ ]
 " fzf
 nnoremap <leader>pf :Files<CR>
@@ -215,7 +217,8 @@ nnoremap <leader>w_ <C-W>_
 nnoremap <leader>w\| <C-W>\|
 nnoremap <leader>w<CR> <C-W>o
 
-nnoremap <leader>t :tag<space>
+nnoremap <leader>gt <C-]>
+nnoremap <leader>gT g]
 
 " comment tools
 nnoremap <leader>cc :call NERDComment('n', "Toggle")<CR>
