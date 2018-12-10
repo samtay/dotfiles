@@ -13,7 +13,6 @@ source ~/.zplug/init.zsh
 zplug "lib/directories",          from:oh-my-zsh
 zplug "plugins/docker",           from:oh-my-zsh, defer:1
 zplug "plugins/docker-compose",   from:oh-my-zsh, defer:1
-zplug "plugins/composer",         from:oh-my-zsh, defer:1
 zplug "zsh-users/zsh-syntax-highlighting", defer:1
 zplug "zsh-users/zsh-history-substring-search", defer:2
 zplug "~/git/dotfiles/zsh/plugins", from:local, defer:3

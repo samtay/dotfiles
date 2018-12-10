@@ -3,7 +3,8 @@ alias copy='pbcopy'
 alias copy-ssh-key='copy-file ~/.ssh/id_rsa.pub'
 alias reload-zsh='source ~/.zshrc'
 alias ba-vpn="sudo openvpn --daemon /etc/openvpn/ba-client.conf"
-alias wifi-scan='sudo iwlist wlp3s0 scan | grep ESSID'
+alias wifi-scan='sudo iwlist wlp1s0 scan | grep ESSID'
+alias wifi-rescan='nmcli d wifi rescan'
 alias wifi-list='nmcli d wifi'
 alias wifi-connect='nmcli -a -p -s d wifi connect'
 alias get-simpsons-img='echo "http://imgur.com/a/T81t9copy" | copy'
@@ -71,4 +72,38 @@ xdebug-toggle() {
 
 fix-broken-symlinks() {
   find -L . -type l -exec rm {} \;
+}
+
+surfcam() {
+  local cam="$1"
+  if [ -z "$cam" ]; then
+    read "cam?w: washout
+sw: south washout
+pn: pier north
+ps pier south
+wr: wrightsville
+f: frisco
+h: hatteras
+r: rockaway
+j: jacksonville
+ns: new-smyrna
+sa: st-augustine
+pi: ponce-inlet
+Pick one: "
+  fi
+  case $cam in
+    w|washout) url='cdn-ec/ec-washout/chunklist.m3u8' ;;
+    sw|washout) url='wsc-east/ec-washoutsouthcam.stream/playlist.m3u8' ;;
+    wr|wrightsville) url='wsc-east/ec-wrightsvillecam.stream/chunklist.m3u8' ;;
+    pn|pier-north) url='wsc-east/ec-follypiernorthcam.stream/playlist.m3u8' ;;
+    ps|pier-south) url='wsc-east/ec-follypiersouthcam.stream/playlist.m3u8' ;;
+    f|frisco) url='wsc-east/ec-friscopiercam.stream/playlist.m3u8' ;;
+    h|hatteras) url='wsc-east/ec-capehatterascam.stream/playlist.m3u8' ;;
+    r|rockaway) url='wsc-east/ec-rockaway90thcam.stream/playlist.m3u8' ;;
+    j|jacksonville) url='wsc-east/ec-jacksonvillepiercam.stream/playlist.m3u8' ;;
+    ns|new-smyrna) url='wsc-east/ec-newsmycam.stream/playlist.m3u8' ;;
+    sa|st-augustine) url='wsc-east/ec-staugustinecam.stream/playlist.m3u8' ;;
+    pi|ponce-inlet) url='wsc-east/ec-ponceinletcam.stream/playlist.m3u8' ;;
+  esac
+  vlc "https://cams.cdn-surfline.com/$url"
 }

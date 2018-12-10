@@ -26,6 +26,7 @@ Plug 'altercation/vim-colors-solarized'
 " Plug 'urso/haskell_syntax.vim' UNCOMMENT FOR vim, COMMENT FOR nvim
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
 Plug 'neovimhaskell/haskell-vim', {'for': 'haskell'}
+Plug 'sbdchd/neoformat'
 " nix
 Plug 'LnL7/vim-nix'
 " tabular formatting
@@ -72,7 +73,6 @@ set shiftwidth=2
 " Don't auto comment for the love of god
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
-" No swap
 set noswapfile
 " Just hide buffers
 set hidden
@@ -207,6 +207,7 @@ let g:spacemacs#excludes = [
   \ '^ft',
   \ '^tn',
   \ '^cc',
+  \ '^gd',
   \ ]
 " fzf
 nnoremap <leader>pf :Files<CR>
@@ -224,7 +225,8 @@ nnoremap <leader>w_ <C-W>_
 nnoremap <leader>w\| <C-W>\|
 nnoremap <leader>w<CR> <C-W>o
 
-nnoremap <leader>t :tag<space>
+nnoremap <leader>gt <C-]>
+nnoremap <leader>gT g]
 
 " comment tools
 nnoremap <leader>cc :call NERDComment('n', "Toggle")<CR>
@@ -241,6 +243,7 @@ vnoremap <leader>a= :Tabularize /=<CR>
 vnoremap <leader>a; :Tabularize /::<CR>
 vnoremap <leader>a- :Tabularize /-><CR>
 vnoremap <leader>a, :Tabularize /,<CR>
+vnoremap <leader>ac :Tabularize /--<CR>
 " formatting
 nnoremap <leader>ash :%!stylish-haskell<CR>
 nnoremap <leader>ase :DeleteTrailingWS<CR>
@@ -269,6 +272,15 @@ set conceallevel=0
 " indent
 let g:haskell_indent_if = 0
 let g:haskell_indent_in = 0
+let g:haskell_indent_let = 4
+let g:haskell_indent_case_alternative = 1
+" highlighting
+let g:haskell_enable_quantification = 1   " to enable highlighting of `forall`
+let g:haskell_enable_recursivedo = 1      " to enable highlighting of `mdo` and `rec`
+let g:haskell_enable_arrowsyntax = 1      " to enable highlighting of `proc`
+let g:haskell_enable_pattern_synonyms = 1 " to enable highlighting of `pattern`
+let g:haskell_enable_typeroles = 1        " to enable highlighting of type roles
+let g:haskell_enable_static_pointers = 1  " to enable highlighting of `static`
 
 """"""" Autocompletion settings
 " Try omnifunc, else fallback to keywords
