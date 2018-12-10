@@ -77,6 +77,10 @@ surfcam() {
   local cam="$1"
   if [ -z "$cam" ]; then
     read "cam?w: washout
+sw: south washout
+pn: pier north
+ps pier south
+wr: wrightsville
 f: frisco
 h: hatteras
 r: rockaway
@@ -87,7 +91,11 @@ pi: ponce-inlet
 Pick one: "
   fi
   case $cam in
-    w|washout) url='wsc-east/ec-washoutcam.stream/playlist.m3u8' ;;
+    w|washout) url='cdn-ec/ec-washout/chunklist.m3u8' ;;
+    sw|washout) url='wsc-east/ec-washoutsouthcam.stream/playlist.m3u8' ;;
+    wr|wrightsville) url='wsc-east/ec-wrightsvillecam.stream/chunklist.m3u8' ;;
+    pn|pier-north) url='wsc-east/ec-follypiernorthcam.stream/playlist.m3u8' ;;
+    ps|pier-south) url='wsc-east/ec-follypiersouthcam.stream/playlist.m3u8' ;;
     f|frisco) url='wsc-east/ec-friscopiercam.stream/playlist.m3u8' ;;
     h|hatteras) url='wsc-east/ec-capehatterascam.stream/playlist.m3u8' ;;
     r|rockaway) url='wsc-east/ec-rockaway90thcam.stream/playlist.m3u8' ;;
