@@ -32,6 +32,7 @@ zplug load
 # environment
 #####################################################################
 
+export CLICOLOR=1
 export EDITOR=vim
 export VISUAL=vim
 export BROWSER=vimb

@@ -108,10 +108,11 @@ endfunc
 if !exists('g:airline_symbols')
   let g:airline_symbols = {}
 endif
-let g:airline_powerline_fonts = 1
+" let g:airline_powerline_fonts = 1
 let g:airline_symbols.space = "\ua0"
 " Set airline theme
 let g:airline_theme='solarized'
+let g:airline_solarized_bg='dark'
 
 " Toggle tagbar
 nmap <leader>t :TagbarToggle<CR>
@@ -153,8 +154,12 @@ vnoremap <silent> * :call VisualSelection('f', '')<CR>
 vnoremap <silent> # :call VisualSelection('b', '')<CR>
 
 """"""" Colors
+if !has("gui_running")
+  set t_Co=256
+endif
+"set termguicolors
 set background=light
-colorscheme solarized
+"colorscheme solarized
 
 hi Comment cterm=italic
 
