@@ -83,11 +83,11 @@
 #     "finder"      : false
 # ]
 
-# TODO open surf vlc
 
 # open apps
-shift + alt - return : open /Applications/Hyper.app
-alt - g : open /Applications/Google\ Chrome.app
+# TODO figure out how to open new window OR launch - might be application specific
+shift + alt - return : hyper
+alt - s : /Applications/VLC.app/Contents/MacOS/VLC https://cams.cdn-surfline.com/cdn-ec/ec-washout/playlist.m3u8
 
 # restart wm
 shift + alt - q : brew services restart skhd;\
