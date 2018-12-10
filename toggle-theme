@@ -23,7 +23,7 @@ else
 fi
 
 # reload open terminals + vim instances
-killall -USR1 termite
+pkill -USR1 termite
 original_window=$(xdotool getwindowfocus)
 for pid in $(xdotool search --name vim); do
   sleep 0.5
