@@ -264,6 +264,15 @@ set conceallevel=0
 " indent
 let g:haskell_indent_if = 0
 let g:haskell_indent_in = 0
+let g:haskell_indent_let = 4
+let g:haskell_indent_case_alternative = 1
+" highlighting
+let g:haskell_enable_quantification = 1   " to enable highlighting of `forall`
+let g:haskell_enable_recursivedo = 1      " to enable highlighting of `mdo` and `rec`
+let g:haskell_enable_arrowsyntax = 1      " to enable highlighting of `proc`
+let g:haskell_enable_pattern_synonyms = 1 " to enable highlighting of `pattern`
+let g:haskell_enable_typeroles = 1        " to enable highlighting of type roles
+let g:haskell_enable_static_pointers = 1  " to enable highlighting of `static`
 
 """"""" Autocompletion settings
 " Try omnifunc, else fallback to keywords
