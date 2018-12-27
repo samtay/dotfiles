@@ -86,7 +86,7 @@
 
 # open apps
 # TODO figure out how to open new window OR launch - might be application specific
-shift + alt - return : hyper
+shift + alt - return : open -na /Applications/iTerm.app
 alt - s : /Applications/VLC.app/Contents/MacOS/VLC https://cams.cdn-surfline.com/cdn-ec/ec-washout/playlist.m3u8
 
 # restart wm
@@ -158,6 +158,7 @@ alt - 6 : chunkc tiling::desktop --focus 6
 alt - 7 : chunkc tiling::desktop --focus 7
 alt - 8 : chunkc tiling::desktop --focus 8
 alt - 9 : chunkc tiling::desktop --focus 9
+alt - 0 : chunkc tiling::desktop --focus 0
 
 # send window to desktop (and follow focus)
 shift + alt - tab : chunkc tiling::window --send-to-desktop $(chunkc get _last_active_desktop); chunkc tiling::desktop --focus $(chunkc get _last_active_desktop)
@@ -170,6 +171,7 @@ shift + alt - 6 : chunkc tiling::window --send-to-desktop 6; chunkc tiling::desk
 shift + alt - 7 : chunkc tiling::window --send-to-desktop 7; chunkc tiling::desktop --focus 7
 shift + alt - 8 : chunkc tiling::window --send-to-desktop 8; chunkc tiling::desktop --focus 8
 shift + alt - 9 : chunkc tiling::window --send-to-desktop 9; chunkc tiling::desktop --focus 9
+shift + alt - 0 : chunkc tiling::window --send-to-desktop 0; chunkc tiling::desktop --focus 0
 
 # focus monitor
 alt - t  : chunkc tiling::monitor -f 1
@@ -193,3 +195,6 @@ alt - e : chunkc tiling::window --toggle split
 # change layout of desktop
 alt - space : curr=$(chunkc tiling::query --desktop mode);\
               chunkc tiling::desktop --layout $(if [[ $curr == "bsp" ]]; then echo "monocle";  else echo "bsp"; fi)
+
+# block hiding windows
+cmd - h : sleep 0.01;

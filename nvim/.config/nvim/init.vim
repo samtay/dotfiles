@@ -16,6 +16,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-surround'
+Plug 'easymotion/vim-easymotion'
 " spacemacs
 Plug 'hecal3/vim-leader-guide'
 Plug 'jimmay5469/vim-spacemacs'
@@ -99,10 +100,10 @@ func! DeleteTrailingWS()
   exe "normal `z"
 endfunc
 " use it on saving haskell files
-" augroup whitespace
-"   autocmd!
-"   autocmd BufWrite *.hs :call DeleteTrailingWS()
-" augroup END
+augroup whitespace
+  autocmd!
+  autocmd BufWrite *.hs :call DeleteTrailingWS()
+augroup END
 
 " Use powerline fonts for airline
 if !exists('g:airline_symbols')
@@ -141,6 +142,14 @@ map <Enter> o<ESC>
 " Damn this doesn't work
 map <C-Enter> O<ESC>
 
+" Easy motions
+let g:EasyMotion_do_mapping = 0 " Disable default mappings
+" nmap s <Plug>(easymotion-overwin-f)
+nmap s <Plug>(easymotion-overwin-f2)
+let g:EasyMotion_smartcase = 1
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+
 " better splits mgmt
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
@@ -160,7 +169,7 @@ endif
 "set termguicolors
 set background=light
 "colorscheme solarized
-
+hi Search cterm=NONE ctermfg=NONE ctermbg=lightgreen
 hi Comment cterm=italic
 
 """"""" Ctrl P settings
@@ -245,7 +254,7 @@ vnoremap <leader>a- :Tabularize /-><CR>
 vnoremap <leader>a, :Tabularize /,<CR>
 vnoremap <leader>ac :Tabularize /--<CR>
 " formatting
-nnoremap <leader>ash :%!stylish-haskell<CR>
+nnoremap <leader>ash :Neoformat! haskell brittany<CR>
 nnoremap <leader>ase :DeleteTrailingWS<CR>
 
 " hdevtools
@@ -268,7 +277,7 @@ hi clear Conceal
 let g:haskell_conceal_wide = 1
 let g:haskell_conceal_enumerations = 1
 let hscoptions="𝐒𝐓𝐄𝐌xRtB𝔻wr↱"
-set conceallevel=0
+" set conceallevel=0
 " indent
 let g:haskell_indent_if = 0
 let g:haskell_indent_in = 0
