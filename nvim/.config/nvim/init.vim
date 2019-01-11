@@ -17,34 +17,49 @@ Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-surround'
 Plug 'easymotion/vim-easymotion'
+
 " spacemacs
 Plug 'hecal3/vim-leader-guide'
 Plug 'jimmay5469/vim-spacemacs'
+
 " color
 Plug 'liuchengxu/space-vim-dark'
 Plug 'vim-scripts/mayansmoke'
 Plug 'altercation/vim-colors-solarized'
+
+"haskell
+Plug 'parsonsmatt/vim2hs'
 " Plug 'urso/haskell_syntax.vim' UNCOMMENT FOR vim, COMMENT FOR nvim
-Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
-Plug 'neovimhaskell/haskell-vim', {'for': 'haskell'}
-Plug 'sbdchd/neoformat'
-" nix
-Plug 'LnL7/vim-nix'
-" tabular formatting
-Plug 'godlygeek/tabular'
-" autocomplete tabs
-Plug 'ervandew/supertab'
-" haskell (might be more suitable for personal projects)
+" Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
+"Plug 'neovimhaskell/haskell-vim', {'for': 'haskell'}
+" Plug 'enomsg/vim-haskellConcealPlus', { 'for': 'haskell' }
+" Plug 'sbdchd/neoformat'
+" Plug 'meck/vim-brittany'
+" Plug 'enomsg/vim-haskellConcealPlus', { 'for': 'haskell' }
 " Plug 'ndmitchell/ghcid', { 'rtp': 'plugins/nvim' }
 " Plug 'bitc/vim-hdevtools', { 'for': 'haskell' }
-" Plug 'enomsg/vim-haskellConcealPlus', { 'for': 'haskell' }
+
+" tex
+Plug 'lervag/vimtex', { 'for': 'tex' }
+
+" nix
+Plug 'LnL7/vim-nix'
+
+" tabular formatting
+Plug 'godlygeek/tabular'
+
+" autocomplete tabs
+Plug 'ervandew/supertab'
+
 " elm
 " Plug 'ElmCast/elm-vim'
+
 " syntax checker
+Plug 'w0rp/ale'
 " Plug 'scrooloose/syntastic'
-" fuzzy filesystem finder
 "Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
 "Plug 'eagletmt/ghcmod-vim', {'for': 'haskell'}
+
 " coq
 " Plug 'let-def/vimbufsync'
 " Plug 'the-lambda-church/coquille'
@@ -63,6 +78,10 @@ set showcmd
 " indenting
 set ai
 set si
+"encoding
+set termencoding=utf-8
+set fileencoding=utf-8
+set fileencodings=ucs-bom,utf-8,big5,gb2312,latin1
 
 """"" default 2 spaces
 filetype plugin indent on
@@ -145,7 +164,7 @@ map <C-Enter> O<ESC>
 " Easy motions
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
 " nmap s <Plug>(easymotion-overwin-f)
-nmap s <Plug>(easymotion-overwin-f2)
+nmap <Leader>f <Plug>(easymotion-overwin-f2)
 let g:EasyMotion_smartcase = 1
 map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
@@ -246,6 +265,8 @@ nnoremap <leader>tn :call NumberToggle()<CR>
 nnoremap <leader>tc :call ConcealToggle()<cr>
 nnoremap <leader>ts :noh<cr>
 
+ """ TODO move haskell stuff to ftplugin
+
 " align tools
 let g:haskell_tabular = 0
 vnoremap <leader>a= :Tabularize /=<CR>
@@ -254,7 +275,10 @@ vnoremap <leader>a- :Tabularize /-><CR>
 vnoremap <leader>a, :Tabularize /,<CR>
 vnoremap <leader>ac :Tabularize /--<CR>
 " formatting
-nnoremap <leader>ash :Neoformat! haskell brittany<CR>
+let g:brittany_on_save = 0
+let g:brittany_config_file = "~/.config/brittany/config.yaml"
+vnoremap <leader>asb :Brittany<CR>
+nnoremap <leader>asb :Brittany<CR>
 nnoremap <leader>ase :DeleteTrailingWS<CR>
 
 " hdevtools
@@ -273,11 +297,15 @@ au FileType haskell nnoremap <leader>hi :HoogleInfo<CR>
 
 """"""" Haskell stuff
 " conceal
-hi clear Conceal
-let g:haskell_conceal_wide = 1
-let g:haskell_conceal_enumerations = 1
-let hscoptions="𝐒𝐓𝐄𝐌xRtB𝔻wr↱"
+" hi clear Conceal
+" let g:haskell_conceal_wide = 1
+" let g:haskell_conceal_enumerations = 1
+" let hscoptions="𝐒𝐓𝐄𝐌xRtB𝔻wr↱"
 " set conceallevel=0
+let g:haskell_conceal = 1
+let g:haskell_conceal_wide = 1
+set nofoldenable
+
 " indent
 let g:haskell_indent_if = 0
 let g:haskell_indent_in = 0
