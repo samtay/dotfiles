@@ -42,6 +42,10 @@ export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.npm-global/bin:$PATH"
 export PATH="$HOME/.dex/bin:$PATH"
 export PATH="$HOME/git/aspen/tools/bin:$PATH"
+export PATH=/usr/local/texlive/2018/bin/x86_64-linux:$PATH
+export INFOPATH=$INFOPATH:/usr/local/texlive/2018/texmf-dist/doc/info
+export MANPATH=$MANPATH:/usr/local/texlive/2018/texmf-dist/doc/man
+
 
 
 #####################################################################

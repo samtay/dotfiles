@@ -3,6 +3,7 @@ call plug#begin('~/.local/share/nvim/plugged')
 """"""""""" Custom added plugins """"""""""""""""""""
 " utils
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
@@ -19,6 +20,7 @@ Plug 'morhetz/gruvbox'
 " Plug 'urso/haskell_syntax.vim' UNCOMMENT FOR vim, COMMENT FOR nvim
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
 Plug 'neovimhaskell/haskell-vim', {'for': 'haskell'}
+Plug 'meck/vim-brittany'
 " nix
 Plug 'LnL7/vim-nix'
 " tabular formatting
@@ -91,10 +93,10 @@ func! DeleteTrailingWS()
   exe "normal `z"
 endfunc
 " use it on saving haskell files
-" augroup whitespace
-"   autocmd!
-"   autocmd BufWrite *.hs :call DeleteTrailingWS()
-" augroup END
+augroup whitespace
+  autocmd!
+  autocmd BufWrite *.hs :call DeleteTrailingWS()
+augroup END
 
 " Use powerline fonts for airline
 if !exists('g:airline_symbols')
@@ -216,7 +218,8 @@ nnoremap <leader>w_ <C-W>_
 nnoremap <leader>w\| <C-W>\|
 nnoremap <leader>w<CR> <C-W>o
 
-nnoremap <leader>t :tag<space>
+nnoremap <leader>gt <C-]>
+nnoremap <leader>gT g]
 
 " comment tools
 nnoremap <leader>cc :call NERDComment('n', "Toggle")<CR>
@@ -236,7 +239,10 @@ vnoremap <leader>a, :Tabularize /,<CR>
 vnoremap <leader>ac :Tabularize /--<CR>
 " formatting
 nnoremap <leader>ash :%!stylish-haskell<CR>
+vnoremap <leader>asb :Brittany<CR>
+nnoremap <leader>asb :Brittany<CR>
 nnoremap <leader>ase :DeleteTrailingWS<CR>
+let g:brittany_on_save = 0
 
 " hdevtools
 let g:hdevtools_options = '-g -ifrontend/src -g -icommon/src -g -ibackend/src -g -Wall'
@@ -262,6 +268,7 @@ set conceallevel=0
 " indent
 let g:haskell_indent_if = 0
 let g:haskell_indent_in = 0
+let g:haskell_indent_case_alternative = 1
 
 """"""" Autocompletion settings
 " Try omnifunc, else fallback to keywords

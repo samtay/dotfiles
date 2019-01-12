@@ -157,6 +157,14 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
       , ((0, xK_z), editFile "$HOME/.zshrc")
       ])
 
+  -- Easy resume reload
+  , ((modMask, xK_r),
+     spawn "build-resume")
+
+  -- Ensure panel is up
+  , ((modMask .|. shiftMask, xK_r),
+     spawn "xfce4-panel -r")
+
   -- XFCE settings
   , ((modMask .|. shiftMask, xK_comma),
      spawn "xfce4-settings-manager")
@@ -179,13 +187,13 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- Spawn washout cam on mod + s
   , ((modMask, xK_s),
-     spawn "vlc https://cams.cdn-surfline.com/wsc-east/ec-washoutcam.stream/chunklist.m3u8")
+     spawn "vlc https://cams.cdn-surfline.com/cdn-ec/ec-washout/chunklist.m3u8")
 
   -- Spawn other cams
   , ((modMask .|. shiftMask, xK_s), submap . M.fromList $
-      let w = spawn "vlc https://cams.cdn-surfline.com/wsc-east/ec-washoutcam.stream/chunklist.m3u8"
-          n = spawn "vlc https://cams.cdn-surfline.com/wsc-east/ec-follypiernorthcam.stream/playlist.m3u8"
-          s = spawn "vlc https://cams.cdn-surfline.com/wsc-east/ec-follypiersouthcam.stream/playlist.m3u8"
+      let w = spawn "vlc https://cams.cdn-surfline.com/cdn-ec/ec-washoutcam/chunklist.m3u8"
+          n = spawn "vlc https://cams.cdn-surfline.com/cdn-ec/ec-follypiernorth/chunklist.m3u8"
+          s = spawn "vlc https://cams.cdn-surfline.com/cdn-ec/ec-follypiersouth/chunklist.m3u8"
       in [ ((0, xK_w), w)
          , ((0, xK_n), n)
          , ((0, xK_s), s)
@@ -216,6 +224,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask, xK_b),
      sendMessage ToggleStruts)
 
+{-
   -- Increase brightness.
   , ((0, xF86XK_MonBrightnessUp),
      spawn "light -A 5")
@@ -223,6 +232,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- Decrease brightness.
   , ((0, xF86XK_MonBrightnessDown),
      spawn "light -U 5")
+-}
 
   -- Mute volume.
   , ((0, xF86XK_AudioMute),
@@ -349,7 +359,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
   -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
   [((m .|. modMask, key), screenWorkspace sc >>= flip whenJust (windows . f))
-    | (key, sc) <- zip [xK_e, xK_r] [1, 0]
+    | (key, sc) <- zip [xK_w, xK_e] [1, 0]
     , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
 
@@ -378,6 +388,13 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
   ]
 
 ------------------------------------------------------------------------
+-- Custom startup
+--
+-- Trying to just get this damn xfce panel to work on start up.
+myStartupHook :: X ()
+myStartupHook = ewmhDesktopsStartup >> spawn "xfce4-panel -r"
+
+------------------------------------------------------------------------
 -- Run xmonad with all the defaults we set up.
 --
 main = xmonad $ def
@@ -395,7 +412,7 @@ main = xmonad $ def
   , workspaces         = myWorkspaces
   , layoutHook         = smartBorders $ myLayoutHook
   , manageHook         = manageDocks <+> myManageHook
-  , startupHook        = ewmhDesktopsStartup
+  , startupHook        = myStartupHook
   , logHook            = ewmhDesktopsLogHook
   , handleEventHook    = docksEventHook
   }
