@@ -1,3 +1,10 @@
+""" Install vimplug if necessary """
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
 call plug#begin('~/.local/share/nvim/plugged')
 
 """"""""""" Custom added plugins """"""""""""""""""""
@@ -9,35 +16,41 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-surround'
+Plug 'easymotion/vim-easymotion'
+
 " spacemacs
 Plug 'hecal3/vim-leader-guide'
 Plug 'jimmay5469/vim-spacemacs'
+
 " color
 Plug 'liuchengxu/space-vim-dark'
 Plug 'vim-scripts/mayansmoke'
 Plug 'altercation/vim-colors-solarized'
 Plug 'morhetz/gruvbox'
-" Plug 'urso/haskell_syntax.vim' UNCOMMENT FOR vim, COMMENT FOR nvim
+
+" haskell
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
-Plug 'neovimhaskell/haskell-vim', {'for': 'haskell'}
+Plug 'parsonsmatt/vim2hs'
 Plug 'meck/vim-brittany'
+
+" tex
+Plug 'lervag/vimtex', { 'for': 'tex' }
+
 " nix
 Plug 'LnL7/vim-nix'
+
 " tabular formatting
 Plug 'godlygeek/tabular'
+
 " autocomplete tabs
 Plug 'ervandew/supertab'
-" haskell (might be more suitable for personal projects)
-" Plug 'ndmitchell/ghcid', { 'rtp': 'plugins/nvim' }
-" Plug 'bitc/vim-hdevtools', { 'for': 'haskell' }
-" Plug 'enomsg/vim-haskellConcealPlus', { 'for': 'haskell' }
-" elm
-" Plug 'ElmCast/elm-vim'
+
 " syntax checker
+Plug 'w0rp/ale'
 " Plug 'scrooloose/syntastic'
-" fuzzy filesystem finder
 "Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
 "Plug 'eagletmt/ghcmod-vim', {'for': 'haskell'}
+
 " coq
 " Plug 'let-def/vimbufsync'
 " Plug 'the-lambda-church/coquille'
@@ -134,6 +147,14 @@ map <Enter> o<ESC>
 " Damn this doesn't work
 map <C-Enter> O<ESC>
 
+" Easy motions
+let g:EasyMotion_do_mapping = 0 " Disable default mappings
+" nmap s <Plug>(easymotion-overwin-f)
+nmap <Leader>s <Plug>(easymotion-overwin-f2)
+let g:EasyMotion_smartcase = 1
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+
 " better splits mgmt
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
@@ -201,6 +222,7 @@ let g:spacemacs#excludes = [
   \ '^ft',
   \ '^tn',
   \ '^cc',
+  \ '^gd',
   \ ]
 " fzf
 nnoremap <leader>pf :Files<CR>
@@ -230,6 +252,8 @@ nnoremap <leader>tn :call NumberToggle()<CR>
 nnoremap <leader>tc :call ConcealToggle()<cr>
 nnoremap <leader>ts :noh<cr>
 
+ """ TODO move haskell stuff to ftplugin
+
 " align tools
 let g:haskell_tabular = 0
 vnoremap <leader>a= :Tabularize /=<CR>
@@ -238,7 +262,8 @@ vnoremap <leader>a- :Tabularize /-><CR>
 vnoremap <leader>a, :Tabularize /,<CR>
 vnoremap <leader>ac :Tabularize /--<CR>
 " formatting
-nnoremap <leader>ash :%!stylish-haskell<CR>
+let g:brittany_on_save = 0
+let g:brittany_config_file = "~/.config/brittany/config.yaml"
 vnoremap <leader>asb :Brittany<CR>
 nnoremap <leader>asb :Brittany<CR>
 nnoremap <leader>ase :DeleteTrailingWS<CR>
@@ -260,15 +285,27 @@ au FileType haskell nnoremap <leader>hi :HoogleInfo<CR>
 
 """"""" Haskell stuff
 " conceal
-hi clear Conceal
+" hi clear Conceal
+" let g:haskell_conceal_wide = 1
+" let g:haskell_conceal_enumerations = 1
+" let hscoptions="𝐒𝐓𝐄𝐌xRtB𝔻wr↱"
+" set conceallevel=0
+let g:haskell_conceal = 1
 let g:haskell_conceal_wide = 1
-let g:haskell_conceal_enumerations = 1
-let hscoptions="𝐒𝐓𝐄𝐌xRtB𝔻wr↱"
-set conceallevel=0
+set nofoldenable
+
 " indent
 let g:haskell_indent_if = 0
 let g:haskell_indent_in = 0
+let g:haskell_indent_let = 4
 let g:haskell_indent_case_alternative = 1
+" highlighting
+let g:haskell_enable_quantification = 1   " to enable highlighting of `forall`
+let g:haskell_enable_recursivedo = 1      " to enable highlighting of `mdo` and `rec`
+let g:haskell_enable_arrowsyntax = 1      " to enable highlighting of `proc`
+let g:haskell_enable_pattern_synonyms = 1 " to enable highlighting of `pattern`
+let g:haskell_enable_typeroles = 1        " to enable highlighting of type roles
+let g:haskell_enable_static_pointers = 1  " to enable highlighting of `static`
 
 """"""" Autocompletion settings
 " Try omnifunc, else fallback to keywords

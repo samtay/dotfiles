@@ -9,6 +9,7 @@ vim/.vim/.netrwhist
 vim/.vim/autoload/
 vim/.vim/plugged/
 xmonad/.xmonad/history
+xmonad/.xmonad/xmonad.state
 ghc/.ghc/ghci_history
 theme
 termite/.config/termite/config

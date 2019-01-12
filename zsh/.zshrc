@@ -13,7 +13,6 @@ source ~/.zplug/init.zsh
 zplug "lib/directories",          from:oh-my-zsh
 zplug "plugins/docker",           from:oh-my-zsh, defer:1
 zplug "plugins/docker-compose",   from:oh-my-zsh, defer:1
-zplug "plugins/composer",         from:oh-my-zsh, defer:1
 zplug "zsh-users/zsh-syntax-highlighting", defer:1
 zplug "zsh-users/zsh-history-substring-search", defer:2
 zplug "~/git/dotfiles/zsh/plugins", from:local, defer:3
@@ -277,9 +276,9 @@ function zle-line-init zle-keymap-select {
 zle -N zle-line-init
 zle -N zle-keymap-select
 
-if [ -e /home/samtay/.nix-profile/etc/profile.d/nix.sh ]; then . /home/samtay/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+alias -g vim='nvim'
 
-export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git --ignore .stack-work --ignore tags -g ""'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 alias -g vim='nvim'
