@@ -108,7 +108,7 @@ endfunc
 " use it on saving haskell files
 augroup whitespace
   autocmd!
-  autocmd BufWrite *.hs :call DeleteTrailingWS()
+  autocmd BufWrite * :call DeleteTrailingWS()
 augroup END
 
 " Use powerline fonts for airline
