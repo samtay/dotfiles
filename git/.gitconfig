@@ -29,7 +29,7 @@
 
 [core]
   editor = nvim
-  excludesfile = /home/samtay/.gitignore_global
+	excludesfile = /Users/sam/.gitignore_global
   whitespace = tabwidth=4
 
 [branch]
@@ -189,3 +189,8 @@
   sa = stash apply
   pop = stash pop
   ss = stash save
+[mergetool]
+	keepBackup = false
+[rerere]
+	enabled = true
+	autoupdate = true

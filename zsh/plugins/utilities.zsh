@@ -8,7 +8,6 @@ alias wifi-rescan='nmcli d wifi rescan'
 alias wifi-list='nmcli d wifi'
 alias wifi-connect='nmcli -a -p -s d wifi connect'
 alias get-simpsons-img='echo "http://imgur.com/a/T81t9copy" | copy'
-alias surfcam='vlc https://cams.cdn-surfline.com/cdn-ec/ec-washout/playlist.m3u8'
 alias aspen='g2 aspen'
 export MY_GIT_DIR="$HOME/git"
 
@@ -36,10 +35,6 @@ displays-toggle() {
 
 copy-file(){
   cat $1 | pbcopy
-}
-
-watch(){
-  less +F $1
 }
 
 screenshot-select() {

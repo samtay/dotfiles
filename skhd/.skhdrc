@@ -87,7 +87,9 @@
 # open apps
 # TODO figure out how to open new window OR launch - might be application specific
 shift + alt - return : open -na /Applications/iTerm.app
-alt - s : /Applications/VLC.app/Contents/MacOS/VLC https://cams.cdn-surfline.com/cdn-ec/ec-washout/playlist.m3u8
+alt - s : /Applications/VLC.app/Contents/MacOS/VLC https://cams.cdn-surfline.com/cdn-ec/ec-washoutsouth/chunklist.m3u8 # https://cams.cdn-surfline.com/cdn-ec/ec-washout/playlist.m3u8
+shift + alt - s : /Applications/VLC.app/Contents/MacOS/VLC https://cams.cdn-surfline.com/cdn-ec/ec-washout/playlist.m3u8
+alt - t : open /Applications/iTerm.app
 
 # restart wm
 shift + alt - q : brew services restart skhd;\

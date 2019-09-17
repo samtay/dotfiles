@@ -28,16 +28,11 @@ Plug 'vim-scripts/mayansmoke'
 Plug 'altercation/vim-colors-solarized'
 
 "haskell
-Plug 'parsonsmatt/vim2hs'
-" Plug 'urso/haskell_syntax.vim' UNCOMMENT FOR vim, COMMENT FOR nvim
-" Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
-"Plug 'neovimhaskell/haskell-vim', {'for': 'haskell'}
-" Plug 'enomsg/vim-haskellConcealPlus', { 'for': 'haskell' }
-" Plug 'sbdchd/neoformat'
-" Plug 'meck/vim-brittany'
-" Plug 'enomsg/vim-haskellConcealPlus', { 'for': 'haskell' }
-" Plug 'ndmitchell/ghcid', { 'rtp': 'plugins/nvim' }
-" Plug 'bitc/vim-hdevtools', { 'for': 'haskell' }
+Plug 'neovimhaskell/haskell-vim', {'for': 'haskell'}
+Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
+Plug 'meck/vim-brittany', { 'for': 'haskell' }
+Plug 'ndmitchell/ghcid', { 'rtp': 'plugins/nvim', 'for': 'haskell' }
+Plug 'sbdchd/neoformat'
 
 " tex
 Plug 'lervag/vimtex', { 'for': 'tex' }
@@ -51,23 +46,12 @@ Plug 'godlygeek/tabular'
 " autocomplete tabs
 Plug 'ervandew/supertab'
 
-" elm
-" Plug 'ElmCast/elm-vim'
-
 " syntax checker
-Plug 'w0rp/ale'
-" Plug 'scrooloose/syntastic'
-"Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
-"Plug 'eagletmt/ghcmod-vim', {'for': 'haskell'}
-
-" coq
-" Plug 'let-def/vimbufsync'
-" Plug 'the-lambda-church/coquille'
+" Plug 'w0rp/ale'
 
 
 """"""""""" End plugins """""""""""""""""""""""""""""
 call plug#end()
-
 
 """""""""""""""""""""""""""" Personal Vim Settings """"""""""""""""""""
 filetype plugin indent on
@@ -123,6 +107,7 @@ augroup whitespace
   autocmd!
   autocmd BufWrite *.hs :call DeleteTrailingWS()
 augroup END
+let g:brittany_on_save = 0
 
 " Use powerline fonts for airline
 if !exists('g:airline_symbols')
@@ -133,6 +118,7 @@ let g:airline_symbols.space = "\ua0"
 " Set airline theme
 let g:airline_theme='solarized'
 let g:airline_solarized_bg='dark'
+let g:airline#extensions#ale#enabled = 1
 
 " Toggle tagbar
 nmap <leader>t :TagbarToggle<CR>
@@ -236,6 +222,9 @@ let g:spacemacs#excludes = [
   \ '^tn',
   \ '^cc',
   \ '^gd',
+  \ '^en',
+  \ '^ep',
+  \ '^te',
   \ ]
 " fzf
 nnoremap <leader>pf :Files<CR>
@@ -264,67 +253,14 @@ vnoremap <leader>cc :call NERDComment('v', "Toggle")<CR>
 nnoremap <leader>tn :call NumberToggle()<CR>
 nnoremap <leader>tc :call ConcealToggle()<cr>
 nnoremap <leader>ts :noh<cr>
+nnoremap <leader>te :cw<cr>
 
- """ TODO move haskell stuff to ftplugin
-
-" align tools
-let g:haskell_tabular = 0
-vnoremap <leader>a= :Tabularize /=<CR>
-vnoremap <leader>a; :Tabularize /::<CR>
-vnoremap <leader>a- :Tabularize /-><CR>
-vnoremap <leader>a, :Tabularize /,<CR>
-vnoremap <leader>ac :Tabularize /--<CR>
-" formatting
-let g:brittany_on_save = 0
-let g:brittany_config_file = "~/.config/brittany/config.yaml"
-vnoremap <leader>asb :Brittany<CR>
-nnoremap <leader>asb :Brittany<CR>
-nnoremap <leader>ase :DeleteTrailingWS<CR>
-
-" hdevtools
-let g:hdevtools_options = '-g -ifrontend/src -g -icommon/src -g -ibackend/src -g -Wall'
-au FileType haskell nnoremap <leader>ht :HdevtoolsType<CR>
-au FileType haskell nnoremap <leader>hc :HoogleClose<CR>:HdevtoolsClear<CR>
-au FileType haskell nnoremap <leader>hi :HdevtoolsInfo<CR>
-
-" hoogle
-au FileType haskell nnoremap <leader>hh :Hoogle<CR>
-au FileType haskell nnoremap <leader>hi :HoogleInfo<CR>
-
-" leader guide (broken)
-" nnoremap <silent> <leader> :<C-U>LeaderGuide '<SPACE>'<CR>
-" vnoremap <silent> <leader> :<C-U>LeaderGuideVisual '<SPACE>'<CR>
-
-""""""" Haskell stuff
-" conceal
-" hi clear Conceal
-" let g:haskell_conceal_wide = 1
-" let g:haskell_conceal_enumerations = 1
-" let hscoptions="𝐒𝐓𝐄𝐌xRtB𝔻wr↱"
-" set conceallevel=0
-let g:haskell_conceal = 1
-let g:haskell_conceal_wide = 1
-set nofoldenable
-
-" indent
-let g:haskell_indent_if = 0
-let g:haskell_indent_in = 0
-let g:haskell_indent_let = 4
-let g:haskell_indent_case_alternative = 1
-" highlighting
-let g:haskell_enable_quantification = 1   " to enable highlighting of `forall`
-let g:haskell_enable_recursivedo = 1      " to enable highlighting of `mdo` and `rec`
-let g:haskell_enable_arrowsyntax = 1      " to enable highlighting of `proc`
-let g:haskell_enable_pattern_synonyms = 1 " to enable highlighting of `pattern`
-let g:haskell_enable_typeroles = 1        " to enable highlighting of type roles
-let g:haskell_enable_static_pointers = 1  " to enable highlighting of `static`
-
-""""""" Autocompletion settings
-" Try omnifunc, else fallback to keywords
-" autocmd FileType *
-"       \ if &omnifunc != '' |
-"       \   call SuperTabChain(&omnifunc, "<c-p>") |
-"       \ endif
+" quickfix nav
+nnoremap <leader>eN :lnext<CR>
+nnoremap <leader>eP :lprev<CR>
+nnoremap <leader>en <Plug>(ale_next_wrap)
+nnoremap <leader>ep <Plug>(ale_previous_wrap)
+nnoremap <leader>ed :ccl<CR>
 
 function! ConcealToggle()
   if &conceallevel
@@ -353,6 +289,3 @@ function! NERDTreeToggleInCurDir()
     exe ":NERDTreeFind"
   endif
 endfunction
-
-set cole=0
-au FileType * setl cole=0

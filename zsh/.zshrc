@@ -284,10 +284,3 @@ export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git --ignore .stack-work --ign
 alias -g vim='nvim'
 alias -g agl='ag --pager="less -XFR"'
 alias -g vlc='/Applications/VLC.app/Contents/MacOS/VLC'
-
-#####################################################################
-# simspace stuff!
-#####################################################################
-
-eval $(minikube docker-env)
-export PATH="/usr/local/sbin:$PATH"
