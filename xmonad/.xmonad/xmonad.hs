@@ -32,7 +32,7 @@ import qualified Data.Map        as M
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
 --
-myTerminal = "xfce4-terminal"
+myTerminal = "kitty"
 
 -- The command to use as a launcher, to launch commands that don't have
 -- preset keybindings.
@@ -86,9 +86,10 @@ myXPConfig = def
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayoutHook = avoidStruts $ (tall ||| tabbed') ||| distractionFree
+myLayoutHook = avoidStruts $ (threecol ||| tall ||| tabbed') ||| distractionFree
     where tabbed' = tabbed shrinkText tabConfig
           tall = Tall 1 (3/100) (1/2)
+          threecol = ThreeColMid 1 (3/100) (1/3)
           distractionFree = noBorders (fullscreenFull Full)
 
 ------------------------------------------------------------------------
@@ -157,13 +158,9 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
       , ((0, xK_z), editFile "$HOME/.zshrc")
       ])
 
-  -- Easy resume reload
-  , ((modMask, xK_r),
-     spawn "build-resume")
-
   -- Ensure panel is up
   , ((modMask .|. shiftMask, xK_r),
-     spawn "xfce4-panel -r")
+     spawn "xfce4-panel -r --disable-wm-check")
 
   -- XFCE settings
   , ((modMask .|. shiftMask, xK_comma),
@@ -205,14 +202,6 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- Spawn firefox on mod + f
   , ((modMask, xK_f),
      spawn "firefox")
-
-  -- Spawn chrome
-  , ((modMask, xK_g),
-     spawn "google-chrome")
-
-  -- Spawn chrome
-  , ((modMask .|. shiftMask, xK_g),
-     spawn "google-chrome --incognito")
 
   -- Take a selective screenshot.
   , ((modMask, xK_y),
@@ -394,7 +383,7 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 --
 -- Trying to just get this damn xfce panel to work on start up.
 myStartupHook :: X ()
-myStartupHook = ewmhDesktopsStartup >> spawn "xfce4-panel -r"
+myStartupHook = ewmhDesktopsStartup -- >> spawn "xfce4-panel -r --disable-wm-check"
 
 ------------------------------------------------------------------------
 -- Run xmonad with all the defaults we set up.
