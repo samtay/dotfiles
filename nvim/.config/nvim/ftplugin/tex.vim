@@ -5,6 +5,7 @@ let g:vimtex_complete_close_braces = 1
 let g:vimtex_env_change_autofill = 1
 let g:vimtex_format_enabled = 1
 let g:vimtex_quickfix_autoclose_after_keystrokes = 2
+let g:Tex_CompileRule_pdf='xelatex --interaction=nonstopmode $*'
 call vimtex#imaps#add_map(
   \{
   \ 'lhs' : '-1',

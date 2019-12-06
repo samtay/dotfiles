@@ -163,7 +163,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- Ensure panel is up
   , ((modMask .|. shiftMask, xK_r),
-     spawn "xfce4-panel -r")
+     spawn "xfce4-panel --disable-wm-check -r")
 
   -- XFCE settings
   , ((modMask .|. shiftMask, xK_comma),
@@ -361,7 +361,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
   -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
   [((m .|. modMask, key), screenWorkspace sc >>= flip whenJust (windows . f))
-    | (key, sc) <- zip [xK_w, xK_e] [1, 0]
+    | (key, sc) <- zip [xK_w, xK_e] [0, 1]
     , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
 
@@ -394,7 +394,7 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 --
 -- Trying to just get this damn xfce panel to work on start up.
 myStartupHook :: X ()
-myStartupHook = ewmhDesktopsStartup >> spawn "xfce4-panel -r"
+myStartupHook = ewmhDesktopsStartup >> spawn "sleep 1.0 ; xfce4-panel --disable-wm-check -r"
 
 ------------------------------------------------------------------------
 -- Run xmonad with all the defaults we set up.
