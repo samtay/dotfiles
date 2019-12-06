@@ -91,6 +91,9 @@ for f in $(find $DOTFILES_DIR/zsh/plugins/completion -name "*.zsh"); do
   source "$f"
 done
 
+# Completion for kitty
+kitty + complete setup zsh | source /dev/stdin
+
 # autocomplete hidden files
 # _comp_options+=(globdots)
 

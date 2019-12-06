@@ -173,7 +173,7 @@ if (has("termguicolors"))
 endif
 
 let g:gruvbox_italic=1
-set background=dark
+set background=light
 colorscheme gruvbox
 
 hi Comment cterm=italic
@@ -344,3 +344,9 @@ endfunction
 
 set cole=0
 au FileType * setl cole=0
+
+augroup my_nerdtree
+  au!
+  au FileType nerdtree setl cole=2
+augroup END
+

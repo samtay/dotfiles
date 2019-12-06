@@ -134,24 +134,12 @@
   # Change last commit message
   recommit = commit --amend
 
-  # Interactively rebase all the commits on the current branch
-  rebase-branch = "!git rebase -i `git merge-base production HEAD`"
-
   # Get the current branch name (not so useful in itself, but used in
   # other aliases)
   branch-name = "!git rev-parse --abbrev-ref HEAD"
 
-  # Create a new working branch
-  mk-branch = "!f() { git fetch origin; git checkout -b $1 origin/develop; }; f"
-
-  # Update working with your current branch
-  merge-working = "!f() { BRANCH_NAME=$(git branch-name); git checkout working; git merge $BRANCH_NAME --no-ff; git checkout $BRANCH_NAME; }; f"
-
   # List all commits that have not been pushed to origin
   unpushed = log --branches --not --remotes --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
-
-  # Update branch. Use like 'git up [branch-name]'
-  up = "!f() { git checkout $1; git fetch origin; git merge origin/$1 --ff-only; }; f"
 
   # See what's new since the last command
   new = !sh -c 'git log $1@{1}..$1@{0} "$@"'

@@ -6,6 +6,7 @@ import Data.Semigroup ((<>))
 import System.IO
 import System.Exit
 import XMonad
+import XMonad.Config.Xfce
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
@@ -65,8 +66,8 @@ myManageHook = composeAll
     , resource  =? "desktop_window" --> doIgnore
     , className =? "stalonetray"    --> doIgnore
     , isFullscreen --> (doF W.focusDown <+> doFullFloat)]
--}
 myManageHook = def
+-}
 
 ------------------------------------------------------------------------
 -- XMonad Prompt
@@ -160,7 +161,8 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- Ensure panel is up
   , ((modMask .|. shiftMask, xK_r),
-     spawn "xfce4-panel -r --disable-wm-check")
+     spawn "xfce4-panel --disable-wm-check")
+     --spawn "xfce4-panel -r --disable-wm-check")
 
   -- XFCE settings
   , ((modMask .|. shiftMask, xK_comma),
@@ -383,27 +385,25 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 --
 -- Trying to just get this damn xfce panel to work on start up.
 myStartupHook :: X ()
-myStartupHook = ewmhDesktopsStartup -- >> spawn "xfce4-panel -r --disable-wm-check"
+myStartupHook = do
+  ewmhDesktopsStartup
+  spawn "xfce4-panel --disable-wm-check"
+  spawn "displays-toggle 1"
+  spawn "ethernet"
 
 ------------------------------------------------------------------------
 -- Run xmonad with all the defaults we set up.
 --
-main = xmonad $ def
-  { -- simple stuff
-    terminal           = myTerminal
+main = xmonad $ xfceConfig
+  { terminal           = myTerminal
   , focusFollowsMouse  = myFocusFollowsMouse
   , borderWidth        = myBorderWidth
   , modMask            = myModMask
   , normalBorderColor  = myNormalBorderColor
   , focusedBorderColor = myFocusedBorderColor
-    -- key bindings
   , keys               = myKeys
   , mouseBindings      = myMouseBindings
-    -- hooks, layouts
   , workspaces         = myWorkspaces
-  , layoutHook         = smartBorders $ myLayoutHook
-  , manageHook         = manageDocks <+> myManageHook
+  , layoutHook         = myLayoutHook
   , startupHook        = myStartupHook
-  , logHook            = ewmhDesktopsLogHook
-  , handleEventHook    = docksEventHook
   }
