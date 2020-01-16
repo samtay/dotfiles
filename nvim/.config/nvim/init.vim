@@ -42,11 +42,15 @@ Plug 'LnL7/vim-nix'
 " tabular formatting
 Plug 'godlygeek/tabular'
 
-" autocomplete tabs
-Plug 'ervandew/supertab'
+" Autocomplete
+" Plug 'ervandew/supertab'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'Shougo/neosnippet.vim'
+Plug 'Shougo/neosnippet-snippets'
+Plug 'honza/vim-snippets'
 
 " syntax checker
-Plug 'w0rp/ale'
+" Plug 'w0rp/ale'
 " Plug 'scrooloose/syntastic'
 "Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
 "Plug 'eagletmt/ghcmod-vim', {'for': 'haskell'}
@@ -79,6 +83,24 @@ set shiftwidth=2
 
 " Don't auto comment for the love of god
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+
+" Use deoplete.
+let g:deoplete#enable_at_startup = 1
+" TODO trying out honza/vim-snippets in .local/nvim/etc
+let g:neosnippet#enable_snipmate_compatibility = 1
+let g:neosnippet#snippets_directory='~/.local/share/vim-snippets/snippets'
+
+" Tabbing snippets behavior.
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+imap <expr><TAB>
+ \ pumvisible() ? "\<C-n>" :
+ \ neosnippet#expandable_or_jumpable() ?
+ \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+      \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+imap <expr><CR>
+ \ neosnippet#expandable_or_jumpable() ?
+ \    "\<Plug>(neosnippet_expand_or_jump)" : "\<CR>"
 
 set noswapfile
 " Just hide buffers
@@ -129,7 +151,7 @@ map <SPACE> <leader>
 " edit vimrc quickly
 map <leader>v :sp ~/.config/nvim/init.vim<cr>
 " reload vimrc when saved
-au BufWritePost .vimrc so ~/.vimrc
+au BufWritePost init.vim so ~/.config/nvim/init.vim
 
 " Leader shortcuts for copy pasting
 vmap <leader>y "+y
