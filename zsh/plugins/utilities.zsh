@@ -11,6 +11,11 @@ alias get-simpsons-img='echo "http://imgur.com/a/T81t9copy" | copy'
 alias surfcam='vlc https://cams.cdn-surfline.com/wsc-east/ec-washoutcam.stream/chunklist.m3u8'
 export MY_GIT_DIR="$HOME/git"
 
+dupe() {
+  cp "$1" "$2"
+  vim "$2"
+}
+
 fix-wide-monitor() {
   xrandr --newmode "2560x1080_45.00"  167.75  2560 2696 2960 3360  1080 1083 1093 1111 -hsync +vsync
   xrandr --addmode DP-1 "2560x1080_45.00"

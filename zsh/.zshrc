@@ -283,3 +283,6 @@ export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git --ignore .stack-work --ign
 
 alias -g vim='nvim'
 alias -g agl='ag --pager="less -XFR"'
+
+export GEM_HOME="$HOME/gems"
+export PATH="$HOME/gems/bin:$PATH"
