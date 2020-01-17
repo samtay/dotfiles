@@ -161,8 +161,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- Ensure panel is up
   , ((modMask .|. shiftMask, xK_r),
-     spawn "xfce4-panel --disable-wm-check")
-     --spawn "xfce4-panel -r --disable-wm-check")
+     spawn "xfce4-panel --disable-wm-check -r")
 
   -- XFCE settings
   , ((modMask .|. shiftMask, xK_comma),
@@ -352,7 +351,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
   -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
   [((m .|. modMask, key), screenWorkspace sc >>= flip whenJust (windows . f))
-    | (key, sc) <- zip [xK_w, xK_e] [1, 0]
+    | (key, sc) <- zip [xK_w, xK_e] [0, 1]
     , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
 
@@ -387,9 +386,9 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 myStartupHook :: X ()
 myStartupHook = do
   ewmhDesktopsStartup
-  spawn "xfce4-panel --disable-wm-check"
-  spawn "displays-toggle 1"
-  spawn "ethernet"
+  spawn "sleep 1.0 ; xfce4-panel --disable-wm-check -r"
+  spawn "sleep 1.0 ; displays-toggle 1"
+  spawn "sleep 1.0 ; ethernet"
 
 ------------------------------------------------------------------------
 -- Run xmonad with all the defaults we set up.

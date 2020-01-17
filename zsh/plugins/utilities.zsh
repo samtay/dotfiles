@@ -12,6 +12,11 @@ alias surfcam='vlc https://cams.cdn-surfline.com/wsc-east/ec-washoutcam.stream/c
 alias ethernet='sudo ip link set dev enp61s0u1u2 up && sudo dhcpcd enp61s0u1u2'
 export MY_GIT_DIR="$HOME/git"
 
+dupe() {
+  cp "$1" "$2"
+  vim "$2"
+}
+
 fix-wide-monitor() {
   if [ -z "$1" ]; then
     monitor="DP-1"
