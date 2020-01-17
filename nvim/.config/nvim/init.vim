@@ -47,7 +47,7 @@ Plug 'godlygeek/tabular'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/neosnippet.vim'
 Plug 'Shougo/neosnippet-snippets'
-Plug 'honza/vim-snippets'
+Plug 'samtay/vim-snippets'
 
 " syntax checker
 " Plug 'w0rp/ale'
@@ -86,7 +86,6 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 " Use deoplete.
 let g:deoplete#enable_at_startup = 1
-" TODO trying out honza/vim-snippets in .local/nvim/etc
 let g:neosnippet#enable_snipmate_compatibility = 1
 let g:neosnippet#snippets_directory='~/.local/share/vim-snippets/snippets'
 
