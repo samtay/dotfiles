@@ -86,10 +86,9 @@ myXPConfig = def
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayoutHook = avoidStruts $ (tall ||| tabbed') ||| distractionFree
-    where tabbed' = tabbed shrinkText tabConfig
-          tall = Tall 1 (3/100) (1/2)
-          distractionFree = noBorders (fullscreenFull Full)
+myLayoutHook =
+  avoidStruts $ Tall 1 (3/100) (1/2) ||| tabbed shrinkText tabConfig
+
 
 ------------------------------------------------------------------------
 -- Colors and borders
