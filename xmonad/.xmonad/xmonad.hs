@@ -87,12 +87,10 @@ myXPConfig = def
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayoutHook = avoidStruts $ (threecol ||| tall ||| tabbed') ||| distractionFree
-    where tabbed' = tabbed shrinkText tabConfig
-          tall = Tall 1 (3/100) (1/2)
+myLayoutHook = avoidStruts $ (threecol ||| tall) ||| distractionFree
+    where tall = Tall 1 (3/100) (1/2)
           threecol = ThreeColMid 1 (3/100) (1/3)
           distractionFree = noBorders (fullscreenFull Full)
-
 ------------------------------------------------------------------------
 -- Colors and borders
 -- Currently based on the tomorrow night eighties theme.

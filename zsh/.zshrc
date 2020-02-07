@@ -44,7 +44,8 @@ export PATH="$HOME/git/aspen/tools/bin:$PATH"
 export PATH=/usr/local/texlive/2018/bin/x86_64-linux:$PATH
 export INFOPATH=$INFOPATH:/usr/local/texlive/2018/texmf-dist/doc/info
 export MANPATH=$MANPATH:/usr/local/texlive/2018/texmf-dist/doc/man
-
+export GEM_HOME="$HOME/gems"
+export PATH="$HOME/gems/bin:$PATH"
 
 
 #####################################################################
@@ -106,6 +107,8 @@ kitty + complete setup zsh | source /dev/stdin
 alias ll='ls -lhF --show-control-chars --color=always'
 alias l='ll -A'
 alias lt='l -t'
+alias ltr='lt -r'
+alias lg='git ls-files'
 alias l.='l .[a-zA-Z]* --color=always'
 export LSCOLORS=ExFxCxdxBxegedabagacad
 export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
@@ -279,13 +282,8 @@ function zle-line-init zle-keymap-select {
 zle -N zle-line-init
 zle -N zle-keymap-select
 
-alias -g vim='nvim'
-
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git --ignore .stack-work --ignore tags -g ""'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 alias -g vim='nvim'
 alias -g agl='ag --pager="less -XFR"'
-
-export GEM_HOME="$HOME/gems"
-export PATH="$HOME/gems/bin:$PATH"
