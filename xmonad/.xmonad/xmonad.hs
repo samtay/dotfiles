@@ -385,8 +385,6 @@ myStartupHook :: X ()
 myStartupHook = do
   ewmhDesktopsStartup
   spawn "sleep 1.0 ; xfce4-panel --disable-wm-check"
-  spawn "sleep 1.0 ; displays-toggle 1"
-  spawn "sleep 1.0 ; ethernet"
 
 ------------------------------------------------------------------------
 -- Run xmonad with all the defaults we set up.
