@@ -87,7 +87,7 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 " Use deoplete.
 let g:deoplete#enable_at_startup = 1
 let g:neosnippet#enable_snipmate_compatibility = 1
-let g:neosnippet#snippets_directory='~/.local/share/vim-snippets/snippets'
+let g:neosnippet#snippets_directory='~/git/vim-snippets/snippets'
 
 " Tabbing snippets behavior.
 " Note: It must be "imap" and "smap".  It uses <Plug> mappings.

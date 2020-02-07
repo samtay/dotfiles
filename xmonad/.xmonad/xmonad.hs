@@ -161,7 +161,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- Ensure panel is up
   , ((modMask .|. shiftMask, xK_r),
-     spawn "xfce4-panel --disable-wm-check -r")
+     spawn "xfce4-panel --disable-wm-check")
 
   -- XFCE settings
   , ((modMask .|. shiftMask, xK_comma),
@@ -386,7 +386,7 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 myStartupHook :: X ()
 myStartupHook = do
   ewmhDesktopsStartup
-  spawn "sleep 1.0 ; xfce4-panel --disable-wm-check -r"
+  spawn "sleep 1.0 ; xfce4-panel --disable-wm-check"
   spawn "sleep 1.0 ; displays-toggle 1"
   spawn "sleep 1.0 ; ethernet"
 
