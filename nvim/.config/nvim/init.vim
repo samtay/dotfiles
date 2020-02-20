@@ -371,3 +371,8 @@ endfunction
 
 set cole=0
 au FileType * setl cole=0
+
+augroup my_nerdtree
+  au!
+  au FileType nerdtree setl cole=2
+augroup END
