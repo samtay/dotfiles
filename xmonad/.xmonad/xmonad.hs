@@ -237,23 +237,23 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- Mute volume.
   , ((0, xF86XK_AudioMute),
-     spawn "amixer -q set Master toggle")
+     spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")
 
   -- Decrease volume.
   , ((0, xF86XK_AudioLowerVolume),
-     spawn "amixer -q set Master 5%-")
+     spawn "pactl set-sink-volume @DEFAULT_SINK@ -5%")
 
   -- Increase volume.
   , ((0, xF86XK_AudioRaiseVolume),
-     spawn "amixer -q set Master 5%+")
+     spawn "pactl set-sink-volume @DEFAULT_SINK@ +5%")
 
   -- Decrease volume.
   , ((modMask .|. controlMask, xK_j),
-     spawn "amixer -q set Master 10%-")
+     spawn "pactl set-sink-volume @DEFAULT_SINK@ -5%")
 
   -- Increase volume.
   , ((modMask .|. controlMask, xK_k),
-     spawn "amixer -q set Master 10%+")
+     spawn "pactl set-sink-volume @DEFAULT_SINK@ +5%")
 
   -- Audio previous.
   , ((0, 0x1008FF16),
