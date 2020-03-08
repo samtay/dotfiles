@@ -16,8 +16,8 @@ import XMonad.Layout.Fullscreen
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Spiral
 import XMonad.Layout.Tabbed
-import XMonad.Layout.Grid
 import XMonad.Layout.ThreeColumns
+import XMonad.Layout.ResizableTile
 import XMonad.Prompt
 import XMonad.Prompt.Shell
 import XMonad.Util.Run(spawnPipe)
@@ -87,7 +87,7 @@ myXPConfig = def
 -- which denotes layout choice.
 --
 myLayoutHook =
-  avoidStruts $ Tall 1 (3/100) (1/2) ||| tabbed shrinkText tabConfig
+  avoidStruts $ ResizableTall 1 (3/100) (1/2) [] ||| tabbed shrinkText tabConfig
 
 
 ------------------------------------------------------------------------
@@ -326,6 +326,12 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- Expand the master area.
   , ((modMask, xK_l),
      sendMessage Expand)
+
+  -- Shrink/expand secondary panes
+  , ((modMask .|. shiftMask, xK_h),
+     sendMessage MirrorShrink)
+  , ((modMask .|. shiftMask, xK_l),
+     sendMessage MirrorExpand)
 
   -- Push window back into tiling.
   , ((modMask, xK_t),
