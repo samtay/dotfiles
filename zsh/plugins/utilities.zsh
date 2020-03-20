@@ -36,17 +36,11 @@ backup() {
 }
 
 displays-toggle() {
-#  local displayCount=$(xrandr | grep " connected " | wc -l)
-#  if [[ $displayCount -gt 1 ]]; then
-  case $1 in
-    0) xrandr --output DP-0 --off --output DP-3 --auto
-       sudo sed -i 's|fontconfig.dpi = 96|fontconfig.dpi = 192|' \
-         /etc/nixos/configuration.nix ;;
-    1) xrandr --output DP-3 --off --output DP-0 --auto
-       sudo sed -i 's|fontconfig.dpi = 192|fontconfig.dpi = 96|' \
-         /etc/nixos/configuration.nix ;;
-  esac
-  sudo nixos-rebuild switch && reboot
+  if xrandr --listmonitors | grep eDP-1 ; then
+    xrandr --output eDP-1 --off --output DP-1 --auto
+  else
+    xrandr --output DP-1 --off --output eDP-1 --auto
+  fi
 }
 
 copy-file(){
