@@ -12,12 +12,13 @@ import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.SetWMName
 import XMonad.Actions.CycleWS
 import XMonad.Actions.Submap
+import XMonad.Layout.BinarySpacePartition
 import XMonad.Layout.Fullscreen
 import XMonad.Layout.NoBorders
+import XMonad.Layout.ResizableTile
 import XMonad.Layout.Spiral
 import XMonad.Layout.Tabbed
-import XMonad.Layout.ThreeColumns
-import XMonad.Layout.ResizableTile
+import XMonad.Layout.TwoPane
 import XMonad.Prompt
 import XMonad.Prompt.Shell
 import XMonad.Util.Run(spawnPipe)
@@ -87,8 +88,11 @@ myXPConfig = def
 -- which denotes layout choice.
 --
 myLayoutHook =
-  avoidStruts $ ResizableTall 1 (3/100) (1/2) [] ||| tabbed shrinkText tabConfig
-
+  avoidStruts $
+      ResizableTall 1 (3/100) (1/2) []
+  ||| emptyBSP
+  ||| tabbed shrinkText tabConfig
+  ||| noBorders (fullscreenFull Full)
 
 ------------------------------------------------------------------------
 -- Colors and borders
@@ -321,17 +325,23 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- Shrink the master area.
   , ((modMask, xK_h),
-     sendMessage Shrink)
+     sendMessage Shrink >> sendMessage (ExpandTowards L))
 
   -- Expand the master area.
   , ((modMask, xK_l),
-     sendMessage Expand)
+     sendMessage Expand >> sendMessage (ExpandTowards R))
 
   -- Shrink/expand secondary panes
   , ((modMask .|. shiftMask, xK_h),
-     sendMessage MirrorShrink)
+     sendMessage MirrorShrink >> sendMessage (ExpandTowards U))
   , ((modMask .|. shiftMask, xK_l),
-     sendMessage MirrorExpand)
+     sendMessage MirrorExpand >> sendMessage (ExpandTowards D))
+
+  , ((myModMask .|. shiftMask, xK_a),
+     sendMessage Equalize)
+
+  , ((myModMask, xK_a),
+     sendMessage Rotate)
 
   -- Push window back into tiling.
   , ((modMask, xK_t),
