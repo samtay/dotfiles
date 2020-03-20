@@ -1,0 +1,44 @@
+steps:
+  - imports:
+      align: group
+      list_align: with_module_name
+      pad_module_names: false
+      long_list_align: new_line_multiline
+      empty_list_align: right_after
+      list_padding: module_name # 7 "import " # def 4
+      separate_lists: true
+      space_surround: false
+  - language_pragmas:
+      style: vertical
+      align: false
+      remove_redundant: true
+  - simple_align:
+      cases: false
+      top_level_patterns: false
+      records: false
+  - trailing_whitespace: {}
+
+# You need to put any language extensions that's enabled for the entire project here.
+language_extensions:
+  - BlockArguments
+  - DeriveFunctor
+  - FlexibleInstances
+  - GADTs
+  - GeneralizedNewtypeDeriving
+  - LambdaCase
+  - MultiWayIf
+  - NamedFieldPuns
+  - MultiParamTypeClasses
+  - OverloadedStrings
+  - QuasiQuotes
+  - RankNTypes
+  - RecordWildCards
+  - ScopedTypeVariables
+  - StandaloneDeriving
+  - TemplateHaskell
+  - TupleSections
+
+# This is up to personal preference, but 80 is the right answer.
+columns: 80
+
+cabal: true
