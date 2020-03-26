@@ -42,17 +42,11 @@ backup() {
 }
 
 displays-toggle() {
-#  local displayCount=$(xrandr | grep " connected " | wc -l)
-#  if [[ $displayCount -gt 1 ]]; then
-  monitor="DP-1"
-  laptop="eDP-1"
-  case $1 in
-    0) xrandr --output $monitor --off --output $laptop --auto ;;
-      # TODO change dpi 96 -> 192 ?
-    1) xrandr --output $laptop --off --output $monitor --auto ;;
-      # TODO change dpi 192 -> 96 ?
-  esac
-  # TODO re-run something after dpi change
+  if xrandr --listmonitors | grep eDP-1 ; then
+    xrandr --output eDP-1 --off --output DP-1 --auto
+  else
+    xrandr --output DP-1 --off --output eDP-1 --auto
+  fi
 }
 
 copy-file(){

@@ -17,6 +17,8 @@ Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-surround'
 Plug 'easymotion/vim-easymotion'
+Plug 'inkarkat/vim-SyntaxRange'
+Plug 'inkarkat/vim-ingo-library'
 
 " spacemacs
 Plug 'hecal3/vim-leader-guide'
@@ -31,7 +33,6 @@ Plug 'morhetz/gruvbox'
 " haskell
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
 Plug 'parsonsmatt/vim2hs'
-Plug 'meck/vim-brittany'
 
 " tex
 Plug 'lervag/vimtex', { 'for': 'tex' }
@@ -286,12 +287,7 @@ vnoremap <leader>a- :Tabularize /-><CR>
 vnoremap <leader>a, :Tabularize /,<CR>
 vnoremap <leader>ac :Tabularize /--<CR>
 " formatting
-let g:brittany_on_save = 0
-let g:brittany_config_file = "~/.config/brittany/config.yaml"
-vnoremap <leader>asb :Brittany<CR>
-nnoremap <leader>asb :Brittany<CR>
-nnoremap <leader>ase :DeleteTrailingWS<CR>
-let g:brittany_on_save = 0
+nnoremap <leader>ah ms:%!stylish-haskell<CR>'s
 
 " hdevtools
 let g:hdevtools_options = '-g -ifrontend/src -g -icommon/src -g -ibackend/src -g -Wall'
@@ -373,4 +369,3 @@ augroup my_nerdtree
   au!
   au FileType nerdtree setl cole=2
 augroup END
-

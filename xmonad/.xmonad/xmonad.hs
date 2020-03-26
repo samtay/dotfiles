@@ -13,12 +13,13 @@ import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.SetWMName
 import XMonad.Actions.CycleWS
 import XMonad.Actions.Submap
+import XMonad.Layout.BinarySpacePartition
 import XMonad.Layout.Fullscreen
 import XMonad.Layout.NoBorders
+import XMonad.Layout.ResizableTile
 import XMonad.Layout.Spiral
 import XMonad.Layout.Tabbed
-import XMonad.Layout.Grid
-import XMonad.Layout.ThreeColumns
+import XMonad.Layout.TwoPane
 import XMonad.Prompt
 import XMonad.Prompt.Shell
 import XMonad.Util.Run(spawnPipe)
@@ -87,10 +88,12 @@ myXPConfig = def
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayoutHook = avoidStruts $ (threecol ||| tall) ||| distractionFree
-    where tall = Tall 1 (3/100) (1/2)
-          threecol = ThreeColMid 1 (3/100) (1/3)
-          distractionFree = noBorders (fullscreenFull Full)
+myLayoutHook = avoidStruts $
+      ThreeColMid 1 (3/100) (1/3)
+  ||| ResizableTall 1 (3/100) (1/2) []
+  ||| emptyBSP
+  ||| noBorders (fullscreenFull Full)
+
 ------------------------------------------------------------------------
 -- Colors and borders
 -- Currently based on the tomorrow night eighties theme.
@@ -226,23 +229,23 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- Mute volume.
   , ((0, xF86XK_AudioMute),
-     spawn "amixer -q set Master toggle")
+     spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")
 
   -- Decrease volume.
   , ((0, xF86XK_AudioLowerVolume),
-     spawn "amixer -q set Master 5%-")
+     spawn "pactl set-sink-volume @DEFAULT_SINK@ -5%")
 
   -- Increase volume.
   , ((0, xF86XK_AudioRaiseVolume),
-     spawn "amixer -q set Master 5%+")
+     spawn "pactl set-sink-volume @DEFAULT_SINK@ +5%")
 
   -- Decrease volume.
   , ((modMask .|. controlMask, xK_j),
-     spawn "amixer -q set Master 10%-")
+     spawn "pactl set-sink-volume @DEFAULT_SINK@ -5%")
 
   -- Increase volume.
   , ((modMask .|. controlMask, xK_k),
-     spawn "amixer -q set Master 10%+")
+     spawn "pactl set-sink-volume @DEFAULT_SINK@ +5%")
 
   -- Audio previous.
   , ((0, 0x1008FF16),
@@ -310,11 +313,23 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- Shrink the master area.
   , ((modMask, xK_h),
-     sendMessage Shrink)
+     sendMessage Shrink >> sendMessage (ExpandTowards L))
 
   -- Expand the master area.
   , ((modMask, xK_l),
-     sendMessage Expand)
+     sendMessage Expand >> sendMessage (ExpandTowards R))
+
+  -- Shrink/expand secondary panes
+  , ((modMask .|. shiftMask, xK_h),
+     sendMessage MirrorShrink >> sendMessage (ExpandTowards U))
+  , ((modMask .|. shiftMask, xK_l),
+     sendMessage MirrorExpand >> sendMessage (ExpandTowards D))
+
+  , ((myModMask .|. shiftMask, xK_a),
+     sendMessage Equalize)
+
+  , ((myModMask, xK_a),
+     sendMessage Rotate)
 
   -- Push window back into tiling.
   , ((modMask, xK_t),
