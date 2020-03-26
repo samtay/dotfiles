@@ -19,6 +19,7 @@ import XMonad.Layout.NoBorders
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Spiral
 import XMonad.Layout.Tabbed
+import XMonad.Layout.ThreeColumns
 import XMonad.Layout.TwoPane
 import XMonad.Prompt
 import XMonad.Prompt.Shell
@@ -89,8 +90,9 @@ myXPConfig = def
 -- which denotes layout choice.
 --
 myLayoutHook = avoidStruts $
-      ThreeColMid 1 (3/100) (1/3)
-  ||| ResizableTall 1 (3/100) (1/2) []
+      ThreeCol 1 (3/100) (1/3) -- Mid?
+  ||| ThreeColMid 1 (3/100) (1/3) -- Mid?
+  -- ||| ResizableTall 1 (3/100) (1/2) []
   ||| emptyBSP
   ||| noBorders (fullscreenFull Full)
 
@@ -229,23 +231,23 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- Mute volume.
   , ((0, xF86XK_AudioMute),
-     spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")
+     spawn "pactl set-sink-mute 0 toggle")
 
   -- Decrease volume.
   , ((0, xF86XK_AudioLowerVolume),
-     spawn "pactl set-sink-volume @DEFAULT_SINK@ -5%")
+     spawn "pactl set-sink-volume 0 -5%")
 
   -- Increase volume.
   , ((0, xF86XK_AudioRaiseVolume),
-     spawn "pactl set-sink-volume @DEFAULT_SINK@ +5%")
+     spawn "pactl set-sink-volume 0 +5%")
 
   -- Decrease volume.
   , ((modMask .|. controlMask, xK_j),
-     spawn "pactl set-sink-volume @DEFAULT_SINK@ -5%")
+     spawn "pactl set-sink-volume 0 -5%")
 
   -- Increase volume.
   , ((modMask .|. controlMask, xK_k),
-     spawn "pactl set-sink-volume @DEFAULT_SINK@ +5%")
+     spawn "pactl set-sink-volume 0 +5%")
 
   -- Audio previous.
   , ((0, 0x1008FF16),
