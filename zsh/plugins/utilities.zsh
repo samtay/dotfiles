@@ -12,6 +12,8 @@ alias surfcam='vlc https://cams.cdn-surfline.com/wsc-east/ec-washoutcam.stream/c
 alias ethernet='sudo ip link set dev enp61s0u1u2 up && sudo dhcpcd enp61s0u1u2'
 export MY_GIT_DIR="$HOME/git"
 
+alias sync-391='rsync -avce ssh --info=progress2 tays@madrid.stat.washington.edu:/mounts/costila/common/391stuff/ ~/uw/stat391/costila'
+
 dupe() {
   cp "$1" "$2"
   vim "$2"
