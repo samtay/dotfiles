@@ -6,6 +6,7 @@ import Data.Semigroup ((<>))
 import System.IO
 import System.Exit
 import XMonad
+import XMonad.Config.Xfce
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
@@ -33,7 +34,7 @@ import qualified Data.Map        as M
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
 --
-myTerminal = "xfce4-terminal"
+myTerminal = "kitty"
 
 -- The command to use as a launcher, to launch commands that don't have
 -- preset keybindings.
@@ -66,8 +67,8 @@ myManageHook = composeAll
     , resource  =? "desktop_window" --> doIgnore
     , className =? "stalonetray"    --> doIgnore
     , isFullscreen --> (doF W.focusDown <+> doFullFloat)]
--}
 myManageHook = def
+-}
 
 ------------------------------------------------------------------------
 -- XMonad Prompt
@@ -160,13 +161,9 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
       , ((0, xK_z), editFile "$HOME/.zshrc")
       ])
 
-  -- Easy resume reload
-  , ((modMask, xK_r),
-     spawn "build-resume")
-
   -- Ensure panel is up
   , ((modMask .|. shiftMask, xK_r),
-     spawn "xfce4-panel --disable-wm-check -r")
+     spawn "xfce4-panel --disable-wm-check")
 
   -- XFCE settings
   , ((modMask .|. shiftMask, xK_comma),
@@ -208,14 +205,6 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- Spawn firefox on mod + f
   , ((modMask, xK_f),
      spawn "firefox")
-
-  -- Spawn chrome
-  , ((modMask, xK_g),
-     spawn "google-chrome")
-
-  -- Spawn chrome
-  , ((modMask .|. shiftMask, xK_g),
-     spawn "google-chrome --incognito")
 
   -- Take a selective screenshot.
   , ((modMask, xK_y),
@@ -407,27 +396,23 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 --
 -- Trying to just get this damn xfce panel to work on start up.
 myStartupHook :: X ()
-myStartupHook = ewmhDesktopsStartup >> spawn "sleep 1.0 ; xfce4-panel --disable-wm-check -r"
+myStartupHook = do
+  ewmhDesktopsStartup
+  spawn "sleep 1.0 ; xfce4-panel --disable-wm-check"
 
 ------------------------------------------------------------------------
 -- Run xmonad with all the defaults we set up.
 --
-main = xmonad $ def
-  { -- simple stuff
-    terminal           = myTerminal
+main = xmonad $ xfceConfig
+  { terminal           = myTerminal
   , focusFollowsMouse  = myFocusFollowsMouse
   , borderWidth        = myBorderWidth
   , modMask            = myModMask
   , normalBorderColor  = myNormalBorderColor
   , focusedBorderColor = myFocusedBorderColor
-    -- key bindings
   , keys               = myKeys
   , mouseBindings      = myMouseBindings
-    -- hooks, layouts
   , workspaces         = myWorkspaces
-  , layoutHook         = smartBorders $ myLayoutHook
-  , manageHook         = manageDocks <+> myManageHook
+  , layoutHook         = myLayoutHook
   , startupHook        = myStartupHook
-  , logHook            = ewmhDesktopsLogHook
-  , handleEventHook    = docksEventHook
   }

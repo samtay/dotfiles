@@ -9,7 +9,10 @@ alias wifi-list='nmcli d wifi'
 alias wifi-connect='nmcli -a -p -s d wifi connect'
 alias get-simpsons-img='echo "http://imgur.com/a/T81t9copy" | copy'
 alias surfcam='vlc https://cams.cdn-surfline.com/wsc-east/ec-washoutcam.stream/chunklist.m3u8'
+alias ethernet='sudo ip link set dev enp61s0u1u2 up && sudo dhcpcd enp61s0u1u2'
 export MY_GIT_DIR="$HOME/git"
+
+alias sync-391='rsync -avce ssh --info=progress2 tays@madrid.stat.washington.edu:/mounts/costila/common/391stuff/ ~/uw/stat391/costila'
 
 dupe() {
   cp "$1" "$2"
@@ -17,9 +20,14 @@ dupe() {
 }
 
 fix-wide-monitor() {
+  if [ -z "$1" ]; then
+    monitor="DP-1"
+  else
+    monitor="$1"
+  fi
   xrandr --newmode "2560x1080_45.00"  167.75  2560 2696 2960 3360  1080 1083 1093 1111 -hsync +vsync
-  xrandr --addmode DP-1 "2560x1080_45.00"
-  xrandr --output DP-1 --mode "2560x1080_45.00"
+  xrandr --addmode $monitor "2560x1080_45.00"
+  xrandr --output $monitor --mode "2560x1080_45.00"
 }
 
 
