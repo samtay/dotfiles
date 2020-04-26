@@ -229,7 +229,6 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask, xK_b),
      sendMessage ToggleStruts)
 
-{-
   -- Increase brightness.
   , ((0, xF86XK_MonBrightnessUp),
      spawn "light -A 5")
@@ -237,7 +236,6 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- Decrease brightness.
   , ((0, xF86XK_MonBrightnessDown),
      spawn "light -U 5")
--}
 
   -- Mute volume.
   , ((0, xF86XK_AudioMute),
