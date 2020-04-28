@@ -25,7 +25,6 @@ Plug 'airblade/vim-rooter'
 
 " spacemacs
 Plug 'hecal3/vim-leader-guide'
-Plug 'jimmay5469/vim-spacemacs'
 
 " color
 Plug 'liuchengxu/space-vim-dark'
@@ -246,42 +245,47 @@ map <SPACE> <leader>
 
 
 """""""""""""""""""""""""""" Leader Settings """"""""""""""""""""
-" TODO remove after porting custom spacemacs
-let g:spacemacs#excludes = [
-  \ '^pf',
-  \ '^bf',
-  \ '^fr',
-  \ '^ff',
-  \ '^ft',
-  \ '^tn',
-  \ '^cc',
-  \ '^gd',
-  \ '^j=',
-  \ '^tl',
-  \ ]
-
 " files
 nnoremap <leader>fp :Files<CR>
+nnoremap <leader>fg :GFiles<CR>
+nnoremap <leader>fG :GFiles?<CR>
 nnoremap <leader>fr :History<CR>
 nnoremap <leader>ft :call NERDTreeToggleInCurDir()<CR>
+nnoremap <leader>fs :w<CR>
+nnoremap <leader>fS :wa<CR>
+nnoremap <leader>fe :!"%:p"<CR>
 " buffers
 nnoremap <leader>bf :Buffers<CR>
+nnoremap <leader>bd :bdelete<CR>
+" git
+nnoremap <leader>gc :Commits<CR>
+nnoremap <leader>gb :BCommits<CR>
+" errors
+nnoremap <leader>en :lnext<CR>
+nnoremap <leader>ep :lprev<CR>
 " search
 nnoremap <leader>/ :execute 'Ag ' . input('Ag/')<CR>
 " window/pane stuff
+nnoremap <leader>w- :sp<CR>
+nnoremap <leader>w/ :vsp<CR>
+nnoremap <leader>w= <C-W>=
+nnoremap <leader>wd :q<CR>
+nnoremap <leader>wh <C-W>h
+nnoremap <leader>wj <C-W>j
+nnoremap <leader>wk <C-W>k
+nnoremap <leader>wl <C-W>l
 nnoremap <leader>wH <C-W>H
+nnoremap <leader>wJ <C-W>J
 nnoremap <leader>wK <C-W>K
 nnoremap <leader>wL <C-W>L
-nnoremap <leader>wJ <C-W>J
-nnoremap <leader>w_ <C-W>_
-nnoremap <leader>w\| <C-W>\|
 nnoremap <leader>w<CR> <C-W>o
+nnoremap <leader><TAB> <C-^>
 " tags
 nnoremap <leader>gt <C-]>
 nnoremap <leader>gT g]
 " comment tools
-nnoremap <leader>cc :call NERDComment('n', "Toggle")<CR>
-vnoremap <leader>cc :call NERDComment('v', "Toggle")<CR>
+nnoremap <leader>; :call NERDComment('n', "Toggle")<CR>
+vnoremap <leader>; :call NERDComment('v', "Toggle")<CR>
 " toggles
 nnoremap <leader>tn :call NumberToggle()<CR>
 nnoremap <leader>tc :call ConcealToggle()<cr>
@@ -296,21 +300,43 @@ nmap <leader>P "+P
 vmap <leader>p "+p
 vmap <leader>P "+P
 " easy motion searches
+" DO NOT namespace with <Leader>s
+" otherwise this will require wait
 nmap <Leader>s <Plug>(easymotion-overwin-f2)
 map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
+" helper tools
+nnoremap <leader>? :Maps<CR>
 " align tools
 vnoremap <leader>a= :Tabularize /=<CR>
 vnoremap <leader>a; :Tabularize /::<CR>
 vnoremap <leader>a- :Tabularize /-><CR>
 vnoremap <leader>a, :Tabularize /,<CR>
 vnoremap <leader>ac :Tabularize /--<CR>
-" edit vimrc quickly
-map <leader>v :sp ~/.config/nvim/init.vim<cr>
-" and reload vimrc when saved
-au BufWritePost init.vim so ~/.config/nvim/init.vim
+" vimrc
+nnoremap <leader>ve :sp ~/.config/nvim/init.vim<cr>
+nnoremap <leader>vs :so ~/.config/nvim/init.vim<cr>
+"au BufWritePost init.vim so ~/.config/nvim/init.vim
 " haskell
-au FileType haskell nnoremap <leader>ha ms:%!stylish-haskell<CR>'s
-au FileType haskell nnoremap <leader>hc :HoogleClose<CR>
-au FileType haskell nnoremap <leader>hh :Hoogle<CR>
-au FileType haskell nnoremap <leader>hi :HoogleInfo<CR>
+augroup haskell_namespace
+  au!
+  au FileType haskell nnoremap <leader>ha ms:%!stylish-haskell<CR>'s
+  au FileType haskell nnoremap <leader>hc :HoogleClose<CR>
+  au FileType haskell nnoremap <leader>hh :Hoogle<CR>
+  au FileType haskell nnoremap <leader>hi :HoogleInfo<CR>
+augroup END
+" coq
+augroup coq_namespace
+  au!
+" will be unnecessary after plugin fixed
+  au FileType coq nnoremap <silent> <leader>cc :silent! call coquille#Commands() <CR>:CoqLaunch<CR>
+  au FileType coq nnoremap <leader>cj :<C-U>call NCoqNext()<CR>
+  "au FileType coq nnoremap <leader>cj :CoqNext<CR>
+  au FileType coq nnoremap <leader>ck :<C-U>call NCoqUndo()<CR>
+  "au FileType coq nnoremap <leader>ck :CoqUndo<CR>
+  au FileType coq nnoremap <leader>cz :CoqToCursor<CR>
+  au FileType coq nnoremap <leader>cq :CoqStop<CR>
+  au FileType coq nnoremap <leader>cx :CoqCancel<CR>
+  au FileType coq nnoremap <leader>cv :CoqVersion<CR>
+  au FileType coq nnoremap <leader>cb :CoqBuild<CR>
+augroup END
