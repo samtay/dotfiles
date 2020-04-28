@@ -1,4 +1,9 @@
 steps:
+  - records:
+      equals: "indent 2"
+      first_field: "indent 2"
+      field_comment: 2
+      deriving: 2
   - imports:
       align: group
       list_align: with_module_name
@@ -13,12 +18,11 @@ steps:
       align: false
       remove_redundant: true
   - simple_align:
-      cases: false
-      top_level_patterns: false
-      records: false
+      cases: true #testing
+      top_level_patterns: true #testing
+      records: true #testing
   - trailing_whitespace: {}
 
-# You need to put any language extensions that's enabled for the entire project here.
 language_extensions:
   - BlockArguments
   - DeriveFunctor
@@ -38,7 +42,6 @@ language_extensions:
   - TemplateHaskell
   - TupleSections
 
-# This is up to personal preference, but 80 is the right answer.
 columns: 80
-
 cabal: true
+indent: 2
