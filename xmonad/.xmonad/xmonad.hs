@@ -403,7 +403,7 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 myStartupHook :: X ()
 myStartupHook = do
   ewmhDesktopsStartup
-  spawn "sleep 1.0 ; xfce4-panel --disable-wm-check"
+  spawn "sleep 1.0 ; xfce4-panel -r --disable-wm-check"
 
 ------------------------------------------------------------------------
 -- Run xmonad with all the defaults we set up.

@@ -195,6 +195,11 @@ let g:haskell_enable_pattern_synonyms = 1 " to enable highlighting of `pattern`
 let g:haskell_enable_typeroles = 1        " to enable highlighting of type roles
 let g:haskell_enable_static_pointers = 1  " to enable highlighting of `static`
 
+" Coq plugin settings
+let g:coquille_auto_move = "true"
+hi default CheckedByCoq ctermbg=11 guibg=LightGreen
+hi default SentToCoq ctermbg=13 guibg=LimeGreen
+
 
 """""""""""""""""""""""""""" Functions """"""""""""""""""""
 " Utility function to delete trailing white space
@@ -230,6 +235,17 @@ function! NERDTreeToggleInCurDir()
   else
     exe ":NERDTreeFind"
   endif
+endfunction
+
+function! NCoqNext()
+  " looks weird without v:count1, just avoiding sleep on default call
+  exe ":CoqNext"
+  for i in range(1, v:count) | sleep 200m | exe ":CoqNext" | endfor
+endfunction
+
+function! NCoqUndo()
+  exe ":CoqUndo"
+  for i in range(1, v:count) | sleep 200m | exe ":CoqUndo" | endfor
 endfunction
 
 
