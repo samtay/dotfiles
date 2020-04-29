@@ -1,4 +1,5 @@
 # Aliases
+export MY_GIT_DIR="$HOME/git"
 alias copy='xclip -sel clip'
 alias copy-ssh-key='copy-file ~/.ssh/id_rsa.pub'
 alias reload-zsh='source ~/.zshrc'
@@ -10,9 +11,9 @@ alias wifi-connect='nmcli -a -p -s d wifi connect'
 alias get-simpsons-img='echo "http://imgur.com/a/T81t9copy" | copy'
 alias surfcam='vlc https://cams.cdn-surfline.com/wsc-east/ec-washoutcam.stream/chunklist.m3u8'
 alias ethernet='sudo ip link set dev enp61s0u1u2 up && sudo dhcpcd enp61s0u1u2'
-export MY_GIT_DIR="$HOME/git"
-
-alias sync-391='rsync -avce ssh --info=progress2 tays@madrid.stat.washington.edu:/mounts/costila/common/391stuff/ ~/uw/stat391/costila'
+alias sync-391-down='rsync -ae ssh --info=progress2 tays@madrid.stat.washington.edu:/mounts/costila/common/391stuff/ ~/uw/stat391/costila'
+alias sync-391-up='rsync -ae ssh --info=progress2 ~/uw/stat391/upload-dir/ tays@madrid.stat.washington.edu:/mounts/costila/common/391stuff/sam-upload-dir'
+alias sync-391='sync-391-up ; sync-391-down'
 
 dupe() {
   cp "$1" "$2"

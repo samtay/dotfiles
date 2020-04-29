@@ -20,6 +20,8 @@ else
   sed -i "s/gruvbox_dark/gruvbox_light/" kitty/.config/kitty/kitty.conf
 fi
 
+echo $theme > theme
+
 # Fark cant reload kitty
 # killall -USR1 termite
 # reload vim instances
@@ -36,5 +38,4 @@ for pid in $(xdotool search --name ': nvim'); do
 done
 xdotool windowfocus $original_window
 
-echo $theme > theme
 echo "Toggled to $theme theme"
