@@ -177,3 +177,5 @@
   sa = stash apply
   pop = stash pop
   ss = stash save
+[status]
+	submodulesummary = true

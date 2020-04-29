@@ -1,0 +1,12 @@
+#!/usr/bin/env shell-helpers
+
+main() {
+  set -eo pipefail
+    for dir in $(find/dirs "/home/sam/git/dotfiles"); do
+      stow --target=$HOME --restow $dir \
+        && p/success "stowed $dir" \
+        || p/error "stowing $dir failed"
+    done
+}
+
+main "$@"
