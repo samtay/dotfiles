@@ -211,11 +211,11 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- Take a selective screenshot.
   , ((modMask, xK_y),
-     spawn "sleep 0.2; scrot '%Y-%m-%d_$wx$h.png' -s -e 'mv $f ~/screenshots/'")
+     spawn "sleep 0.2; scrot -s -e 'mv $f ~/screenshots/'")
 
   -- Take a full screenshot.
   , ((modMask .|. shiftMask, xK_y),
-     spawn "sleep 0.2; scrot '%Y-%m-%d_$wx$h.png' -e 'mv $f ~/screenshots/'")
+     spawn "sleep 0.2; scrot -s -e 'mv $f ~/screenshots/ && dragon-drag-and-drop -x ~/screenshots/$f'")
 
   -- Toggle status bar
   , ((modMask, xK_b),
