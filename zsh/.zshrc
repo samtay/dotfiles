@@ -31,9 +31,9 @@ zplug load
 # environment
 #####################################################################
 
-export EDITOR=vim
-export VISUAL=vim
-export BROWSER=vimb
+export EDITOR=nvim
+export VISUAL=nvim
+export BROWSER=firefox
 export DOTFILES_DIR="$HOME/git/dotfiles"
 export PATH=/usr/local/bin:$PATH
 export PATH="$HOME/.cabal/bin:$PATH"
