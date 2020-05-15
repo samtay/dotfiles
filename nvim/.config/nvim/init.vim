@@ -36,6 +36,9 @@ Plug 'morhetz/gruvbox'
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
 Plug 'parsonsmatt/vim2hs'
 
+" rust
+Plug 'rust-lang/rust.vim'
+
 " coq ?
 " check back after neovim support added
 " Plug 'whonore/Coqtail' | Plug 'let-def/vimbufsync'
