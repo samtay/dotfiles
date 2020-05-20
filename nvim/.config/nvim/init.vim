@@ -179,6 +179,9 @@ let g:limelight_conceal_guifg = 'DarkGray'
 let g:limelight_conceal_guifg = '#777777'
 let g:limelight_default_coefficient = 0.7
 
+" Rooter
+let g:rooter_patterns = ['Cargo.toml', 'Rakefile', 'stack.yaml', 'Gemfile', '.git/']
+
 " Haskell plugin settings
 " TODO move haskell stuff to ftplugin
 " conceal
