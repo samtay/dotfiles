@@ -137,8 +137,7 @@ purple = "#cc99cc"
 -- "windows key" is usually mod4Mask.
 --
 myModMask = mod1Mask
-
-editFile f = spawn $ myTerminal ++ " -e \"nvim " ++ f ++ "\""
+editFile f = spawn $ myTerminal ++ " sh -c \"nvim " ++ f ++ "\""
 
 myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   ----------------------------------------------------------------------
