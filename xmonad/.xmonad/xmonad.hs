@@ -185,12 +185,12 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- Spawn washout cams
   , ((modMask, xK_s),
-     spawn "vlc https://cams.cdn-surfline.com/wsc-east/ec-washoutcam.stream/chunklist.m3u8")
+     spawn "vlc https://cams.cdn-surfline.com/cdn-ec/ec-washout/playlist.m3u8")
 
   -- Spawn other cams
   , ((modMask .|. shiftMask, xK_s), submap . M.fromList $
-      let w = spawn "https://cams.cdn-surfline.com/cdn-ec/ec-washout/playlist.m3u8"
-          s = spawn "vlc https://cams.cdn-surfline.com/wsc-east/ec-washoutsouthcam.stream/chunklist.m3u8"
+      let w = spawn "vlc https://cams.cdn-surfline.com/cdn-ec/ec-washout/playlist.m3u8"
+          s = spawn "vlc https://cams.cdn-surfline.com/cdn-ec/ec-washoutsouth/playlist.m3u8"
           n = spawn "vlc https://cams.cdn-surfline.com/wsc-east/ec-follypiernorthcam.stream/playlist.m3u8"
           p = spawn "vlc https://cams.cdn-surfline.com/wsc-east/ec-follypiersouthcam.stream/playlist.m3u8"
       in [ ((0, xK_w), w)
