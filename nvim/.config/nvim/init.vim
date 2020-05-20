@@ -35,6 +35,7 @@ Plug 'morhetz/gruvbox'
 " haskell
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
 Plug 'parsonsmatt/vim2hs'
+Plug 'ndmitchell/ghcid', { 'rtp': 'plugins/nvim' }
 
 " rust
 Plug 'rust-lang/rust.vim'
@@ -256,9 +257,8 @@ endfunction
 " Save read-only files easily
 cmap w!! w !sudo tee > /dev/null %
 " New lines without insert mode
-map <Enter> o<ESC>
-" Damn this doesn't work
-map <C-Enter> O<ESC>
+map <CR> o<ESC>k
+map <S-CR> O<ESC>j
 " leader
 map <SPACE> <leader>
 
@@ -280,8 +280,11 @@ nnoremap <leader>bd :bdelete<CR>
 nnoremap <leader>gc :Commits<CR>
 nnoremap <leader>gb :BCommits<CR>
 " errors
-nnoremap <leader>en :lnext<CR>
-nnoremap <leader>ep :lprev<CR>
+nnoremap <leader>ee :cc<CR>
+nnoremap <leader>ej :cn<CR>
+nnoremap <leader>eJ :clast<CR>
+nnoremap <leader>ek :cp<CR>
+nnoremap <leader>eK :crewind<CR>
 " search
 nnoremap <leader>/ :execute 'Ag ' . input('Ag/')<CR>
 " window/pane stuff
@@ -343,6 +346,9 @@ augroup haskell_namespace
   au FileType haskell nnoremap <leader>hc :HoogleClose<CR>
   au FileType haskell nnoremap <leader>hh :Hoogle<CR>
   au FileType haskell nnoremap <leader>hi :HoogleInfo<CR>
+  au FileType haskell nnoremap <leader>hg :Ghcid<CR>
+  au FileType haskell nnoremap <leader>hG :Ghcid -c <SPACE>
+  au FileType haskell nnoremap <leader>hq :GhcidKill<CR>
 augroup END
 " coq
 augroup coq_namespace
