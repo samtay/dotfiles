@@ -36,6 +36,9 @@ Plug 'morhetz/gruvbox'
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
 Plug 'parsonsmatt/vim2hs'
 
+" rust
+Plug 'rust-lang/rust.vim'
+
 " coq ?
 " check back after neovim support added
 " Plug 'whonore/Coqtail' | Plug 'let-def/vimbufsync'
@@ -174,6 +177,9 @@ let g:limelight_conceal_ctermfg = 240
 let g:limelight_conceal_guifg = 'DarkGray'
 let g:limelight_conceal_guifg = '#777777'
 let g:limelight_default_coefficient = 0.7
+
+" Rust plugin settings
+let g:rustfmt_autosave = 1
 
 " Haskell plugin settings
 " TODO move haskell stuff to ftplugin
@@ -339,4 +345,11 @@ augroup coq_namespace
   au FileType coq nnoremap <leader>cx :CoqCancel<CR>
   au FileType coq nnoremap <leader>cv :CoqVersion<CR>
   au FileType coq nnoremap <leader>cb :CoqBuild<CR>
+augroup END
+" rust
+augroup rust_namespace
+  au!
+  au FileType rust nnoremap <leader>rt :RustTest<CR>
+  au FileType rust set softtabstop=2
+  au FileType set shiftwidth=2
 augroup END

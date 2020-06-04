@@ -47,6 +47,7 @@ export MANPATH=$MANPATH:/usr/local/texlive/2018/texmf-dist/doc/man
 export GEM_HOME="$HOME/gems"
 export PATH="$HOME/gems/bin:$PATH"
 export PATH="$HOME/racket/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
 
 
 #####################################################################
