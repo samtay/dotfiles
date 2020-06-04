@@ -40,6 +40,9 @@ Plug 'ndmitchell/ghcid', { 'rtp': 'plugins/nvim' }
 " rust
 Plug 'rust-lang/rust.vim'
 
+" rust
+Plug 'rust-lang/rust.vim'
+
 " coq ?
 " check back after neovim support added
 " Plug 'whonore/Coqtail' | Plug 'let-def/vimbufsync'
@@ -181,6 +184,9 @@ let g:limelight_default_coefficient = 0.7
 
 " Rooter
 let g:rooter_patterns = ['Cargo.toml', 'Rakefile', 'stack.yaml', 'Gemfile', '.git/']
+
+" Rust plugin settings
+let g:rustfmt_autosave = 1
 
 " Haskell plugin settings
 " TODO move haskell stuff to ftplugin
@@ -367,4 +373,11 @@ augroup coq_namespace
   au FileType coq nnoremap <leader>cx :CoqCancel<CR>
   au FileType coq nnoremap <leader>cv :CoqVersion<CR>
   au FileType coq nnoremap <leader>cb :CoqBuild<CR>
+augroup END
+" rust
+augroup rust_namespace
+  au!
+  au FileType rust nnoremap <leader>rt :RustTest<CR>
+  au FileType rust set softtabstop=2
+  au FileType set shiftwidth=2
 augroup END
