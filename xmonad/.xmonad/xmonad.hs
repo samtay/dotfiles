@@ -6,18 +6,20 @@ import Data.Semigroup ((<>))
 import System.IO
 import System.Exit
 import XMonad
-import XMonad.Hooks.DynamicLog
+import XMonad.Config.Xfce
+import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.SetWMName
 import XMonad.Actions.CycleWS
 import XMonad.Actions.Submap
+import XMonad.Layout.BinarySpacePartition
 import XMonad.Layout.Fullscreen
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Spiral
 import XMonad.Layout.Tabbed
-import XMonad.Layout.Grid
-import XMonad.Layout.ThreeColumns
+import XMonad.Layout.ResizableThreeColumns
+import XMonad.Layout.TwoPane
 import XMonad.Prompt
 import XMonad.Prompt.Shell
 import XMonad.Util.Run(spawnPipe)
@@ -32,19 +34,18 @@ import qualified Data.Map        as M
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
 --
-myTerminal = "termite"
+myTerminal = "kitty"
 
 -- The command to use as a launcher, to launch commands that don't have
 -- preset keybindings.
 --myLauncher = "$(yeganesh -x)"
-myLauncher = "dmenu_run -fn '-*-terminus-*-r-normal-*-*-120-*-*-*-*-iso8859-*' -nb '#000000' -nf '#FFFFFF' -sb '#2c2c2c' -sf '#99cc99'"
-
+myLauncher = "rofi -matching fuzzy -show run"
 
 ------------------------------------------------------------------------
 -- Workspaces
 -- The default number of workspaces (virtual screens) and their names.
 --
-myWorkspaces = ["1:code", "2:repl", "3:chrome"] ++ map show ([4..9] ++ [0])
+myWorkspaces = map show ([1..9] ++ [0])
 
 ------------------------------------------------------------------------
 -- Window rules
@@ -60,17 +61,20 @@ myWorkspaces = ["1:code", "2:repl", "3:chrome"] ++ map show ([4..9] ++ [0])
 -- To match on the WM_NAME, you can use 'title' in the same way that
 -- 'className' and 'resource' are used below.
 --
+{-
 myManageHook = composeAll
     [ className =? "Google-chrome"  --> doShift "3:web"
     , resource  =? "desktop_window" --> doIgnore
     , className =? "stalonetray"    --> doIgnore
     , isFullscreen --> (doF W.focusDown <+> doFullFloat)]
+myManageHook = def
+-}
 
 ------------------------------------------------------------------------
 -- XMonad Prompt
 --
 -- TODO explore
-myXPConfig = defaultXPConfig
+myXPConfig = def
 
 ------------------------------------------------------------------------
 
@@ -84,12 +88,11 @@ myXPConfig = defaultXPConfig
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayoutHook = avoidStruts (threecol ||| tall ||| tabbed') ||| distractionFree
-    where tabbed' = tabbed shrinkText tabConfig
-          threecol = ThreeColMid 1 (3/100) (1/3)
-          tall = Tall 1 (3/100) (2/3)
-          grid = GridRatio (5/2)
-          distractionFree = noBorders (fullscreenFull Full)
+myLayoutHook = avoidStruts $
+      ResizableThreeCol 1 (3/100) (1/3) []
+  ||| ResizableThreeColMid 1 (3/100) (1/3) []
+  ||| emptyBSP
+  ||| noBorders (fullscreenFull Full)
 
 ------------------------------------------------------------------------
 -- Colors and borders
@@ -100,9 +103,8 @@ myFocusedBorderColor = brightGreen
 myBorderWidth = 2
 
 -- Colors for text and backgrounds of each tab when in "Tabbed" layout.
-tabConfig = defaultTheme {
+tabConfig = def {
     fontName = "xft:Source Code Pro:size=9",
-    decoHeight = 34,
     activeBorderColor   = aqua,
     activeTextColor     = foreground,
     activeColor         = selection,
@@ -110,12 +112,6 @@ tabConfig = defaultTheme {
     inactiveTextColor   = comment,
     inactiveColor       = background
 }
-
--- Color of current window title in xmobar.
-xmobarTitleColor = green
-
--- Color of current workspace in xmobar.
-xmobarCurrentWorkspaceColor = purple
 
 -- Tomorrow Night Eighties theme
 background = "#2d2d2d"
@@ -141,18 +137,7 @@ purple = "#cc99cc"
 -- "windows key" is usually mod4Mask.
 --
 myModMask = mod1Mask
-
-editFile f = spawn $ myTerminal ++ " -e \"nvim " ++ f ++ "\""
-
-aspen ghcid = do
-  let cd = myTerminal ++ " -d \"$HOME/git/aspen\""
-      run script = cd ++ " -e \"sh " ++ script ++ "\""
-  spawn $ run "ghci-frontend-mobile"
-  spawn $ run "focus/ghci-backend"
-  maybe (return ()) (spawn . run . ("focus/ghcid-" <>)) ghcid
-  -- Two extra terminals for good measure, nvim, git, etc.
-  -- spawn cd
-  -- spawn cd
+editFile f = spawn $ myTerminal ++ " sh -c \"nvim " ++ f ++ "\""
 
 myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   ----------------------------------------------------------------------
@@ -174,12 +159,13 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
       , ((0, xK_z), editFile "$HOME/.zshrc")
       ])
 
-  -- Start aspen stuff
-  , ((modMask, xK_a), submap . M.fromList $
-      [ ((0, xK_f), aspen $ Just "frontend")
-      , ((0, xK_b), aspen $ Just "backend")
-      , ((0, xK_a), aspen $ Nothing)
-      ])
+  -- Ensure panel is up
+  , ((modMask .|. shiftMask, xK_r),
+     spawn "xfce4-panel --disable-wm-check")
+
+  -- XFCE settings
+  , ((modMask .|. shiftMask, xK_comma),
+     spawn "xfce4-settings-manager")
 
   -- Toggle multi monitor display (xrandr wrapper)
   , ((modMask .|. shiftMask, xK_d), submap . M.fromList $
@@ -199,12 +185,12 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- Spawn washout cams
   , ((modMask, xK_s),
-     spawn "vlc https://cams.cdn-surfline.com/cdn-ec/ec-washout/chunklist.m3u8")
+     spawn "vlc https://cams.cdn-surfline.com/cdn-ec/ec-washout/playlist.m3u8")
 
   -- Spawn other cams
   , ((modMask .|. shiftMask, xK_s), submap . M.fromList $
-      let w = spawn "vlc https://cams.cdn-surfline.com/cdn-ec/ec-washout/chunklist.m3u8"
-          s = spawn "vlc https://cams.cdn-surfline.com/wsc-east/ec-washoutsouthcam.stream/chunklist.m3u8"
+      let w = spawn "vlc https://cams.cdn-surfline.com/cdn-ec/ec-washout/playlist.m3u8"
+          s = spawn "vlc https://cams.cdn-surfline.com/cdn-ec/ec-washoutsouth/playlist.m3u8"
           n = spawn "vlc https://cams.cdn-surfline.com/wsc-east/ec-follypiernorthcam.stream/playlist.m3u8"
           p = spawn "vlc https://cams.cdn-surfline.com/wsc-east/ec-follypiersouthcam.stream/playlist.m3u8"
       in [ ((0, xK_w), w)
@@ -217,54 +203,50 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- Spawn firefox on mod + f
   , ((modMask, xK_f),
      spawn "firefox")
-
-  -- Spawn chrome
-  , ((modMask, xK_g),
-     spawn "chromium")
-
-  -- Spawn chrome
-  , ((modMask .|. shiftMask, xK_g),
-     spawn "chromium --incognito")
+  , ((modMask .|. shiftMask, xK_f),
+     spawn "firefox --private-window")
 
   -- Take a selective screenshot.
   , ((modMask, xK_y),
-     spawn "sleep 0.2; scrot -s")
+     spawn "sleep 0.2; scrot -s -e 'mv $f ~/screenshots/'")
 
   -- Take a full screenshot.
   , ((modMask .|. shiftMask, xK_y),
-     spawn "sleep 0.2; scrot")
+     spawn "sleep 0.2; scrot -s -e 'mv $f ~/screenshots/ && dragon-drag-and-drop -x ~/screenshots/$f'")
 
   -- Toggle status bar
   , ((modMask, xK_b),
      sendMessage ToggleStruts)
 
+{-
   -- Increase brightness.
   , ((0, xF86XK_MonBrightnessUp),
-     spawn "xbacklight + 5")
+     spawn "light -A 5")
 
   -- Decrease brightness.
   , ((0, xF86XK_MonBrightnessDown),
-     spawn "xbacklight - 5")
+     spawn "light -U 5")
+-}
 
   -- Mute volume.
   , ((0, xF86XK_AudioMute),
-     spawn "amixer -q set Master toggle")
+     spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")
 
   -- Decrease volume.
   , ((0, xF86XK_AudioLowerVolume),
-     spawn "amixer -q set Master 5%-")
+     spawn "pactl set-sink-volume @DEFAULT_SINK@ -5%")
 
   -- Increase volume.
   , ((0, xF86XK_AudioRaiseVolume),
-     spawn "amixer -q set Master 5%+")
+     spawn "pactl set-sink-volume @DEFAULT_SINK@ +5%")
 
   -- Decrease volume.
   , ((modMask .|. controlMask, xK_j),
-     spawn "amixer -q set Master 10%-")
+     spawn "pactl set-sink-volume alsa_output.pci-0000_01_00.1.hdmi-stereo -5%")
 
   -- Increase volume.
   , ((modMask .|. controlMask, xK_k),
-     spawn "amixer -q set Master 10%+")
+     spawn "pactl set-sink-volume alsa_output.pci-0000_01_00.1.hdmi-stereo +5%")
 
   -- Audio previous.
   , ((0, 0x1008FF16),
@@ -332,11 +314,23 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- Shrink the master area.
   , ((modMask, xK_h),
-     sendMessage Shrink)
+     sendMessage Shrink >> sendMessage (ExpandTowards L))
 
   -- Expand the master area.
   , ((modMask, xK_l),
-     sendMessage Expand)
+     sendMessage Expand >> sendMessage (ExpandTowards R))
+
+  -- Shrink/expand secondary panes
+  , ((modMask .|. shiftMask, xK_h),
+     sendMessage MirrorShrink >> sendMessage (ExpandTowards U))
+  , ((modMask .|. shiftMask, xK_l),
+     sendMessage MirrorExpand >> sendMessage (ExpandTowards D))
+
+  , ((myModMask .|. shiftMask, xK_a),
+     sendMessage Equalize)
+
+  , ((myModMask, xK_a),
+     sendMessage Rotate)
 
   -- Push window back into tiling.
   , ((modMask, xK_t),
@@ -352,11 +346,11 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- Quit xmonad.
   , ((modMask .|. shiftMask, xK_q),
-     io (exitWith ExitSuccess))
+     spawn "xfce4-session-logout")
 
   -- Restart xmonad.
   , ((modMask, xK_q),
-     restart "xmonad" True)
+     spawn "xmonad --recompile" >> restart "xmonad" True)
   ]
 
   ++
@@ -371,7 +365,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
   -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
   [((m .|. modMask, key), screenWorkspace sc >>= flip whenJust (windows . f))
-    | (key, sc) <- zip [xK_e, xK_r] [1, 0]
+    | (key, sc) <- zip [xK_w, xK_e] [0, 1]
     , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
 
@@ -399,66 +393,28 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
     -- you may also bind events to the mouse scroll wheel (button4 and button5)
   ]
 
-
 ------------------------------------------------------------------------
--- Status bars and logging
--- Perform an arbitrary action on each internal state change or X event.
--- See the 'DynamicLog' extension for examples.
+-- Custom startup
 --
--- To emulate dwm's status bar
---
-myDefaultPP = xmobarPP
-  { ppTitle = xmobarColor xmobarTitleColor "" . shorten 100
-  , ppCurrent = xmobarColor xmobarCurrentWorkspaceColor ""
-  , ppSep = "   "
-  }
-
-
-
-------------------------------------------------------------------------
--- Startup hook
--- Perform an arbitrary action each time xmonad starts or is restarted
--- with mod-q.  Used by, e.g., XMonad.Layout.PerWorkspace to initialize
--- per-workspace layout choices.
---
--- By default, do nothing.
-myStartupHook = return ()
+-- Trying to just get this damn xfce panel to work on start up.
+myStartupHook :: X ()
+myStartupHook = do
+  ewmhDesktopsStartup
+  spawn "sleep 1.0 ; xfce4-panel -r --disable-wm-check"
 
 ------------------------------------------------------------------------
 -- Run xmonad with all the defaults we set up.
 --
-main = do
-  xmproc   <- spawnPipe "xmobar ~/.xmonad/xmobar.hs"
-  xmonad $ defaults
-    { logHook    = dynamicLogWithPP $ myDefaultPP { ppOutput = hPutStrLn xmproc }
-    , manageHook = manageDocks <+> myManageHook
-    , handleEventHook = docksEventHook
-    }
-
-------------------------------------------------------------------------
--- Combine it all together
--- A structure containing your configuration settings, overriding
--- fields in the default config. Any you don't override, will
--- use the defaults defined in xmonad/XMonad/Config.hs
---
--- No need to modify this.
---
-defaults = defaultConfig {
-    -- simple stuff
-    terminal           = myTerminal,
-    focusFollowsMouse  = myFocusFollowsMouse,
-    borderWidth        = myBorderWidth,
-    modMask            = myModMask,
-    normalBorderColor  = myNormalBorderColor,
-    focusedBorderColor = myFocusedBorderColor,
-
-    -- key bindings
-    keys               = myKeys,
-    mouseBindings      = myMouseBindings,
-
-    -- hooks, layouts
-    workspaces         = myWorkspaces,
-    layoutHook         = smartBorders $ myLayoutHook,
-    manageHook         = myManageHook,
-    startupHook        = myStartupHook
-}
+main = xmonad $ xfceConfig
+  { terminal           = myTerminal
+  , focusFollowsMouse  = myFocusFollowsMouse
+  , borderWidth        = myBorderWidth
+  , modMask            = myModMask
+  , normalBorderColor  = myNormalBorderColor
+  , focusedBorderColor = myFocusedBorderColor
+  , keys               = myKeys
+  , mouseBindings      = myMouseBindings
+  , workspaces         = myWorkspaces
+  , layoutHook         = myLayoutHook
+  , startupHook        = myStartupHook
+  }

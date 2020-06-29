@@ -2,4 +2,4 @@
 *.errors
 *.hi
 *.o
-
+.stack-work/

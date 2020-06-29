@@ -31,10 +31,9 @@ zplug load
 # environment
 #####################################################################
 
-export CLICOLOR=1
-export EDITOR=vim
-export VISUAL=vim
-export BROWSER=vimb
+export EDITOR=nvim
+export VISUAL=nvim
+export BROWSER=firefox
 export DOTFILES_DIR="$HOME/git/dotfiles"
 export PATH=/usr/local/bin:$PATH
 export PATH="$HOME/.cabal/bin:$PATH"
@@ -42,6 +41,15 @@ export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.npm-global/bin:$PATH"
 export PATH="$HOME/.dex/bin:$PATH"
 export PATH="$HOME/git/aspen/tools/bin:$PATH"
+export PATH=/usr/local/texlive/2018/bin/x86_64-linux:$PATH
+export INFOPATH=$INFOPATH:/usr/local/texlive/2018/texmf-dist/doc/info
+export MANPATH=$MANPATH:/usr/local/texlive/2018/texmf-dist/doc/man
+export GEM_HOME="$HOME/gems"
+export PATH="$HOME/gems/bin:$PATH"
+export PATH="$HOME/.gem/ruby/2.7.0/bin:$PATH"
+export PATH="$HOME/.rbenv/bin:$PATH"
+export PATH="$HOME/racket/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
 
 
 #####################################################################
@@ -88,6 +96,9 @@ for f in $(find $DOTFILES_DIR/zsh/plugins/completion -name "*.zsh"); do
   source "$f"
 done
 
+# Completion for kitty
+kitty + complete setup zsh | source /dev/stdin
+
 # autocomplete hidden files
 # _comp_options+=(globdots)
 
@@ -97,12 +108,13 @@ done
 #####################################################################
 
 # Color settings for zsh complete candidates
-alias ls='ls -lGH'
-alias ll='ls -lhF'
+alias ll='ls -lhF --show-control-chars --color=always'
 alias l='ll -A'
 alias lt='l -t'
-alias l.='l .[a-zA-Z]*'
-export LSCOLORS="EHfxcxdxBxegecabagacad" 
+alias ltr='lt -r'
+alias lg='git ls-files'
+alias l.='l .[a-zA-Z]* --color=always'
+export LSCOLORS=ExFxCxdxBxegedabagacad
 export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
 zstyle ':completion:*' list-colors 'di=;34;1' 'ln=;35;1' 'so=;32;1' 'ex=31;1' 'bd=46;34' 'cd=43;34'
 
@@ -238,8 +250,6 @@ bindkey -M menuselect '^[[Z' reverse-menu-complete # shift tab for reverse compl
 autoload -U +X bashcompinit && bashcompinit
 # stack completion
 eval "$(stack --bash-completion-script stack)"
-#eval "$(dmc --bash-completion-script dmc)"
-#eval "$(dm --bash-completion-script dm)"
 
 HISTFILE=${HOME}/.zsh_history
 HISTSIZE=10000                   # The maximum number of events to save in the internal history.
@@ -275,8 +285,6 @@ function zle-line-init zle-keymap-select {
 }
 zle -N zle-line-init
 zle -N zle-keymap-select
-
-alias -g vim='nvim'
 
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git --ignore .stack-work --ignore tags -g ""'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

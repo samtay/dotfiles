@@ -1,4 +1,5 @@
 # Aliases
+export MY_GIT_DIR="$HOME/git"
 alias copy='pbcopy'
 alias copy-ssh-key='copy-file ~/.ssh/id_rsa.pub'
 alias reload-zsh='source ~/.zshrc'
@@ -8,11 +9,31 @@ alias wifi-rescan='nmcli d wifi rescan'
 alias wifi-list='nmcli d wifi'
 alias wifi-connect='nmcli -a -p -s d wifi connect'
 alias get-simpsons-img='echo "http://imgur.com/a/T81t9copy" | copy'
-alias aspen='g2 aspen'
-export MY_GIT_DIR="$HOME/git"
+alias surfcam='vlc https://cams.cdn-surfline.com/wsc-east/ec-washoutcam.stream/chunklist.m3u8'
+
+dupe() {
+  cp "$1" "$2"
+  vim "$2"
+}
+
+fix-wide-monitor() {
+  if [ -z "$1" ]; then
+    monitor="DP-1"
+  else
+    monitor="$1"
+  fi
+  xrandr --newmode "2560x1080_45.00"  167.75  2560 2696 2960 3360  1080 1083 1093 1111 -hsync +vsync
+  xrandr --addmode $monitor "2560x1080_45.00"
+  xrandr --output $monitor --mode "2560x1080_45.00"
+}
+
+
+build-resume() {
+  cd "$MY_GIT_DIR/resume" && ./build.hs
+}
 
 g2() {
-  cd "$MY_GIT_DIR/$1" && ls -lhF
+  cd "$MY_GIT_DIR/$1" && ls -lhF --show-control-chars --color=always
 }
 
 backup() {
@@ -20,21 +41,15 @@ backup() {
 }
 
 displays-toggle() {
-#  local displayCount=$(xrandr | grep " connected " | wc -l)
-#  if [[ $displayCount -gt 1 ]]; then
-  case $1 in
-    0) xrandr --output DP-0 --off --output DP-3 --auto
-       sudo sed -i 's|fontconfig.dpi = 96|fontconfig.dpi = 192|' \
-         /etc/nixos/configuration.nix ;;
-    1) xrandr --output DP-3 --off --output DP-0 --auto
-       sudo sed -i 's|fontconfig.dpi = 192|fontconfig.dpi = 96|' \
-         /etc/nixos/configuration.nix ;;
-  esac
-  sudo nixos-rebuild switch && reboot
+  if xrandr --listmonitors | grep eDP-1 ; then
+    xrandr --output eDP-1 --off --output DP-1 --auto
+  else
+    xrandr --output DP-1 --off --output eDP-1 --auto
+  fi
 }
 
 copy-file(){
-  cat $1 | pbcopy
+  cat $1 | copy
 }
 
 screenshot-select() {

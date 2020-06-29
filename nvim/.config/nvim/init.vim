@@ -11,28 +11,39 @@ call plug#begin('~/.local/share/nvim/plugged')
 " utils
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+Plug 'junegunn/goyo.vim'
+Plug 'junegunn/limelight.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-surround'
 Plug 'easymotion/vim-easymotion'
+Plug 'inkarkat/vim-SyntaxRange'
+Plug 'inkarkat/vim-ingo-library'
+Plug 'airblade/vim-rooter'
 
 " spacemacs
 Plug 'hecal3/vim-leader-guide'
-Plug 'jimmay5469/vim-spacemacs'
 
 " color
 Plug 'liuchengxu/space-vim-dark'
 Plug 'vim-scripts/mayansmoke'
 Plug 'altercation/vim-colors-solarized'
+Plug 'morhetz/gruvbox'
 
-"haskell
-Plug 'neovimhaskell/haskell-vim', {'for': 'haskell'}
+" haskell
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
-Plug 'meck/vim-brittany', { 'for': 'haskell' }
-Plug 'ndmitchell/ghcid', { 'rtp': 'plugins/nvim', 'for': 'haskell' }
-Plug 'sbdchd/neoformat'
+Plug 'parsonsmatt/vim2hs'
+Plug 'ndmitchell/ghcid', { 'rtp': 'plugins/nvim' }
+
+" rust
+Plug 'rust-lang/rust.vim'
+
+" coq ?
+" check back after neovim support added
+" Plug 'whonore/Coqtail' | Plug 'let-def/vimbufsync'
+Plug 'https://framagit.org/tyreunom/coquille.git'
 
 " tex
 Plug 'lervag/vimtex', { 'for': 'tex' }
@@ -43,15 +54,15 @@ Plug 'LnL7/vim-nix'
 " tabular formatting
 Plug 'godlygeek/tabular'
 
-" autocomplete tabs
-Plug 'ervandew/supertab'
-
-" syntax checker
-" Plug 'w0rp/ale'
-
+" Autocomplete
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'Shougo/neosnippet.vim'
+Plug 'Shougo/neosnippet-snippets'
+Plug 'samtay/vim-snippets'
 
 """"""""""" End plugins """""""""""""""""""""""""""""
 call plug#end()
+
 
 """""""""""""""""""""""""""" Personal Vim Settings """"""""""""""""""""
 filetype plugin indent on
@@ -62,10 +73,13 @@ set showcmd
 " indenting
 set ai
 set si
-"encoding
-set termencoding=utf-8
-set fileencoding=utf-8
-set fileencodings=ucs-bom,utf-8,big5,gb2312,latin1
+" Just hide buffers
+set noswapfile
+set hidden
+" Remember info about open buffers on close
+set viminfo^=%
+" Status line always shows
+set laststatus=2
 
 """"" default 2 spaces
 filetype plugin indent on
@@ -73,87 +87,6 @@ syntax on
 set expandtab
 set softtabstop=2
 set shiftwidth=2
-
-" Don't auto comment for the love of god
-autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-
-set noswapfile
-" Just hide buffers
-set hidden
-
-" Return to last edit position when opening files (You want this!)
-augroup last_edit
-  autocmd!
-  autocmd BufReadPost *
-     \ if line("'\"") > 0 && line("'\"") <= line("$") |
-     \   exe "normal! g`\"" |
-     \ endif
-augroup END
-
-" Remember info about open buffers on close
-set viminfo^=%
-
-" Status line always shows
-set laststatus=2
-
-" Utility function to delete trailing white space
-func! DeleteTrailingWS()
-  exe "normal mz"
-  %s/\s\+$//ge
-  exe "normal `z"
-endfunc
-" use it on saving haskell files
-augroup whitespace
-  autocmd!
-  autocmd BufWrite *.hs :call DeleteTrailingWS()
-augroup END
-let g:brittany_on_save = 0
-
-" Use powerline fonts for airline
-if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
-endif
-" let g:airline_powerline_fonts = 1
-let g:airline_symbols.space = "\ua0"
-" Set airline theme
-let g:airline_theme='solarized'
-let g:airline_solarized_bg='dark'
-let g:airline#extensions#ale#enabled = 1
-
-" Toggle tagbar
-nmap <leader>t :TagbarToggle<CR>
-
-"""""""" Aliases """""""
-" leader
-map <SPACE> <leader>
-" edit vimrc quickly
-map <leader>v :sp ~/.config/nvim/init.vim<cr>
-" reload vimrc when saved
-au BufWritePost .vimrc so ~/.vimrc
-
-" Leader shortcuts for copy pasting
-vmap <leader>y "+y
-vmap <leader>d "+d
-nmap <leader>p "+p
-nmap <leader>P "+P
-vmap <leader>p "+p
-vmap <leader>P "+P
-
-" Save read-only files easily
-cmap w!! w !sudo tee > /dev/null %
-
-" New lines without insert mode
-map <Enter> o<ESC>
-" Damn this doesn't work
-map <C-Enter> O<ESC>
-
-" Easy motions
-let g:EasyMotion_do_mapping = 0 " Disable default mappings
-" nmap s <Plug>(easymotion-overwin-f)
-nmap <Leader>f <Plug>(easymotion-overwin-f2)
-let g:EasyMotion_smartcase = 1
-map <Leader>j <Plug>(easymotion-j)
-map <Leader>k <Plug>(easymotion-k)
 
 " better splits mgmt
 nnoremap <C-J> <C-W><C-J>
@@ -163,104 +96,125 @@ nnoremap <C-H> <C-W><C-H>
 set splitbelow
 set splitright
 
-" find current selection
-vnoremap <silent> * :call VisualSelection('f', '')<CR>
-vnoremap <silent> # :call VisualSelection('b', '')<CR>
+" Don't auto comment for the love of god
+autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
-""""""" Colors
-if !has("gui_running")
-  set t_Co=256
+" No concealment?
+set cole=0
+au FileType * setl cole=0
+" Fix ^G characters in nerdtree buffer
+augroup my_nerdtree
+  au!
+  au FileType nerdtree setl cole=2
+augroup END
+
+" Return to last edit position when opening files
+augroup last_edit
+  autocmd!
+  autocmd BufReadPost *
+     \ if line("'\"") > 0 && line("'\"") <= line("$") |
+     \   exe "normal! g`\"" |
+     \ endif
+augroup END
+
+" Delete whitespace when saving haskell files
+augroup whitespace
+  autocmd!
+  autocmd BufWrite * :call DeleteTrailingWS()
+augroup END
+
+" Colors
+if (has("termguicolors"))
+  set termguicolors
 endif
-"set termguicolors
-set background=light
-"colorscheme solarized
-hi Search cterm=NONE ctermfg=NONE ctermbg=lightgreen
+let g:gruvbox_italic=1
+set background=dark
+colorscheme gruvbox
 hi Comment cterm=italic
 
-""""""" Ctrl P settings
-" ali's settings
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
-let g:ctrlp_working_path_mode = 'ra'
-let g:ctrlp_lazy_update = 10
-nnoremap <C-o> :CtrlPBuffer<CR>
-inoremap <C-o> <Esc>:CtrlPBuffer<CR>
-" default hidden stuff
-let g:ctrlp_show_hidden = 1
-" set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/.stack-work/* TODO hopefully this fixes fucking nvim freezing
-let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/]\.(git|stack-work)$',
-  \ 'file': '\v\.(exe|so|dll)$',
-  \ }
-" ag + aspen
-if executable('ag')
-  set grepprg=ag\ --nogroup\ --nocolor\ --smart-case
-  let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden --smart-case
-                              \ --ignore .git
-                              \ --ignore .svn
-                              \ --ignore .hg
-                              \ --ignore amazonka
-                              \ --ignore="*.dyn_hi"
-                              \ --ignore="*.dyn_o"
-                              \ --ignore="*.p_hi"
-                              \ --ignore="*.p_o"
-                              \ --ignore="*.hi"
-                              \ --ignore="*.o"
-                              \ -g ""'
-endif
 
-""""""" FZF settings
+"""""""""""""""""""""""""""" Plugin Settings """"""""""""""""""""
+" Use deoplete / snippets.
+let g:deoplete#enable_at_startup = 1
+let g:neosnippet#enable_snipmate_compatibility = 1
+let g:neosnippet#snippets_directory='~/git/vim-snippets/snippets'
+" Tabbing snippets behavior.
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+imap <expr><TAB>
+ \ pumvisible() ? "\<C-n>" :
+ \ neosnippet#expandable_or_jumpable() ?
+ \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+      \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+smap <expr><CR>
+ \ neosnippet#expandable_or_jumpable() ?
+ \    "\<Plug>(neosnippet_expand_or_jump)" : "\<CR>"
+imap <expr><CR>
+ \ neosnippet#expandable_or_jumpable() ?
+ \    "\<Plug>(neosnippet_expand_or_jump)" : "\<CR>"
+
+" Use powerline fonts for airline
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+let g:airline_powerline_fonts = 0
+let g:airline_symbols.space = "\ua0"
+" Set airline theme
+let g:airline_theme='gruvbox'
+
+" Easy motions
+let g:EasyMotion_do_mapping = 0 " Disable default mappings
+let g:EasyMotion_smartcase = 1
+" nmap s <Plug>(easymotion-overwin-f)
+
+" FZF settings
 let g:fzf_layout = { 'down': '~35%' }
 
-""""""" Spacemacs shiz
-let g:spacemacs#excludes = [
-  \ '^pf',
-  \ '^bf',
-  \ '^fr',
-  \ '^ff',
-  \ '^ft',
-  \ '^tn',
-  \ '^cc',
-  \ '^gd',
-  \ '^en',
-  \ '^ep',
-  \ '^te',
-  \ ]
-" fzf
-nnoremap <leader>pf :Files<CR>
-nnoremap <leader>fr :History<CR>
-nnoremap <leader>ft :call NERDTreeToggleInCurDir()<CR>
-nnoremap <leader>bf :Buffers<CR>
-nnoremap <leader>/ :execute 'Ag ' . input('Ag/')<CR>
+" Limelight
+autocmd! User GoyoEnter Limelight
+autocmd! User GoyoLeave Limelight!
+let g:limelight_conceal_ctermfg = 'gray'
+let g:limelight_conceal_ctermfg = 240
+let g:limelight_conceal_guifg = 'DarkGray'
+let g:limelight_conceal_guifg = '#777777'
+let g:limelight_default_coefficient = 0.7
 
-" window/split stuff
-nnoremap <leader>wH <C-W>H
-nnoremap <leader>wK <C-W>K
-nnoremap <leader>wL <C-W>L
-nnoremap <leader>wJ <C-W>J
-nnoremap <leader>w_ <C-W>_
-nnoremap <leader>w\| <C-W>\|
-nnoremap <leader>w<CR> <C-W>o
+" Rooter
+let g:rooter_patterns = ['Cargo.toml', 'Rakefile', 'stack.yaml', 'Gemfile', '.git/']
 
-nnoremap <leader>gt <C-]>
-nnoremap <leader>gT g]
+" Haskell plugin settings
+" TODO move haskell stuff to ftplugin
+" conceal
+let g:haskell_conceal = 1
+let g:haskell_conceal_wide = 1
+set nofoldenable
+" indent
+let g:haskell_indent_if = 0
+let g:haskell_indent_in = 0
+let g:haskell_indent_let = 4
+let g:haskell_indent_case_alternative = 1
+let g:haskell_tabular = 0
+" highlighting
+let g:haskell_enable_quantification = 1   " to enable highlighting of `forall`
+let g:haskell_enable_recursivedo = 1      " to enable highlighting of `mdo` and `rec`
+let g:haskell_enable_arrowsyntax = 1      " to enable highlighting of `proc`
+let g:haskell_enable_pattern_synonyms = 1 " to enable highlighting of `pattern`
+let g:haskell_enable_typeroles = 1        " to enable highlighting of type roles
+let g:haskell_enable_static_pointers = 1  " to enable highlighting of `static`
 
-" comment tools
-nnoremap <leader>cc :call NERDComment('n', "Toggle")<CR>
-vnoremap <leader>cc :call NERDComment('v', "Toggle")<CR>
+" Coq plugin settings
+let g:coquille_auto_move = "true"
+hi default CheckedByCoq ctermbg=11 guibg=LightGreen
+hi default SentToCoq ctermbg=13 guibg=LimeGreen
 
-" toggles
-nnoremap <leader>tn :call NumberToggle()<CR>
-nnoremap <leader>tc :call ConcealToggle()<cr>
-nnoremap <leader>ts :noh<cr>
-nnoremap <leader>te :cw<cr>
 
-" quickfix nav
-nnoremap <leader>eN :lnext<CR>
-nnoremap <leader>eP :lprev<CR>
-nnoremap <leader>en <Plug>(ale_next_wrap)
-nnoremap <leader>ep <Plug>(ale_previous_wrap)
-nnoremap <leader>ed :ccl<CR>
+"""""""""""""""""""""""""""" Functions """"""""""""""""""""
+" Utility function to delete trailing white space
+func! DeleteTrailingWS()
+  exe "normal mz"
+  %s/\s\+$//ge
+  exe "normal `z"
+endfunc
 
 function! ConcealToggle()
   if &conceallevel
@@ -289,3 +243,128 @@ function! NERDTreeToggleInCurDir()
     exe ":NERDTreeFind"
   endif
 endfunction
+
+function! NCoqNext()
+  " looks weird without v:count1, just avoiding sleep on default call
+  exe ":CoqNext"
+  for i in range(1, v:count) | sleep 200m | exe ":CoqNext" | endfor
+endfunction
+
+function! NCoqUndo()
+  exe ":CoqUndo"
+  for i in range(1, v:count) | sleep 200m | exe ":CoqUndo" | endfor
+endfunction
+
+
+"""""""""""""""""""""""""""" Alias Settings """"""""""""""""""""
+" Save read-only files easily
+cmap w!! w !sudo tee > /dev/null %
+" New lines without insert mode
+map <CR> o<ESC>k
+map <S-CR> O<ESC>j
+" leader
+map <SPACE> <leader>
+
+
+"""""""""""""""""""""""""""" Leader Settings """"""""""""""""""""
+" files
+nnoremap <leader>fp :Files<CR>
+nnoremap <leader>fg :GFiles<CR>
+nnoremap <leader>fG :GFiles?<CR>
+nnoremap <leader>fr :History<CR>
+nnoremap <leader>ft :call NERDTreeToggleInCurDir()<CR>
+nnoremap <leader>fs :w<CR>
+nnoremap <leader>fS :wa<CR>
+nnoremap <leader>fe :!"%:p"<CR>
+" buffers
+nnoremap <leader>bf :Buffers<CR>
+nnoremap <leader>bd :bdelete<CR>
+" git
+nnoremap <leader>gc :Commits<CR>
+nnoremap <leader>gb :BCommits<CR>
+" errors
+nnoremap <leader>ee :cc<CR>
+nnoremap <leader>ej :cn<CR>
+nnoremap <leader>eJ :clast<CR>
+nnoremap <leader>ek :cp<CR>
+nnoremap <leader>eK :crewind<CR>
+" search
+nnoremap <leader>/ :execute 'Ag ' . input('Ag/')<CR>
+" window/pane stuff
+nnoremap <leader>w- :sp<CR>
+nnoremap <leader>w/ :vsp<CR>
+nnoremap <leader>w= <C-W>=
+nnoremap <leader>wd :q<CR>
+nnoremap <leader>wh <C-W>h
+nnoremap <leader>wj <C-W>j
+nnoremap <leader>wk <C-W>k
+nnoremap <leader>wl <C-W>l
+nnoremap <leader>wH <C-W>H
+nnoremap <leader>wJ <C-W>J
+nnoremap <leader>wK <C-W>K
+nnoremap <leader>wL <C-W>L
+nnoremap <leader>w<CR> <C-W>o
+nnoremap <leader><TAB> <C-^>
+" tags
+nnoremap <leader>gt <C-]>
+nnoremap <leader>gT g]
+" comment tools
+nnoremap <leader>; :call NERDComment('n', "Toggle")<CR>
+vnoremap <leader>; :call NERDComment('v', "Toggle")<CR>
+" toggles
+nnoremap <leader>tn :call NumberToggle()<CR>
+nnoremap <leader>tc :call ConcealToggle()<cr>
+nnoremap <leader>ts :noh<cr>
+nnoremap <leader>tg :Goyo<cr>
+nnoremap <leader>tl :Limelight!!<cr>
+" copy/paste
+vmap <leader>y "+y
+vmap <leader>d "+d
+nmap <leader>p "+p
+nmap <leader>P "+P
+vmap <leader>p "+p
+vmap <leader>P "+P
+" easy motion searches
+" DO NOT namespace with <Leader>s
+" otherwise this will require wait
+nmap <Leader>s <Plug>(easymotion-overwin-f2)
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+" helper tools
+nnoremap <leader>? :Maps<CR>
+" align tools
+vnoremap <leader>a= :Tabularize /=<CR>
+vnoremap <leader>a; :Tabularize /::<CR>
+vnoremap <leader>a- :Tabularize /-><CR>
+vnoremap <leader>a, :Tabularize /,<CR>
+vnoremap <leader>ac :Tabularize /--<CR>
+" vimrc
+nnoremap <leader>ve :sp ~/.config/nvim/init.vim<cr>
+nnoremap <leader>vs :so ~/.config/nvim/init.vim<cr>
+"au BufWritePost init.vim so ~/.config/nvim/init.vim
+" haskell
+augroup haskell_namespace
+  au!
+  au FileType haskell nnoremap <leader>ha ms:%!stylish-haskell<CR>'s
+  au FileType haskell nnoremap <leader>hc :HoogleClose<CR>
+  au FileType haskell nnoremap <leader>hh :Hoogle<CR>
+  au FileType haskell nnoremap <leader>hi :HoogleInfo<CR>
+  au FileType haskell nnoremap <leader>hg :Ghcid<CR>
+  au FileType haskell nnoremap <leader>hG :Ghcid -c <SPACE>
+  au FileType haskell nnoremap <leader>hq :GhcidKill<CR>
+augroup END
+" coq
+augroup coq_namespace
+  au!
+" will be unnecessary after plugin fixed
+  au FileType coq nnoremap <silent> <leader>cc :silent! call coquille#Commands() <CR>:CoqLaunch<CR>
+  au FileType coq nnoremap <leader>cj :<C-U>call NCoqNext()<CR>
+  "au FileType coq nnoremap <leader>cj :CoqNext<CR>
+  au FileType coq nnoremap <leader>ck :<C-U>call NCoqUndo()<CR>
+  "au FileType coq nnoremap <leader>ck :CoqUndo<CR>
+  au FileType coq nnoremap <leader>cz :CoqToCursor<CR>
+  au FileType coq nnoremap <leader>cq :CoqStop<CR>
+  au FileType coq nnoremap <leader>cx :CoqCancel<CR>
+  au FileType coq nnoremap <leader>cv :CoqVersion<CR>
+  au FileType coq nnoremap <leader>cb :CoqBuild<CR>
+augroup END
