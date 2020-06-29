@@ -108,6 +108,7 @@ done
 #####################################################################
 
 # Color settings for zsh complete candidates
+export CLICOLOR=1
 alias ll='ls -lhF'
 alias l='ll -A'
 alias lt='l -t'
