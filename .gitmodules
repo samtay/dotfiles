@@ -4,3 +4,6 @@
 [submodule "xmonad/.xmonad/xmonad-contrib-git"]
 	path = xmonad/.xmonad/xmonad-contrib-git
 	url = https://github.com/xmonad/xmonad-contrib
+[submodule "tmux/.tmux/plugins/tpm"]
+	path = tmux/.tmux/plugins/tpm
+	url = git@github.com:tmux-plugins/tpm.git
