@@ -97,7 +97,7 @@ for f in $(find $DOTFILES_DIR/zsh/plugins/completion -name "*.zsh"); do
 done
 
 # Completion for kitty
-kitty + complete setup zsh | source /dev/stdin
+#kitty + complete setup zsh | source /dev/stdin
 
 # autocomplete hidden files
 # _comp_options+=(globdots)
@@ -108,7 +108,7 @@ kitty + complete setup zsh | source /dev/stdin
 #####################################################################
 
 # Color settings for zsh complete candidates
-alias ll='ls -lhF --show-control-chars --color=always'
+alias ll='ls -lhF --color=always'
 alias l='ll -A'
 alias lt='l -t'
 alias ltr='lt -r'

@@ -8,6 +8,7 @@ ranger/.config/ranger/tagged
 vim/.vim/.netrwhist
 vim/.vim/autoload/
 vim/.vim/plugged/
+nvim/.local/share/nvim
 xmonad/.xmonad/history
 xmonad/.xmonad/xmonad.state
 ghc/.ghc/ghci_history
