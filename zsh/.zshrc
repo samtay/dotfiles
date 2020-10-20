@@ -291,3 +291,6 @@ export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git --ignore .stack-work --ign
 
 alias -g vim='nvim'
 alias -g agl='ag --pager="less -XFR"'
+
+# added by travis gem
+[ ! -s /home/sam/.travis/travis.sh ] || source /home/sam/.travis/travis.sh
