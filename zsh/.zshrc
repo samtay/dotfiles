@@ -48,6 +48,7 @@ export GEM_HOME="$HOME/gems"
 export PATH="$HOME/gems/bin:$PATH"
 export PATH="$HOME/racket/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="/snap/bin:$PATH"
 
 
 #####################################################################
@@ -59,6 +60,9 @@ if [ -d ~/.zsh/comp ]; then
   fpath=(~/.zsh/comp $fpath)
   autoload -U ~/.zsh/comp/*(:t)
 fi
+
+fpath+=~/plugins/completion
+fpath+=~/.zfunc
 
 unsetopt menu_complete   # do not autoselect the first completion entry
 unsetopt flowcontrol
@@ -284,8 +288,11 @@ function zle-line-init zle-keymap-select {
 zle -N zle-line-init
 zle -N zle-keymap-select
 
-export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git --ignore .stack-work --ignore tags -g ""'
+export FZF_DEFAULT_COMMAND='rg --hidden -l ""'
+export FZF_CTRL_T_COMMAND='find . -printf "%P\\n"'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 alias -g vim='nvim'
 alias -g agl='ag --pager="less -XFR"'
+
+source /home/sam/.config/broot/launcher/bash/br

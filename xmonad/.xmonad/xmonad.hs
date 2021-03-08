@@ -17,6 +17,7 @@ import XMonad.Layout.BinarySpacePartition
 import XMonad.Layout.Fullscreen
 import XMonad.Layout.NoBorders
 import XMonad.Layout.ResizableTile
+import XMonad.Layout.ResizableThreeColumns
 import XMonad.Layout.Spiral
 import XMonad.Layout.Tabbed
 import XMonad.Layout.TwoPane
@@ -91,7 +92,7 @@ myXPConfig = def
 myLayoutHook =
   avoidStruts $
       ResizableTall 1 (3/100) (1/2) []
-  ||| emptyBSP
+  ||| ResizableThreeCol 1 (3/100) (1/2) []
   ||| tabbed shrinkText tabConfig
   ||| noBorders (fullscreenFull Full)
 

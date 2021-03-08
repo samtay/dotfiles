@@ -38,6 +38,7 @@ Plug 'parsonsmatt/vim2hs'
 
 " rust
 Plug 'rust-lang/rust.vim'
+Plug 'racer-rust/vim-racer'
 
 " coq ?
 " check back after neovim support added
@@ -180,6 +181,7 @@ let g:limelight_default_coefficient = 0.7
 
 " Rust plugin settings
 let g:rustfmt_autosave = 1
+let g:racer_experimental_completer = 1
 
 " Haskell plugin settings
 " TODO move haskell stuff to ftplugin
@@ -349,6 +351,8 @@ augroup END
 " rust
 augroup rust_namespace
   au!
+  autocmd FileType rust nmap <buffer> gd <Plug>(rust-def)
+  autocmd FileType rust nmap <buffer> gD <Plug>(rust-doc-tab)
   au FileType rust nnoremap <leader>rt :RustTest<CR>
   au FileType rust set softtabstop=2
   au FileType set shiftwidth=2
