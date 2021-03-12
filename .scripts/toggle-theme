@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+set -eo
+
+# clean
+cd $HOME/git/dotfiles
+rm -f termite/.config/termite/config
+theme=
+
+if grep -q light theme; then
+  # make dark
+  theme=dark
+  ln -s tomorrow-night termite/.config/termite/config
+  sed -i 's/set background=light/set background=dark/' nvim/.config/nvim/init.vim
+  sed -i "s/gruvbox_light/gruvbox_dark/" kitty/.config/kitty/kitty.conf
+else
+  # make light
+  theme=light
+  ln -s solarized-light termite/.config/termite/config
+  sed -i 's/set background=dark/set background=light/' nvim/.config/nvim/init.vim
+  sed -i "s/gruvbox_dark/gruvbox_light/" kitty/.config/kitty/kitty.conf
+fi
+
+echo $theme > theme
+
+# Fark cant reload kitty
+# killall -USR1 termite
+# reload vim instances
+original_window=$(xdotool getwindowfocus)
+for pid in $(xdotool search --name ': nvim'); do
+  sleep 0.5
+  xdotool windowfocus $pid
+  sleep 0.1
+  xdotool key Escape
+  sleep 0.1
+  xdotool type ':so $MYVIMRC'
+  sleep 0.1
+  xdotool key Return
+done
+xdotool windowfocus $original_window
+
+echo "Toggled to $theme theme"

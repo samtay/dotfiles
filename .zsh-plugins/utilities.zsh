@@ -1,5 +1,5 @@
 # Aliases
-export MY_GIT_DIR="$HOME/git"
+export MY_GIT_DIR="$HOME/code"
 alias copy='xclip -sel clip'
 alias copy-ssh-key='copy-file ~/.ssh/id_rsa.pub'
 alias reload-zsh='source ~/.zshrc'

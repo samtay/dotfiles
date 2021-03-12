@@ -15,7 +15,7 @@ zplug "plugins/docker",           from:oh-my-zsh, defer:1
 zplug "plugins/docker-compose",   from:oh-my-zsh, defer:1
 zplug "zsh-users/zsh-syntax-highlighting", defer:1
 zplug "zsh-users/zsh-history-substring-search", defer:2
-zplug "~/git/dotfiles/zsh/plugins", from:local, defer:3
+zplug "~/.zsh-plugins", from:local, defer:3
 zplug "spwhitt/nix-zsh-completions"
 
 # theme
@@ -34,22 +34,18 @@ zplug load
 export EDITOR=nvim
 export VISUAL=nvim
 export BROWSER=firefox
-export DOTFILES_DIR="$HOME/git/dotfiles"
 export PATH=/usr/local/bin:$PATH
 export PATH="$HOME/.cabal/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.npm-global/bin:$PATH"
-export PATH="$HOME/.dex/bin:$PATH"
-export PATH="$HOME/git/aspen/tools/bin:$PATH"
-export PATH=/usr/local/texlive/2018/bin/x86_64-linux:$PATH
-export INFOPATH=$INFOPATH:/usr/local/texlive/2018/texmf-dist/doc/info
-export MANPATH=$MANPATH:/usr/local/texlive/2018/texmf-dist/doc/man
-export GEM_HOME="$HOME/gems"
-export PATH="$HOME/gems/bin:$PATH"
-export PATH="$HOME/.gem/ruby/2.7.0/bin:$PATH"
-export PATH="$HOME/.rbenv/bin:$PATH"
-export PATH="$HOME/racket/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
+#export PATH=/usr/local/texlive/2018/bin/x86_64-linux:$PATH
+#export INFOPATH=$INFOPATH:/usr/local/texlive/2018/texmf-dist/doc/info
+#export MANPATH=$MANPATH:/usr/local/texlive/2018/texmf-dist/doc/man
+#export GEM_HOME="$HOME/gems"
+#export PATH="$HOME/gems/bin:$PATH"
+#export PATH="$HOME/.gem/ruby/2.7.0/bin:$PATH"
+#export PATH="$HOME/.rbenv/bin:$PATH"
 
 
 #####################################################################
@@ -92,7 +88,7 @@ zstyle ':completion:*:processes' command "ps -u $USER -o pid,stat,%cpu,%mem,cput
 autoload -U compinit; compinit -d ~/.zcompdump
 
 # Original complete functions
-for f in $(find $DOTFILES_DIR/zsh/plugins/completion -name "*.zsh"); do
+for f in $(find $HOME/.zsh-plugins/completion -name "*.zsh"); do
   source "$f"
 done
 
@@ -249,7 +245,7 @@ bindkey -M menuselect '^[[Z' reverse-menu-complete # shift tab for reverse compl
 # bash completions
 autoload -U +X bashcompinit && bashcompinit
 # stack completion
-eval "$(stack --bash-completion-script stack)"
+# eval "$(stack --bash-completion-script stack)"
 
 HISTFILE=${HOME}/.zsh_history
 HISTSIZE=10000                   # The maximum number of events to save in the internal history.
@@ -291,6 +287,4 @@ export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git --ignore .stack-work --ign
 
 alias -g vim='nvim'
 alias -g agl='ag --pager="less -XFR"'
-
-# added by travis gem
-[ ! -s /home/sam/.travis/travis.sh ] || source /home/sam/.travis/travis.sh
+alias dotfiles='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
