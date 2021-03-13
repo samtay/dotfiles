@@ -1,10 +1,36 @@
 {
     "layer": "top",
     "position": "top",
-    "height": 24,
-    "modules-left": ["sway/workspaces"],
-    "modules-center": ["sway/window"],
-    "modules-right": ["tray", "pulseaudio", "network", "temperature", "cpu", "memory", "battery", "clock"],
+    "height": 25,
+     "modules-left": [
+        "sway/workspaces",
+        "sway/mode"
+    ],
+    "modules-right": [
+        "custom/progress",
+        "custom/usbguard",
+        "custom/yubikey",
+        "custom/decrypted",
+        "custom/systemd",
+        "custom/updates",
+        "custom/mail",
+        "custom/recording",
+        "custom/dnd",
+        "pulseaudio",
+        "network",
+        "custom/vpn",
+        "cpu",
+        "memory",
+        "custom/tablet",
+        "backlight",
+        "battery",
+        "clock",
+        "tray"
+    ],
+    "custom/yubikey": {
+        "exec": "waybar-yubikey",
+        "return-type": "json"
+    },
     "sway/workspaces": {
         "disable-scroll": true,
         "disable-click": true,
@@ -13,40 +39,62 @@
         "spacing": 10,
     },
     "clock": {
-        "format": "{:%Y %b %d %R}"
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "format": " {:%a, %d %b    %H:%M}"
     },
     "cpu": {
-        "format": " {usage}%"
+        "format": " {usage}%",
+        "states": {
+            "warning": 70,
+            "critical": 90
+        }
     },
     "memory": {
-        "format": " {}%"
+        "format": " {}%",
+        "states": {
+            "warning": 70,
+            "critical": 90
+        }
     },
-    "temperature": {
-        "critical-threshold": 75,
-        "format": " {temperatureC}°C"
+    "backlight": {
+        "format": "{icon} {percent}%",
+        "format-icons": [""]
     },
     "battery": {
-        /*"bat": "BAT0",*/
-        "full-at": 95,
         "states": {
-            "good": 95,
             "warning": 30,
             "critical": 15
         },
         "format": "{icon} {capacity}%",
+        "format-charging": " {capacity}%",
+        "format-alt": "{time} {icon}",
         "format-icons": ["", "", "", "", ""]
     },
     "network": {
+        "interval": 2,
+        "interface": "wlan0",
         "format-wifi": " {essid}",
-        "format-disconnected": "⚠ Disconnected"
+        "format-ethernet": " {ifname}",
+        "format-linked": " {ifname}",
+        "format-disconnected": "  ",
+        "tooltip-format": "{ifname}: {ipaddr}/{cidr}\n {bandwidthDownBits}\n {bandwidthUpBits}"
     },
     "pulseaudio": {
-        "format": "{icon} {volume}%",
-        "format-muted": "",
+        "format": "{icon} {volume}%   {format_source}",
+        "format-bluetooth": "{icon} {volume}%   {format_source}",
+        "format-bluetooth-muted": " {icon}   {format_source}",
+        "format-muted": "   {format_source}",
+        "format-source": " {volume}%",
+        "format-source-muted": "",
         "format-icons": {
-            "headphones": "",
-            "default": ["", ""]
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", "", ""]
         },
         "on-click": "pavucontrol"
-    },
+    }
 }
