@@ -1,0 +1,32 @@
+#!/bin/bash
+
+function vpnstatus {
+  vpn="$()"
+  if protonvpn status | tr -s ' ' | grep -q 'Status: Connected'; then
+      vpn=""
+      class=on
+      tooltip="Connected to $server"
+  else
+      vpn=""
+      class=off
+      tooltip="Disconnected"
+  fi
+  printf '{"text": "%s", "tooltip": "", "class": "%s"}\n' "$vpn" "$class"
+}
+  #vpn="$(protonvpn status | tr -s ' ')"
+  #if grep 'Status: Connected' <<< $vpn; then
+      #vpn=sed -n 's/^Server: //p')"
+      #text=" "
+      #class=on
+      #tooltip="Connected to $vpn"
+  #else
+      #text=" "
+      #class=off
+      #tooltip="Disconnected"
+  #fi
+
+vpnstatus
+
+# ip monitor link will print a line whenever the vpn connection is altered.
+# also at other times, but not very often.
+ip monitor link | while read -r line; do vpnstatus; done

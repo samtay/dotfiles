@@ -7,21 +7,12 @@
         "sway/mode"
     ],
     "modules-right": [
-        "custom/progress",
-        "custom/usbguard",
         "custom/yubikey",
-        "custom/decrypted",
-        "custom/systemd",
-        "custom/updates",
-        "custom/mail",
-        "custom/recording",
-        "custom/dnd",
         "pulseaudio",
         "network",
         "custom/vpn",
         "cpu",
         "memory",
-        "custom/tablet",
         "backlight",
         "battery",
         "clock",
@@ -30,6 +21,13 @@
     "custom/yubikey": {
         "exec": "waybar-yubikey",
         "return-type": "json"
+    },
+    "custom/vpn": {
+        "format": "{}",
+        "return-type": "json",
+        "exec": "waybar-vpn",
+        "on-click": "protonvpn connect --fastest",
+        "on-click-right": "protonvpn disconnect"
     },
     "sway/workspaces": {
         "disable-scroll": true,

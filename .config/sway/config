@@ -215,6 +215,7 @@ input "1739:32652:SYNA2B31:00_06CB:7F8C_Touchpad" {
 
     # Move focus to the parent container
     bindsym $mod+a focus parent
+    bindsym $mod+shift+a focus child
 #
 # Scratchpad:
 #

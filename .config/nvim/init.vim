@@ -295,7 +295,7 @@ nnoremap <leader>eJ :clast<CR>
 nnoremap <leader>ek :cp<CR>
 nnoremap <leader>eK :crewind<CR>
 " search
-nnoremap <leader>/ :execute 'Ag ' . input('Ag/')<CR>
+nnoremap <leader>/ :execute 'Rg ' . input('Rg/')<CR>
 " window/pane stuff
 nnoremap <leader>w- :sp<CR>
 nnoremap <leader>w/ :vsp<CR>
