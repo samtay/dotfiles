@@ -46,7 +46,7 @@ window#waybar {
 #custom-decrypted,
 #custom-updates,
 #custom-mail,
-#custom-vpn.off,
+/*#custom-vpn.off,*/
 #battery.warning,
 #memory.warning,
 #cpu.warning,
@@ -60,10 +60,12 @@ window#waybar {
 #memory.critical,
 #cpu.critical,
 #custom-yubikey,
+#custom-vpn.error,
 #custom-recording {
   border-bottom: 3px solid @red;
 }
 
+#custom-vpn.on,
 #battery.charging {
   border-bottom: 3px solid @green;
 }

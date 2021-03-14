@@ -1,29 +1,37 @@
 #!/bin/bash
 
+#Status:       Connected
+#Time:         0:00:05
+#IP:           209.58.142.157
+#Server:       US-FREE#1
+#Features:     Normal
+#Protocol:     UDP
+#Kill Switch:  Enabled
+#Country:      United States
+#City:         None
+#Load:         95%
+#Received:     14.52 KB
+#Sent:         4.73 KB
+
 function vpnstatus {
-  vpn="$()"
-  if protonvpn status | tr -s ' ' | grep -q 'Status: Connected'; then
-      vpn=""
-      class=on
-      tooltip="Connected to $server"
+  local status="$(protonvpn status)"
+  if (tr -s ' ' | grep -q 'Status: Connected') <<< $status; then
+    #server=$( (tr -s ' ' | sed -n 's/^Server: //p')  <<< $status)
+    #text=" $server"
+    text=""
+    tooltip=$(awk '$1=$1' ORS='\\n' <<< $status)
+    class=on
+  elif (tr -s ' ' | grep -q 'Status: Disconnected') <<< $status; then
+    text=""
+    tooltip="Disconnected"
+    class=off
   else
-      vpn=""
-      class=off
-      tooltip="Disconnected"
+    text=""
+    tooltip="Error in connection; try disconnecting"
+    class=error
   fi
-  printf '{"text": "%s", "tooltip": "", "class": "%s"}\n' "$vpn" "$class"
+  printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "$tooltip" "$class"
 }
-  #vpn="$(protonvpn status | tr -s ' ')"
-  #if grep 'Status: Connected' <<< $vpn; then
-      #vpn=sed -n 's/^Server: //p')"
-      #text=" "
-      #class=on
-      #tooltip="Connected to $vpn"
-  #else
-      #text=" "
-      #class=off
-      #tooltip="Disconnected"
-  #fi
 
 vpnstatus
 
