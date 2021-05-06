@@ -33,7 +33,7 @@ build-resume() {
 }
 
 g2() {
-  cd "$MY_GIT_DIR/$1" && ls -lhF
+  cd "$MY_GIT_DIR/$1"
 }
 
 backup() {

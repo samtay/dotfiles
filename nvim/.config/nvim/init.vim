@@ -22,6 +22,8 @@ Plug 'easymotion/vim-easymotion'
 Plug 'inkarkat/vim-SyntaxRange'
 Plug 'inkarkat/vim-ingo-library'
 Plug 'airblade/vim-rooter'
+Plug 'tpope/vim-obsession'
+Plug 'Yggdroot/indentLine'
 
 " spacemacs
 Plug 'hecal3/vim-leader-guide'
@@ -36,9 +38,15 @@ Plug 'morhetz/gruvbox'
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
 Plug 'parsonsmatt/vim2hs'
 Plug 'ndmitchell/ghcid', { 'rtp': 'plugins/nvim' }
+Plug 'sdiehl/vim-ormolu'
+
+" ts
+Plug 'leafgarland/typescript-vim'
+Plug 'peitalin/vim-jsx-typescript'
 
 " rust
 Plug 'rust-lang/rust.vim'
+Plug 'racer-rust/vim-racer'
 
 " coq ?
 " check back after neovim support added
@@ -51,8 +59,9 @@ Plug 'lervag/vimtex', { 'for': 'tex' }
 " nix
 Plug 'LnL7/vim-nix'
 
-" tabular formatting
-Plug 'godlygeek/tabular'
+" formatting
+Plug 'godlygeek/tabular' " TODO replace with junegunn/vim-easy-align
+Plug 'aetherknight/neoformat'
 
 " Autocomplete
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -127,7 +136,7 @@ if (has("termguicolors"))
   set termguicolors
 endif
 let g:gruvbox_italic=1
-set background=light
+set background=dark
 colorscheme gruvbox
 hi Comment cterm=italic
 
@@ -137,6 +146,7 @@ hi Comment cterm=italic
 let g:deoplete#enable_at_startup = 1
 let g:neosnippet#enable_snipmate_compatibility = 1
 let g:neosnippet#snippets_directory='~/git/vim-snippets/snippets'
+let g:python_host_prog='/usr/bin/python3' " fix virtualenv's
 " Tabbing snippets behavior.
 " Note: It must be "imap" and "smap".  It uses <Plug> mappings.
 imap <expr><TAB>
@@ -160,6 +170,13 @@ let g:airline_powerline_fonts = 0
 let g:airline_symbols.space = "\ua0"
 " Set airline theme
 let g:airline_theme='gruvbox'
+function! AirlineInit()
+    let g:airline_section_z = airline#section#create(['%{ObsessionStatus(''$'', '''')}', 'windowswap', '%3p%% ', 'linenr', ':%3v '])
+endfunction
+autocmd User AirlineAfterInit call AirlineInit()
+
+" ident line visuals
+let g:indentLine_char = '│'
 
 " Easy motions
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
@@ -181,18 +198,29 @@ let g:limelight_default_coefficient = 0.7
 " Rooter
 let g:rooter_patterns = ['Cargo.toml', 'Rakefile', 'stack.yaml', 'Gemfile', '.git/']
 
+" Rust
+let g:rustfmt_autosave = 1
+let g:racer_experimental_completer = 1
+
 " Haskell plugin settings
 " TODO move haskell stuff to ftplugin
 " conceal
-let g:haskell_conceal = 1
-let g:haskell_conceal_wide = 1
+let g:haskell_conceal = 0
+let g:haskell_conceal_wide = 0
 set nofoldenable
-" indent
+" indent TODO make these consistent with brittany settings
 let g:haskell_indent_if = 0
 let g:haskell_indent_in = 0
 let g:haskell_indent_let = 4
 let g:haskell_indent_case_alternative = 1
 let g:haskell_tabular = 0
+" ormolu
+let g:ormolu_disable=1
+" neoformat
+let g:neoformat_run_all_formatters = 0
+let g:neoformat_enabled_haskell = ['simformat -e']
+" let g:neoformat_try_formatprg = 1 " try simformat first
+" let g:neoformat_enabled_haskell = ['brittany', 'simformat']
 " highlighting
 let g:haskell_enable_quantification = 1   " to enable highlighting of `forall`
 let g:haskell_enable_recursivedo = 1      " to enable highlighting of `mdo` and `rec`
@@ -200,6 +228,9 @@ let g:haskell_enable_arrowsyntax = 1      " to enable highlighting of `proc`
 let g:haskell_enable_pattern_synonyms = 1 " to enable highlighting of `pattern`
 let g:haskell_enable_typeroles = 1        " to enable highlighting of type roles
 let g:haskell_enable_static_pointers = 1  " to enable highlighting of `static`
+" hoogle <-> stack
+" broken AF
+"let g:hoogle_search_bin = 'stack --silent hoogle --'
 
 " Coq plugin settings
 let g:coquille_auto_move = "true"
@@ -254,6 +285,11 @@ function! NCoqUndo()
   for i in range(1, v:count) | sleep 200m | exe ":CoqUndo" | endfor
 endfunction
 
+function! Simformat()
+  let l:pos=getpos(".")
+  exe "%!simformat -e"
+  call setpos(".", l:pos)
+endfunc
 
 """""""""""""""""""""""""""" Alias Settings """"""""""""""""""""
 " Save read-only files easily
@@ -277,7 +313,10 @@ nnoremap <leader>fS :wa<CR>
 nnoremap <leader>fe :!"%:p"<CR>
 " buffers
 nnoremap <leader>bf :Buffers<CR>
+nnoremap <leader>bx :%bd\|e#\|bd#<CR>
 nnoremap <leader>bd :bdelete<CR>
+" marks
+nnoremap <leader>m :Marks<CR>
 " git
 nnoremap <leader>gc :Commits<CR>
 nnoremap <leader>gb :BCommits<CR>
@@ -345,10 +384,17 @@ nnoremap <leader>vs :so ~/.config/nvim/init.vim<cr>
 " haskell
 augroup haskell_namespace
   au!
-  au FileType haskell nnoremap <leader>ha ms:%!stylish-haskell<CR>'s
+  "au FileType haskell nnoremap <leader>ha ms:%!stylish-haskell<CR>'s
+  " brittany
+  au FileType haskell nnoremap <leader>hf :call Simformat()<CR>
+  au FileType haskell vnoremap <leader>hf :!simformat -e<CR>
+  " ormolu
+  au FileType haskell xnoremap <leader>ho :<c-u>call OrmoluBlock()<CR>
+  " hoogle
   au FileType haskell nnoremap <leader>hc :HoogleClose<CR>
   au FileType haskell nnoremap <leader>hh :Hoogle<CR>
   au FileType haskell nnoremap <leader>hi :HoogleInfo<CR>
+  " ghcid
   au FileType haskell nnoremap <leader>hg :Ghcid<CR>
   au FileType haskell nnoremap <leader>hG :Ghcid -c <SPACE>
   au FileType haskell nnoremap <leader>hq :GhcidKill<CR>
@@ -367,4 +413,12 @@ augroup coq_namespace
   au FileType coq nnoremap <leader>cx :CoqCancel<CR>
   au FileType coq nnoremap <leader>cv :CoqVersion<CR>
   au FileType coq nnoremap <leader>cb :CoqBuild<CR>
+augroup END
+" rust
+augroup Racer
+    autocmd!
+    autocmd FileType rust nmap <buffer> <leader>gd <Plug>(rust-def)
+    autocmd FileType rust nmap <buffer> gs         <Plug>(rust-def-split)
+    autocmd FileType rust nmap <buffer> gx         <Plug>(rust-def-vertical)
+    autocmd FileType rust nmap <buffer> <leader>gD <Plug>(rust-doc)
 augroup END

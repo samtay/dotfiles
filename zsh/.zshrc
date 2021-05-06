@@ -9,6 +9,10 @@ if [[ ! -d ~/.zplug ]]; then
 fi
 source ~/.zplug/init.zsh
 
+# completions
+autoload -U +X bashcompinit && bashcompinit
+autoload -U compinit; compinit -d ~/.zcompdump
+
 # functionality
 zplug "lib/directories",          from:oh-my-zsh
 zplug "plugins/docker",           from:oh-my-zsh, defer:1
@@ -38,9 +42,6 @@ export DOTFILES_DIR="$HOME/git/dotfiles"
 export PATH=/usr/local/bin:$PATH
 export PATH="$HOME/.cabal/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
-export PATH="$HOME/.npm-global/bin:$PATH"
-export PATH="$HOME/.dex/bin:$PATH"
-export PATH="$HOME/git/aspen/tools/bin:$PATH"
 export PATH=/usr/local/texlive/2018/bin/x86_64-linux:$PATH
 export INFOPATH=$INFOPATH:/usr/local/texlive/2018/texmf-dist/doc/info
 export MANPATH=$MANPATH:/usr/local/texlive/2018/texmf-dist/doc/man
@@ -89,15 +90,13 @@ zstyle ':completion:*' list-colors ''
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
 zstyle ':completion:*:processes' command "ps -u $USER -o pid,stat,%cpu,%mem,cputime,command"
 
-autoload -U compinit; compinit -d ~/.zcompdump
-
 # Original complete functions
 for f in $(find $DOTFILES_DIR/zsh/plugins/completion -name "*.zsh"); do
   source "$f"
 done
 
 # Completion for kitty
-#kitty + complete setup zsh | source /dev/stdin
+kitty + complete setup zsh | source /dev/stdin
 
 # autocomplete hidden files
 # _comp_options+=(globdots)
@@ -247,8 +246,6 @@ bindkey -M menuselect '^[[Z' reverse-menu-complete # shift tab for reverse compl
 # misc tasks
 #####################################################################
 
-# bash completions
-autoload -U +X bashcompinit && bashcompinit
 # stack completion
 eval "$(stack --bash-completion-script stack)"
 
@@ -287,9 +284,27 @@ function zle-line-init zle-keymap-select {
 zle -N zle-line-init
 zle -N zle-keymap-select
 
-export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git --ignore .stack-work --ignore tags -g ""'
+export FZF_DEFAULT_COMMAND='rg --files --hidden'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 alias -g vim='nvim'
 alias -g agl='ag --pager="less -XFR"'
+rg() {
+    if [ -t 1 ]; then
+        command rg -p "$@" | less -RFX
+    else
+        command rg "$@"
+    fi
+}
 alias -g vlc='/Applications/VLC.app/Contents/MacOS/VLC'
+alias ctags="`brew --prefix`/bin/ctags"
+
+# SIMSPACE
+eval $("$HOME/git/ci/deploy/portal" env 2> /dev/null)
+export POOL_ALLOCATION=1516-1525
+export PORTAL_SUITE_DIR=~/git/portal-suite
+
+export RUST_SRC_PATH=$(rustc --print sysroot)/lib/rustlib/src/rust/src/
+if [ -e /Users/sam/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/sam/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+export RANGE_HOST=$(ifconfig | awk '$2 ~ /^192.168.(207|206|205)/ {print $2;}')
+export HOMEBREW_NO_AUTO_UPDATE=1

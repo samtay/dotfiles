@@ -184,3 +184,5 @@
 	autoupdate = true
 [status]
 	submodulesummary = true
+[push]
+	followTags = true
