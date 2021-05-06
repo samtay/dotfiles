@@ -82,17 +82,16 @@ set viminfo^=%
 set laststatus=2
 
 """"" default 2 spaces
-filetype plugin indent on
 syntax on
 set expandtab
 set softtabstop=2
 set shiftwidth=2
 
-" better splits mgmt
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
+" resize splits more easily (more split mgmt below via <leader>w)
+nnoremap <C-J> <C-W>-
+nnoremap <C-K> <C-W>+
+nnoremap <C-L> <C-W>>
+nnoremap <C-H> <C-W><
 set splitbelow
 set splitright
 
@@ -289,7 +288,8 @@ nnoremap <leader>eJ :clast<CR>
 nnoremap <leader>ek :cp<CR>
 nnoremap <leader>eK :crewind<CR>
 " search
-nnoremap <leader>/ :execute 'Ag ' . input('Ag/')<CR>
+nnoremap <leader>/ :execute 'Rg ' . input('Rg/')<CR>
+xnoremap <leader>/ y:Rg <C-r>=fnameescape(@")<CR><CR>
 " window/pane stuff
 nnoremap <leader>w- :sp<CR>
 nnoremap <leader>w/ :vsp<CR>
@@ -307,7 +307,7 @@ nnoremap <leader>w<CR> <C-W>o
 nnoremap <leader><TAB> <C-^>
 " tags
 nnoremap <leader>gt <C-]>
-nnoremap <leader>gT g]
+nnoremap <leader>gT :Tag <c-r>=expand("<cword>")<CR><CR>
 " comment tools
 nnoremap <leader>; :call NERDComment('n', "Toggle")<CR>
 vnoremap <leader>; :call NERDComment('v', "Toggle")<CR>
