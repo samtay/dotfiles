@@ -65,3 +65,22 @@ call vimtex#imaps#add_map(
   \ 'rhs' : '\mathcal{}',
   \ 'wrapper' : 'vimtex#imaps#wrap_trivial'
   \})
+" Use deoplete / snippets.
+let g:deoplete#enable_at_startup = 1
+let g:neosnippet#enable_snipmate_compatibility = 1
+let g:neosnippet#snippets_directory='~/git/vim-snippets/snippets'
+let g:python_host_prog='/usr/bin/python3' " fix virtualenv's
+" Tabbing snippets behavior.
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+imap <expr><TAB>
+ \ pumvisible() ? "\<C-n>" :
+ \ neosnippet#expandable_or_jumpable() ?
+ \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+      \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+smap <expr><CR>
+ \ neosnippet#expandable_or_jumpable() ?
+ \    "\<Plug>(neosnippet_expand_or_jump)" : "\<CR>"
+imap <expr><CR>
+ \ neosnippet#expandable_or_jumpable() ?
+ \    "\<Plug>(neosnippet_expand_or_jump)" : "\<CR>"
