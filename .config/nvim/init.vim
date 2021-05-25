@@ -39,9 +39,8 @@ Plug 'ndmitchell/ghcid', { 'rtp': 'plugins/nvim' }
 
 " rust
 Plug 'rust-lang/rust.vim'
+Plug 'cespare/vim-toml'
 
-" rust
-Plug 'rust-lang/rust.vim'
 
 " coq ?
 " check back after neovim support added
@@ -54,6 +53,9 @@ Plug 'lervag/vimtex', { 'for': 'tex' }
 " nix
 Plug 'LnL7/vim-nix'
 
+" souffle/datalog
+Plug 'souffle-lang/souffle.vim'
+
 " tabular formatting
 Plug 'godlygeek/tabular'
 
@@ -62,6 +64,8 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/neosnippet.vim'
 Plug 'Shougo/neosnippet-snippets'
 Plug 'samtay/vim-snippets'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" :CocInstall coc-rust-analyzer
 
 """"""""""" End plugins """""""""""""""""""""""""""""
 call plug#end()
@@ -85,17 +89,16 @@ set viminfo^=%
 set laststatus=2
 
 """"" default 2 spaces
-filetype plugin indent on
 syntax on
 set expandtab
 set softtabstop=2
 set shiftwidth=2
 
-" better splits mgmt
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
+" resize splits more easily (more split mgmt below via <leader>w)
+nnoremap <C-J> <C-W>-
+nnoremap <C-K> <C-W>+
+nnoremap <C-L> <C-W>>
+nnoremap <C-H> <C-W><
 set splitbelow
 set splitright
 
@@ -131,14 +134,14 @@ if (has("termguicolors"))
   set termguicolors
 endif
 let g:gruvbox_italic=1
-set background=light
+set background=dark
 colorscheme gruvbox
 hi Comment cterm=italic
 
 
 """""""""""""""""""""""""""" Plugin Settings """"""""""""""""""""
 " Use deoplete / snippets.
-let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_at_startup = 0
 let g:neosnippet#enable_snipmate_compatibility = 1
 let g:neosnippet#snippets_directory='~/git/vim-snippets/snippets'
 " Tabbing snippets behavior.
@@ -296,6 +299,8 @@ nnoremap <leader>ek :cp<CR>
 nnoremap <leader>eK :crewind<CR>
 " search
 nnoremap <leader>/ :execute 'Rg ' . input('Rg/')<CR>
+xnoremap <leader>/ y:Rg <C-r>=fnameescape(@")<CR><CR>
+
 " window/pane stuff
 nnoremap <leader>w- :sp<CR>
 nnoremap <leader>w/ :vsp<CR>
@@ -313,7 +318,7 @@ nnoremap <leader>w<CR> <C-W>o
 nnoremap <leader><TAB> <C-^>
 " tags
 nnoremap <leader>gt <C-]>
-nnoremap <leader>gT g]
+nnoremap <leader>gT :Tag <c-r>=expand("<cword>")<CR><CR>
 " comment tools
 nnoremap <leader>; :call NERDComment('n', "Toggle")<CR>
 vnoremap <leader>; :call NERDComment('v', "Toggle")<CR>
@@ -378,6 +383,12 @@ augroup END
 augroup rust_namespace
   au!
   au FileType rust nnoremap <leader>rt :RustTest<CR>
-  au FileType rust set softtabstop=2
-  au FileType set shiftwidth=2
+  au FileType rust set softtabstop=4
+  au FileType rust set shiftwidth=4
+augroup END
+" java
+augroup java_namespace
+  au!
+  au FileType java set softtabstop=4
+  au FileType java set shiftwidth=4
 augroup END

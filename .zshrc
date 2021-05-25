@@ -264,27 +264,32 @@ setopt HIST_VERIFY               # Do not execute immediately upon history expan
 bindkey -v
 
 # vi mode inidicator
-VIM_PROMPT="❯"
-PROMPT='%(?.%F{magenta}.%F{red})${VIM_PROMPT}%f '
+#VIM_PROMPT="❯"
+#PROMPT='%(?.%F{magenta}.%F{red})${VIM_PROMPT}%f '
 
-prompt_pure_update_vim_prompt() {
-    zle || {
-        print "error: pure_update_vim_prompt must be called when zle is active"
-        return 1
-    }
-    VIM_PROMPT=${${KEYMAP/vicmd/❮}/(main|viins)/❯}
-    zle .reset-prompt
-}
+# prompt_pure_update_vim_prompt() {
+    #zle || {
+        #print "error: pure_update_vim_prompt must be called when zle is active"
+        #return 1
+    #}
+    #VIM_PROMPT=${${KEYMAP/vicmd/❮}/(main|viins)/❯}
+    #zle .reset-prompt
+#}
 
-function zle-line-init zle-keymap-select {
-    prompt_pure_update_vim_prompt
-}
-zle -N zle-line-init
-zle -N zle-keymap-select
+#function zle-line-init zle-keymap-select {
+    #prompt_pure_update_vim_prompt
+#}
+#zle -N zle-line-init
+#zle -N zle-keymap-select
 
-export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git --ignore .stack-work --ignore tags -g ""'
+export FZF_DEFAULT_COMMAND="rg --files --hidden -g '!.git'"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 alias -g vim='nvim'
-alias -g agl='ag --pager="less -XFR"'
+alias -g agl='rg --pager="less -XFR"'
 alias dotfiles='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
+
+source /home/sam/.config/broot/launcher/bash/br
+
+# eval "$(starship init zsh)"
+eval "$(rbenv init -)"

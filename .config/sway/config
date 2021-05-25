@@ -113,7 +113,7 @@ input "1739:32652:SYNA2B31:00_06CB:7F8C_Touchpad" {
     # clipboard
     bindsym $mod+p exec clipman pick --tool wofi
 
-    bindsym $mod+o exec rg --files ~ | wofi --dmenu | xargs dragon-drag-and-drop --and-exit
+    bindsym $mod+o exec rg --files ~ | wofi --dmenu | xargs -n 1 dragon-drag-and-drop --and-exit
 
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
@@ -135,7 +135,9 @@ input "1739:32652:SYNA2B31:00_06CB:7F8C_Touchpad" {
     # brightness
     bindsym XF86MonBrightnessUp exec light -A 3
     bindsym XF86MonBrightnessDown exec light -U 3
-    # screenshot controls TODO
+
+    bindsym $mod+y exec grim -g "$(slurp)" "/home/sam/Screenshots/$(date -u +'%Y-%m-%d_%H-%M-%S.png')"
+    bindsym $mod+Shift+y grim -o $(swaymsg -t get_outputs | jq -r '.[] | select(.focused) | .name') "/home/sam/Screenshots/$(date -u +'%Y-%m-%d_%H-%M-%S.png')"
     # bindsym Print exec scrot -e 'mv $f ~/screenshots/'
     # bindsym $mod+Print exec scrot -s -e 'mv $f ~/screenshots/'
 
