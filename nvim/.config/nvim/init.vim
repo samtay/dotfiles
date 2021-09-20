@@ -25,6 +25,7 @@ Plug 'airblade/vim-rooter'
 Plug 'tpope/vim-obsession'
 Plug 'Yggdroot/indentLine'
 Plug 'kana/vim-textobj-user' | Plug 'kana/vim-textobj-line'
+Plug 'tpope/vim-fugitive'
 
 " spacemacs
 Plug 'hecal3/vim-leader-guide'
@@ -66,11 +67,11 @@ Plug 'godlygeek/tabular' " TODO replace with junegunn/vim-easy-align
 Plug 'aetherknight/neoformat'
 
 " Autocomplete
-"Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins', 'for': 'tex' }
-"Plug 'Shougo/neosnippet.vim'
-"Plug 'Shougo/neosnippet-snippets'
-"Plug 'samtay/vim-snippets'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins', 'for': 'haskell' }
+Plug 'Shougo/neosnippet.vim'
+Plug 'Shougo/neosnippet-snippets'
+Plug 'samtay/vim-snippets'
+Plug 'neoclide/coc.nvim', {'branch': 'release', 'for': 'rust'}
 
 """"""""""" End plugins """""""""""""""""""""""""""""
 call plug#end()
@@ -139,64 +140,31 @@ if (has("termguicolors"))
   set termguicolors
 endif
 let g:gruvbox_italic=1
-set background=dark
+set background=light
 colorscheme gruvbox
 hi Comment cterm=italic
 
 
 """""""""""""""""""""""""""" Plugin Settings """"""""""""""""""""
-" TODO move all this to .tex ftplugin
 " Use deoplete / snippets.
-"let g:deoplete#enable_at_startup = 1
-"let g:neosnippet#enable_snipmate_compatibility = 1
-"let g:neosnippet#snippets_directory='~/git/vim-snippets/snippets'
-"let g:python_host_prog='/usr/bin/python3' " fix virtualenv's
-"" Tabbing snippets behavior.
-"" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
-"imap <expr><TAB>
- "\ pumvisible() ? "\<C-n>" :
- "\ neosnippet#expandable_or_jumpable() ?
- "\    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-"smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-      "\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-"smap <expr><CR>
- "\ neosnippet#expandable_or_jumpable() ?
- "\    "\<Plug>(neosnippet_expand_or_jump)" : "\<CR>"
-"imap <expr><CR>
- "\ neosnippet#expandable_or_jumpable() ?
- "\    "\<Plug>(neosnippet_expand_or_jump)" : "\<CR>"
-
-" coc settings
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-" Use <c-space> to trigger completion.
-if has('nvim')
-  inoremap <silent><expr> <c-space> coc#refresh()
-else
-  inoremap <silent><expr> <c-@> coc#refresh()
-endif
-
-" Make <CR> auto-select the first completion item and notify coc.nvim to
-" format on enter, <cr> could be remapped by other vim plugin
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-
-" preview documentation
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-" GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+let g:deoplete#enable_at_startup = 1
+let g:neosnippet#enable_snipmate_compatibility = 1
+let g:neosnippet#snippets_directory='~/git/vim-snippets/snippets'
+let g:python_host_prog='/usr/bin/python3' " fix virtualenv's
+" Tabbing snippets behavior.
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+imap <expr><TAB>
+ \ pumvisible() ? "\<C-n>" :
+ \ neosnippet#expandable_or_jumpable() ?
+ \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+      \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+smap <expr><CR>
+ \ neosnippet#expandable_or_jumpable() ?
+ \    "\<Plug>(neosnippet_expand_or_jump)" : "\<CR>"
+imap <expr><CR>
+ \ neosnippet#expandable_or_jumpable() ?
+ \    "\<Plug>(neosnippet_expand_or_jump)" : "\<CR>"
 
 " Use powerline fonts for airline
 if !exists('g:airline_symbols')
@@ -251,6 +219,8 @@ let g:haskell_indent_let = 4
 let g:haskell_indent_case_alternative = 1
 let g:haskell_tabular = 0
 " ormolu
+let g:ormolu_options=["-o -XTypeApplications"]
+" let g:ormolu_command="fourmolu"
 let g:ormolu_disable=1
 " neoformat
 let g:neoformat_run_all_formatters = 0
@@ -348,6 +318,11 @@ function! s:show_documentation()
   else
     execute '!' . &keywordprg . " " . expand('<cword>')
   endif
+endfunction
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
 """""""""""""""""""""""""""" Alias Settings """"""""""""""""""""
@@ -457,6 +432,8 @@ augroup haskell_namespace
   au FileType haskell nnoremap <leader>hf :call Simformat()<CR>
   au FileType haskell vnoremap <leader>hf :!simformat -e<CR>
   " ormolu
+  au FileType haskell nnoremap <leader>ho :call RunOrmolu()<CR>
+  au FileType haskell nnoremap <leader>to :call ToggleOrmolu()<CR>
   au FileType haskell xnoremap <leader>ho :<c-u>call OrmoluBlock()<CR>
   " hoogle
   au FileType haskell nnoremap <leader>hc :HoogleClose<CR>
@@ -481,4 +458,28 @@ augroup coq_namespace
   au FileType coq nnoremap <leader>cx :CoqCancel<CR>
   au FileType coq nnoremap <leader>cv :CoqVersion<CR>
   au FileType coq nnoremap <leader>cb :CoqBuild<CR>
+augroup END
+
+augroup rust_namespace
+  au!
+  au FileType rust inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+  au FileType rust inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+  " Use <c-space> to trigger completion.
+  au FileType rust inoremap <silent><expr> <c-space> coc#refresh()
+
+  " Make <CR> auto-select the first completion item and notify coc.nvim to
+  " format on enter, <cr> could be remapped by other vim plugin
+  au FileType rust inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                                \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+  " preview documentation
+  au FileType rust nnoremap <silent> K :call <SID>show_documentation()<CR>
+  " GoTo code navigation.
+  au FileType rust nmap <silent> gd <Plug>(coc-definition)
+  au FileType rust nmap <silent> gy <Plug>(coc-type-definition)
+  au FileType rust nmap <silent> gi <Plug>(coc-implementation)
+  au FileType rust nmap <silent> gr <Plug>(coc-references)
 augroup END
