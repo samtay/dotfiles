@@ -37,7 +37,7 @@ build-resume() {
 }
 
 g2() {
-  cd "$MY_GIT_DIR/$1" && ls -lhF --show-control-chars --color=always
+  cd "$MY_GIT_DIR/$1" && ll
 }
 
 backup() {

@@ -104,7 +104,9 @@ kitty + complete setup zsh | source /dev/stdin
 #####################################################################
 
 # Color settings for zsh complete candidates
-alias ll='ls -lhF --show-control-chars --color=always'
+alias ls='ls -lGH'
+export CLICOLOR=1
+alias ll='ls -lhF'
 alias l='ll -A'
 alias lt='l -t'
 alias ltr='lt -r'
