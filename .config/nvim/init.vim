@@ -25,6 +25,7 @@ Plug 'airblade/vim-rooter'
 Plug 'tpope/vim-obsession'
 Plug 'Yggdroot/indentLine'
 Plug 'kana/vim-textobj-user' | Plug 'kana/vim-textobj-line'
+Plug 'ledger/vim-ledger'
 
 " spacemacs
 Plug 'hecal3/vim-leader-guide'
@@ -143,7 +144,7 @@ if (has("termguicolors"))
   set termguicolors
 endif
 let g:gruvbox_italic=1
-set background=dark
+set background=light
 colorscheme gruvbox
 hi Comment cterm=italic
 
@@ -442,4 +443,10 @@ augroup java_namespace
   au!
   au FileType java set softtabstop=4
   au FileType java set shiftwidth=4
+augroup END
+" ledger
+augroup ledger_namespace
+  au!
+  au FileType ledger set softtabstop=4
+  au FileType ledger set shiftwidth=4
 augroup END

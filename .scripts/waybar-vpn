@@ -14,27 +14,32 @@
 #Sent:         4.73 KB
 
 function vpnstatus {
-  local status="$(protonvpn status)"
-  if (tr -s ' ' | grep -q 'Status: Connected') <<< $status; then
-    #server=$( (tr -s ' ' | sed -n 's/^Server: //p')  <<< $status)
-    #text=" $server"
-    text=""
-    tooltip=$(awk '$1=$1' ORS='\\n' <<< $status)
-    class=on
-  elif (tr -s ' ' | grep -q 'Status: Disconnected') <<< $status; then
+  local status="$(protonvpn-cli status)"
+  if (grep -q 'No active ProtonVPN connection') <<< $status; then
     text=""
     tooltip="Disconnected"
     class=off
   else
     text=""
-    tooltip="Error in connection; try disconnecting"
-    class=error
+    tooltip=$(awk '$1=$1' ORS='\\n' <<< $status)
+    class=on
   fi
   printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "$tooltip" "$class"
 }
 
 vpnstatus
 
+throttle_vpn_status() {
+    local -i limit
+    ((limit = SECONDS + $1))
+    while read line; do
+      if ((limit < SECONDS)); then
+        ((limit = SECONDS + $1))
+        vpnstatus
+      fi
+    done
+  }
+
 # ip monitor link will print a line whenever the vpn connection is altered.
-# also at other times, but not very often.
-ip monitor link | while read -r line; do vpnstatus; done
+
+ip monitor link | throttle_vpn_status 1

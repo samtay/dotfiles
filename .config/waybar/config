@@ -25,8 +25,8 @@
         "format": "{}",
         "return-type": "json",
         "exec": "waybar-vpn",
-        "on-click": "sudo protonvpn connect --fastest",
-        "on-click-right": "sudo protonvpn disconnect"
+        "on-click": "protonvpn",
+        "on-click-right": "protonvpn-cli disconnect"
     },
     "sway/workspaces": {
         "disable-scroll": true,

@@ -6,6 +6,8 @@
 exec wl-paste -t text --watch clipman store
 exec wl-paste -p -t text --watch clipman store -P --histpath="~/.local/share/clipman-primary.json"
 exec mako
+exec nm-applet --indicator
+exec pulseaudio --start
 
 
 ### Variables
@@ -60,18 +62,23 @@ client.urgent           $bg-urgent    $bg-urgent   $text          $bar $bar
 #client.focused_inactive "#${colors.base02}" "#${colors.base02}" "#${colors.base04}" "#${colors.base04}" "#${colors.base02}"
 #client.unfocused "#${colors.base02}" "#231f20" "#${colors.base04}" "#${colors.base03}" "#${colors.base02}"
 #client.urgent "#${colors.base08}" "#${colors.base08}" "#${colors.base00}" "#${colors.base08}" "#${colors.base08}"
-gaps outer 16
-gaps inner 10
+
+# temporarily removing gaps
+# gaps outer 16
+# gaps inner 10
 
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Gruvbox.png fill
-output "Goldstar Company Ltd LG ULTRAWIDE 0x00004C24" bg /home/sam/Downloads/the_valley.png fill
+#output "Goldstar Company Ltd LG ULTRAWIDE 0x00004C25" bg /home/sam/Downloads/the_valley.png fill
+output "Unknown MSI MAG322CQR DA7A040C01269" bg /home/sam/Downloads/the_valley.png fill
 #
 # You can get the names of your outputs by running: swaymsg -t get_outputs
 # N.B.: relies on custom boot param video=DP-1:2560x1080@45
-output "Goldstar Company Ltd LG ULTRAWIDE 0x00004C24" resolution 2560x1080@45.028999Hz position -2560,0
+#output "Goldstar Company Ltd LG ULTRAWIDE 0x00004C24" resolution 2560x1080@45.028999Hz position -2560,0
+#output "Unknown MSI MAG322CQR DA7A040C01269" resolution 2560x1080@45.028999Hz position -2560,0
+output "Unknown MSI MAG322CQR DA7A040C01269" resolution 1920x1080@45Hz position -1920,0
 
 ### Idle configuration
 #
@@ -146,6 +153,9 @@ input "1739:32652:SYNA2B31:00_06CB:7F8C_Touchpad" {
     mode "display" {
       bindsym 1 output eDP-1 toggle, mode "default"
       bindsym 2 output DP-1 toggle, mode "default"
+      # Return to default mode
+      bindsym Return mode "default"
+      bindsym Escape mode "default"
     }
 #
 # Moving around:
@@ -155,22 +165,12 @@ input "1739:32652:SYNA2B31:00_06CB:7F8C_Touchpad" {
     bindsym $mod+$down focus down
     bindsym $mod+$up focus up
     bindsym $mod+$right focus right
-    # Or use $mod+[up|down|left|right]
-    bindsym $mod+Left focus left
-    bindsym $mod+Down focus down
-    bindsym $mod+Up focus up
-    bindsym $mod+Right focus right
 
     # Move the focused window with the same, but add Shift
     bindsym $mod+Shift+$left move left
     bindsym $mod+Shift+$down move down
     bindsym $mod+Shift+$up move up
     bindsym $mod+Shift+$right move right
-    # Ditto, with arrow keys
-    bindsym $mod+Shift+Left move left
-    bindsym $mod+Shift+Down move down
-    bindsym $mod+Shift+Up move up
-    bindsym $mod+Shift+Right move right
 #
 # Workspaces:
 #
@@ -250,12 +250,6 @@ mode "resize" {
     bindsym $down resize grow height 20px
     bindsym $up resize shrink height 20px
     bindsym $right resize grow width 20px
-
-    # Ditto, with arrow keys
-    bindsym Left resize shrink width 20px
-    bindsym Down resize grow height 20px
-    bindsym Up resize shrink height 20px
-    bindsym Right resize grow width 20px
 
     # Return to default mode
     bindsym Return mode "default"
