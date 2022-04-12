@@ -104,6 +104,7 @@ kitty + complete setup zsh | source /dev/stdin
 #####################################################################
 
 # Color settings for zsh complete candidates
+export less='less -R'
 alias ls='ls -lGH'
 export CLICOLOR=1
 alias ll='ls -lhF'
