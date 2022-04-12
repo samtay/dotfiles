@@ -1,6 +1,5 @@
 # Aliases
 export MY_GIT_DIR="$HOME/code"
-alias copy='xclip -sel clip'
 alias copy-ssh-key='copy-file ~/.ssh/id_rsa.pub'
 alias reload-zsh='source ~/.zshrc'
 alias ba-vpn="sudo openvpn --daemon /etc/openvpn/ba-client.conf"
@@ -9,7 +8,6 @@ alias wifi-rescan='nmcli d wifi rescan'
 alias wifi-list='nmcli d wifi'
 alias wifi-connect='nmcli -a -p -s d wifi connect'
 alias get-simpsons-img='echo "http://imgur.com/a/T81t9copy" | copy'
-alias surfcam='vlc https://cams.cdn-surfline.com/wsc-east/ec-washoutcam.stream/chunklist.m3u8'
 alias ethernet='sudo ip link set dev enp61s0u1u2 up && sudo dhcpcd enp61s0u1u2'
 alias sync-391-down='rsync -ae ssh --info=progress2 tays@madrid.stat.washington.edu:/mounts/costila/common/391stuff/ ~/uw/stat391/costila'
 alias sync-391-up='rsync -ae ssh --info=progress2 ~/uw/stat391/upload-dir/ tays@madrid.stat.washington.edu:/mounts/costila/common/391stuff/sam-upload-dir'
@@ -53,7 +51,7 @@ displays-toggle() {
 }
 
 copy-file(){
-  cat $1 | copy
+  wl-copy < $1
 }
 
 watch(){
@@ -96,32 +94,13 @@ surfcam() {
   local cam="$1"
   if [ -z "$cam" ]; then
     read "cam?w: washout
-sw: south washout
-pn: pier north
-ps pier south
-wr: wrightsville
-f: frisco
-h: hatteras
-r: rockaway
-j: jacksonville
-ns: new-smyrna
-sa: st-augustine
-pi: ponce-inlet
+ht: hightower
+16: 16th st s
 Pick one: "
   fi
   case $cam in
     w|washout) url='cdn-ec/ec-washout/chunklist.m3u8' ;;
-    sw|washout) url='wsc-east/ec-washoutsouthcam.stream/playlist.m3u8' ;;
-    wr|wrightsville) url='wsc-east/ec-wrightsvillecam.stream/chunklist.m3u8' ;;
-    pn|pier-north) url='wsc-east/ec-follypiernorthcam.stream/playlist.m3u8' ;;
-    ps|pier-south) url='wsc-east/ec-follypiersouthcam.stream/playlist.m3u8' ;;
-    f|frisco) url='wsc-east/ec-friscopiercam.stream/playlist.m3u8' ;;
-    h|hatteras) url='wsc-east/ec-capehatterascam.stream/playlist.m3u8' ;;
-    r|rockaway) url='wsc-east/ec-rockaway90thcam.stream/playlist.m3u8' ;;
-    j|jacksonville) url='wsc-east/ec-jacksonvillepiercam.stream/playlist.m3u8' ;;
-    ns|new-smyrna) url='wsc-east/ec-newsmycam.stream/playlist.m3u8' ;;
-    sa|st-augustine) url='wsc-east/ec-staugustinecam.stream/playlist.m3u8' ;;
-    pi|ponce-inlet) url='wsc-east/ec-ponceinletcam.stream/playlist.m3u8' ;;
+    16) url='cdn-ec/ec-cocoastreets/chunklist.m3u8'
   esac
   vlc "https://cams.cdn-surfline.com/$url"
 }

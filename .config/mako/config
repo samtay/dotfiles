@@ -1,0 +1,11 @@
+border-size=3
+border-radius=0
+margin=10,10,10
+default-timeout=3000
+font=Iosevka 10
+
+# Gruvbox
+background-color=#282828e0
+text-color=#ebdbb2
+border-color=#ebdbb2
+progress-color=source #cc241d

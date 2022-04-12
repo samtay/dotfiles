@@ -1,0 +1,45 @@
+#!/bin/bash
+
+#Status:       Connected
+#Time:         0:00:05
+#IP:           209.58.142.157
+#Server:       US-FREE#1
+#Features:     Normal
+#Protocol:     UDP
+#Kill Switch:  Enabled
+#Country:      United States
+#City:         None
+#Load:         95%
+#Received:     14.52 KB
+#Sent:         4.73 KB
+
+function vpnstatus {
+  local status="$(protonvpn-cli status)"
+  if (grep -q 'No active ProtonVPN connection') <<< $status; then
+    text=""
+    tooltip="Disconnected"
+    class=off
+  else
+    text=""
+    tooltip=$(awk '$1=$1' ORS='\\n' <<< $status)
+    class=on
+  fi
+  printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "$tooltip" "$class"
+}
+
+vpnstatus
+
+throttle_vpn_status() {
+    local -i limit
+    ((limit = SECONDS + $1))
+    while read line; do
+      if ((limit < SECONDS)); then
+        ((limit = SECONDS + $1))
+        vpnstatus
+      fi
+    done
+  }
+
+# ip monitor link will print a line whenever the vpn connection is altered.
+
+ip monitor link | throttle_vpn_status 1

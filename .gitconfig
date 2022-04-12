@@ -179,3 +179,5 @@
   ss = stash save
 [status]
 	submodulesummary = true
+[init]
+	defaultBranch = main

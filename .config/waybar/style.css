@@ -1,72 +1,101 @@
+@define-color background #282828;
+@define-color foreground #ebdbb2;
+@define-color black      #222222;
+@define-color yellow     #fabd2f;
+@define-color red        #fb4934;
+@define-color green      #b8bb26;
+
 * {
-    border: none;
-    border-radius: 0;
-    font-family: "Ubuntu Nerd Font";
-    font-size: 13px;
-    min-height: 0;
+  border: none;
+  border-radius: 0;
+  font-family: Input, "Font Awesome 5 Free";
+  font-size: 13px;
+  min-height: 0;
 }
 
 window#waybar {
-    background: transparent;
-    color: white;
+  background: @background;
+  color: @foreground;
+  transition-property: background-color;
+  transition-duration: 0.5s;
 }
-
-#window {
-    font-family: "Ubuntu";
-    margin-top: 5px;
-}
-
-/*
-#workspaces {
-    padding: 0 5px;
-}
-*/
 
 #workspaces button {
-    padding: 0 5px;
-    background: transparent;
-    color: white;
-    border-top: 2px solid transparent;
+  padding: 0 10px;
+  background: transparent;
+  color: @foreground;
+  border-top: 3px solid @background;
+  border-bottom: 3px solid transparent;
 }
 
 #workspaces button.focused {
-    color: white;
-    border-top: 2px solid white;
+  border-bottom: 3px solid @green;
 }
 
-#tray, #custom-japan, #temperature, #clock, #battery, #cpu, #memory, #network, #pulseaudio {
-    padding: 0 5px;
-    margin-right: 5px;
-    margin-top: 5px;
+#workspaces button.urgent {
+  border-bottom: 3px solid @yellow;
 }
 
-#temperature.critical {
-    color: red;
+#mode {
+  background-color: @black;
+  border-top: 3px solid @black;
+  border-bottom: 3px solid @red;
 }
 
-#battery icon {
-    color: red;
+#custom-usbguard,
+#custom-decrypted,
+#custom-updates,
+#custom-mail,
+/*#custom-vpn.off,*/
+#battery.warning,
+#memory.warning,
+#cpu.warning,
+#custom-dnd.on,
+#custom-tablet.on {
+  border-bottom: 3px solid @yellow;
 }
 
+#custom-systemd,
+#battery.critical,
+#memory.critical,
+#cpu.critical,
+#custom-yubikey,
+#custom-vpn.error,
+#custom-recording {
+  border-bottom: 3px solid @red;
+}
+
+#custom-vpn.on,
 #battery.charging {
+  border-bottom: 3px solid @green;
 }
 
-@keyframes blink {
-    to {
-        background-color: #ffffff;
-        color: black;
-    }
+#mode,
+#pulseaudio,
+#custom-usbguard,
+#custom-yubikey,
+#custom-decrypted,
+#custom-systemd,
+#custom-updates,
+#custom-mail,
+#network,
+#cpu,
+#memory,
+#backlight,
+#battery,
+#clock {
+  padding: 0 6px;
+  margin: 0 6px;
 }
 
-#battery.warning:not(.charging) {
-    color: white;
-    animation-name: blink;
-    animation-duration: 0.5s;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
+#custom-vpn,
+#custom-dnd,
+#custom-tablet,
+#custom-recording {
+  padding: 0;
+  margin: 0 6px;
 }
 
-#network.disconnected {
-    background: #f53c3c;
+#tray {
+  margin-left: -1000000px;
 }

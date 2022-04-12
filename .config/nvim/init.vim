@@ -1,7 +1,7 @@
 """ Install vimplug if necessary """
-if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
@@ -22,6 +22,10 @@ Plug 'easymotion/vim-easymotion'
 Plug 'inkarkat/vim-SyntaxRange'
 Plug 'inkarkat/vim-ingo-library'
 Plug 'airblade/vim-rooter'
+Plug 'tpope/vim-obsession'
+Plug 'Yggdroot/indentLine'
+Plug 'kana/vim-textobj-user' | Plug 'kana/vim-textobj-line'
+Plug 'ledger/vim-ledger'
 
 " spacemacs
 Plug 'hecal3/vim-leader-guide'
@@ -34,14 +38,16 @@ Plug 'morhetz/gruvbox'
 
 " haskell
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
-Plug 'parsonsmatt/vim2hs'
-Plug 'ndmitchell/ghcid', { 'rtp': 'plugins/nvim' }
+Plug 'neovimhaskell/haskell-vim'
+Plug 'sdiehl/vim-ormolu'
+
+" ts
+Plug 'leafgarland/typescript-vim'
+Plug 'peitalin/vim-jsx-typescript'
 
 " rust
 Plug 'rust-lang/rust.vim'
-
-" rust
-Plug 'rust-lang/rust.vim'
+Plug 'cespare/vim-toml'
 
 " coq ?
 " check back after neovim support added
@@ -54,14 +60,22 @@ Plug 'lervag/vimtex', { 'for': 'tex' }
 " nix
 Plug 'LnL7/vim-nix'
 
-" tabular formatting
-Plug 'godlygeek/tabular'
+" souffle/datalog
+Plug 'souffle-lang/souffle.vim'
+
+" formatting
+Plug 'godlygeek/tabular' " TODO replace with junegunn/vim-easy-align
+Plug 'aetherknight/neoformat'
 
 " Autocomplete
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'Shougo/neosnippet.vim'
-Plug 'Shougo/neosnippet-snippets'
-Plug 'samtay/vim-snippets'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins', 'for': 'tex' }
+Plug 'Shougo/neosnippet.vim', {'for': 'tex'}
+Plug 'Shougo/neosnippet-snippets', {'for': 'tex'}
+Plug 'samtay/vim-snippets', {'for': 'tex'}
+
+" language server
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+":CocInstall coc-rust-analyzer
 
 """"""""""" End plugins """""""""""""""""""""""""""""
 call plug#end()
@@ -85,17 +99,16 @@ set viminfo^=%
 set laststatus=2
 
 """"" default 2 spaces
-filetype plugin indent on
 syntax on
 set expandtab
 set softtabstop=2
 set shiftwidth=2
 
-" better splits mgmt
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
+" resize splits more easily (more split mgmt below via <leader>w)
+nnoremap <C-J> <C-W>-
+nnoremap <C-K> <C-W>+
+nnoremap <C-L> <C-W>>
+nnoremap <C-H> <C-W><
 set splitbelow
 set splitright
 
@@ -137,24 +150,38 @@ hi Comment cterm=italic
 
 
 """""""""""""""""""""""""""" Plugin Settings """"""""""""""""""""
-" Use deoplete / snippets.
-let g:deoplete#enable_at_startup = 1
-let g:neosnippet#enable_snipmate_compatibility = 1
-let g:neosnippet#snippets_directory='~/git/vim-snippets/snippets'
-" Tabbing snippets behavior.
-" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
-imap <expr><TAB>
- \ pumvisible() ? "\<C-n>" :
- \ neosnippet#expandable_or_jumpable() ?
- \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-      \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-smap <expr><CR>
- \ neosnippet#expandable_or_jumpable() ?
- \    "\<Plug>(neosnippet_expand_or_jump)" : "\<CR>"
-imap <expr><CR>
- \ neosnippet#expandable_or_jumpable() ?
- \    "\<Plug>(neosnippet_expand_or_jump)" : "\<CR>"
+
+" coc settings
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion.
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
+
+" Make <CR> auto-select the first completion item and notify coc.nvim to
+" format on enter, <cr> could be remapped by other vim plugin
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" preview documentation
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
 
 " Use powerline fonts for airline
 if !exists('g:airline_symbols')
@@ -164,11 +191,17 @@ let g:airline_powerline_fonts = 0
 let g:airline_symbols.space = "\ua0"
 " Set airline theme
 let g:airline_theme='gruvbox'
+function! AirlineInit()
+    let g:airline_section_z = airline#section#create(['%{ObsessionStatus(''$'', '''')}', 'windowswap', '%3p%% ', 'linenr', ':%3v '])
+endfunction
+autocmd User AirlineAfterInit call AirlineInit()
+
+" ident line visuals
+let g:indentLine_char = '│'
 
 " Easy motions
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
 let g:EasyMotion_smartcase = 1
-" nmap s <Plug>(easymotion-overwin-f)
 
 " FZF settings
 let g:fzf_layout = { 'down': '~35%' }
@@ -185,28 +218,8 @@ let g:limelight_default_coefficient = 0.7
 " Rooter
 let g:rooter_patterns = ['Cargo.toml', 'Rakefile', 'stack.yaml', 'Gemfile', '.git/']
 
-" Rust plugin settings
+" Rust
 let g:rustfmt_autosave = 1
-
-" Haskell plugin settings
-" TODO move haskell stuff to ftplugin
-" conceal
-let g:haskell_conceal = 1
-let g:haskell_conceal_wide = 1
-set nofoldenable
-" indent
-let g:haskell_indent_if = 0
-let g:haskell_indent_in = 0
-let g:haskell_indent_let = 4
-let g:haskell_indent_case_alternative = 1
-let g:haskell_tabular = 0
-" highlighting
-let g:haskell_enable_quantification = 1   " to enable highlighting of `forall`
-let g:haskell_enable_recursivedo = 1      " to enable highlighting of `mdo` and `rec`
-let g:haskell_enable_arrowsyntax = 1      " to enable highlighting of `proc`
-let g:haskell_enable_pattern_synonyms = 1 " to enable highlighting of `pattern`
-let g:haskell_enable_typeroles = 1        " to enable highlighting of type roles
-let g:haskell_enable_static_pointers = 1  " to enable highlighting of `static`
 
 " Coq plugin settings
 let g:coquille_auto_move = "true"
@@ -261,6 +274,34 @@ function! NCoqUndo()
   for i in range(1, v:count) | sleep 200m | exe ":CoqUndo" | endfor
 endfunction
 
+function! Simformat()
+  let l:pos=getpos(".")
+  exe "%!simformat -e"
+  call setpos(".", l:pos)
+endfunc
+
+function! Get_visual_selection()
+  " Why is this not a built-in Vim script function?!
+  let [line_start, column_start] = getpos("'<")[1:2]
+  let [line_end, column_end] = getpos("'>")[1:2]
+  let lines = getline(line_start, line_end)
+  if len(lines) == 0
+      return ''
+  endif
+  let lines[-1] = lines[-1][: column_end - (&selection == 'inclusive' ? 1 : 2)]
+  let lines[0] = lines[0][column_start - 1:]
+  return join(lines, "\n")
+endfunction
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
 
 """""""""""""""""""""""""""" Alias Settings """"""""""""""""""""
 " Save read-only files easily
@@ -284,10 +325,19 @@ nnoremap <leader>fS :wa<CR>
 nnoremap <leader>fe :!"%:p"<CR>
 " buffers
 nnoremap <leader>bf :Buffers<CR>
+nnoremap <leader>bx :%bd\|e#\|bd#<CR>
 nnoremap <leader>bd :bdelete<CR>
+" marks
+nnoremap <leader>m :Marks<CR>
 " git
 nnoremap <leader>gc :Commits<CR>
 nnoremap <leader>gb :BCommits<CR>
+" coc diagnostics
+" TODO remove
+"nnoremap <leader>dn <Plug>(coc-diagnostic-next)
+"nnoremap <leader>dp <Plug>(coc-diagnostic-prev)
+nmap <leader>dp <Plug>(coc-diagnostic-prev)
+nmap <leader>dn <Plug>(coc-diagnostic-next)
 " errors
 nnoremap <leader>ee :cc<CR>
 nnoremap <leader>ej :cn<CR>
@@ -295,7 +345,10 @@ nnoremap <leader>eJ :clast<CR>
 nnoremap <leader>ek :cp<CR>
 nnoremap <leader>eK :crewind<CR>
 " search
-nnoremap <leader>/ :execute 'Ag ' . input('Ag/')<CR>
+nnoremap <leader>/ :execute 'Rg ' . input('Rg/')<CR>
+" TODO add more escape characters whenever encountering issues
+xnoremap <leader>/ y:Rg <C-r>=escape(@", '$\')<CR><CR>
+"xnoremap <leader>/ y:Rg <C-r>=Get_visual_selection()<CR><CR>
 " window/pane stuff
 nnoremap <leader>w- :sp<CR>
 nnoremap <leader>w/ :vsp<CR>
@@ -312,8 +365,10 @@ nnoremap <leader>wL <C-W>L
 nnoremap <leader>w<CR> <C-W>o
 nnoremap <leader><TAB> <C-^>
 " tags
-nnoremap <leader>gt <C-]>
-nnoremap <leader>gT g]
+nnoremap <leader>gt :tag <c-r>=expand("<cword>")<CR><CR>
+vnoremap <leader>gt :tag <c-r>=Get_visual_selection()<CR><CR>
+nnoremap <leader>gT :Tag <c-r>=expand("<cword>")<CR><CR>
+vnoremap <leader>gT :Tag <c-r>=Get_visual_selection()<CR><CR>
 " comment tools
 nnoremap <leader>; :call NERDComment('n', "Toggle")<CR>
 vnoremap <leader>; :call NERDComment('v', "Toggle")<CR>
@@ -325,7 +380,6 @@ nnoremap <leader>tg :Goyo<cr>
 nnoremap <leader>tl :Limelight!!<cr>
 " copy/paste
 vmap <leader>y "+y
-vmap <leader>d "+d
 nmap <leader>p "+p
 nmap <leader>P "+P
 vmap <leader>p "+p
@@ -351,13 +405,16 @@ nnoremap <leader>vs :so ~/.config/nvim/init.vim<cr>
 " haskell
 augroup haskell_namespace
   au!
-  au FileType haskell nnoremap <leader>ha ms:%!stylish-haskell<CR>'s
+  "au FileType haskell nnoremap <leader>ha ms:%!stylish-haskell<CR>'s
+  " simformat
+  au FileType haskell nnoremap <leader>hf :call Simformat()<CR>
+  au FileType haskell vnoremap <leader>hf :!simformat -e<CR>
+  " ormolu
+  au FileType haskell xnoremap <leader>ho :<c-u>call OrmoluBlock()<CR>
+  " hoogle
   au FileType haskell nnoremap <leader>hc :HoogleClose<CR>
   au FileType haskell nnoremap <leader>hh :Hoogle<CR>
   au FileType haskell nnoremap <leader>hi :HoogleInfo<CR>
-  au FileType haskell nnoremap <leader>hg :Ghcid<CR>
-  au FileType haskell nnoremap <leader>hG :Ghcid -c <SPACE>
-  au FileType haskell nnoremap <leader>hq :GhcidKill<CR>
 augroup END
 " coq
 augroup coq_namespace
@@ -378,6 +435,18 @@ augroup END
 augroup rust_namespace
   au!
   au FileType rust nnoremap <leader>rt :RustTest<CR>
-  au FileType rust set softtabstop=2
-  au FileType set shiftwidth=2
+  au FileType rust set softtabstop=4
+  au FileType rust set shiftwidth=4
+augroup END
+" java
+augroup java_namespace
+  au!
+  au FileType java set softtabstop=4
+  au FileType java set shiftwidth=4
+augroup END
+" ledger
+augroup ledger_namespace
+  au!
+  au FileType ledger set softtabstop=4
+  au FileType ledger set shiftwidth=4
 augroup END

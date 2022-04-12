@@ -1,8 +1,14 @@
 # Default config for sway
 #
-# Copy this to ~/.config/sway/config and edit it to your liking.
-#
 # Read `man 5 sway` for a complete reference.
+
+# exec
+exec wl-paste -t text --watch clipman store
+exec wl-paste -p -t text --watch clipman store -P --histpath="~/.local/share/clipman-primary.json"
+exec mako
+exec nm-applet --indicator
+exec pulseaudio --start
+
 
 ### Variables
 #
@@ -19,19 +25,60 @@ set $term kitty
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
 set $menu wofi --show=drun --lines=5 --prompt=""
-gaps inner 8
-default_border pixel 3
+default_border pixel 2
+set $bg 	#d65d0e
+set $bg-inactive   #323232
+set $bg-urgent     #000000
+set $text          #eeeeec
+set $text-inactive #babdb6
+
+set $bar           #323232
+set $statusline    #e0e0e0
+
+client.focused          $bg           $bg          $text          $bg $bg
+client.unfocused        $bg-inactive  $bg-inactive $text-inactive $bar $bar
+client.focused_inactive $bg-inactive  $bg-inactive $text-inactive $bar $bar
+client.urgent           $bg-urgent    $bg-urgent   $text          $bar $bar
+
+#{
+  #base00 = "282828"; # ----
+  #base01 = "3c3836"; # ---
+  #base02 = "504945"; # --
+  #base03 = "665c54"; # -
+  #base04 = "bdae93"; # +
+  #base05 = "d5c4a1"; # ++
+  #base06 = "ebdbb2"; # +++
+  #base07 = "fbf1c7"; # ++++
+  #base08 = "fb4934"; # red
+  #base09 = "fe8019"; # orange
+  #base0A = "fabd2f"; # yellow
+  #base0B = "b8bb26"; # green
+  #base0C = "8ec07c"; # aqua/cyan
+  #base0D = "83a598"; # blue
+  #base0E = "d3869b"; # purple
+  #base0F = "d65d0e"; # brown
+#}
+#client.focused "#${colors.base0D}" "#${colors.base0D}" "#${colors.base00}" "#${colors.base0C}" "#${colors.base0D}"
+#client.focused_inactive "#${colors.base02}" "#${colors.base02}" "#${colors.base04}" "#${colors.base04}" "#${colors.base02}"
+#client.unfocused "#${colors.base02}" "#231f20" "#${colors.base04}" "#${colors.base03}" "#${colors.base02}"
+#client.urgent "#${colors.base08}" "#${colors.base08}" "#${colors.base00}" "#${colors.base08}" "#${colors.base08}"
+
+# temporarily removing gaps
+# gaps outer 16
+# gaps inner 10
 
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
-#
-# Example configuration:
-#
-#   output HDMI-A-1 resolution 1920x1080 position 1920,0
+output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Gruvbox.png fill
+#output "Goldstar Company Ltd LG ULTRAWIDE 0x00004C25" bg /home/sam/Downloads/the_valley.png fill
+output "Unknown MSI MAG322CQR DA7A040C01269" bg /home/sam/Downloads/the_valley.png fill
 #
 # You can get the names of your outputs by running: swaymsg -t get_outputs
+# N.B.: relies on custom boot param video=DP-1:2560x1080@45
+#output "Goldstar Company Ltd LG ULTRAWIDE 0x00004C24" resolution 2560x1080@45.028999Hz position -2560,0
+#output "Unknown MSI MAG322CQR DA7A040C01269" resolution 2560x1080@45.028999Hz position -2560,0
+output "Unknown MSI MAG322CQR DA7A040C01269" resolution 1920x1080@45Hz position -1920,0
 
 ### Idle configuration
 #
@@ -68,7 +115,12 @@ input "1739:32652:SYNA2B31:00_06CB:7F8C_Touchpad" {
     bindsym $mod+w kill
 
     # Start your launcher
-    bindsym $mod+p exec $menu
+    bindsym $mod+space exec $menu
+
+    # clipboard
+    bindsym $mod+p exec clipman pick --tool wofi
+
+    bindsym $mod+o exec rg --files ~ | wofi --dmenu | xargs -n 1 dragon-drag-and-drop --and-exit
 
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
@@ -83,21 +135,28 @@ input "1739:32652:SYNA2B31:00_06CB:7F8C_Touchpad" {
     # Exit sway (logs you out of your Wayland session)
     bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
 
-    bindsym XF86AudioLowerVolume exec amixer set Master playback 2-
-    bindsym XF86AudioRaiseVolume exec amixer set Master playback 2+
-    bindsym XF86AudioMute exec amixer set Master playback 0%
+    # volume
+    bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+    bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+    bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
     # brightness
-    bindsym XF86MonBrightnessUp exec xbacklight -inc 10
-    bindsym XF86MonBrightnessDown exec xbacklight -dec 10
-    # audacious controls
-    #bindsym XF86AudioPause exec audacious --play-pause
-    #bindsym XF86AudioPlay exec audacious --play-pause
-    #bindsym $mod+XF86AudioPlay exec audacious --show-jump-box
-    #bindsym XF86AudioPrev exec audacious --rew
-    #bindsym XF86AudioNext exec audacious --fwd
-    # screenshot controls
+    bindsym XF86MonBrightnessUp exec light -A 3
+    bindsym XF86MonBrightnessDown exec light -U 3
+
+    bindsym $mod+y exec grim -g "$(slurp)" "/home/sam/Screenshots/$(date -u +'%Y-%m-%d_%H-%M-%S.png')"
+    bindsym $mod+Shift+y grim -o $(swaymsg -t get_outputs | jq -r '.[] | select(.focused) | .name') "/home/sam/Screenshots/$(date -u +'%Y-%m-%d_%H-%M-%S.png')"
     # bindsym Print exec scrot -e 'mv $f ~/screenshots/'
     # bindsym $mod+Print exec scrot -s -e 'mv $f ~/screenshots/'
+
+# Displays
+    bindsym $mod+d mode "display"
+    mode "display" {
+      bindsym 1 output eDP-1 toggle, mode "default"
+      bindsym 2 output DP-1 toggle, mode "default"
+      # Return to default mode
+      bindsym Return mode "default"
+      bindsym Escape mode "default"
+    }
 #
 # Moving around:
 #
@@ -106,22 +165,12 @@ input "1739:32652:SYNA2B31:00_06CB:7F8C_Touchpad" {
     bindsym $mod+$down focus down
     bindsym $mod+$up focus up
     bindsym $mod+$right focus right
-    # Or use $mod+[up|down|left|right]
-    bindsym $mod+Left focus left
-    bindsym $mod+Down focus down
-    bindsym $mod+Up focus up
-    bindsym $mod+Right focus right
 
     # Move the focused window with the same, but add Shift
     bindsym $mod+Shift+$left move left
     bindsym $mod+Shift+$down move down
     bindsym $mod+Shift+$up move up
     bindsym $mod+Shift+$right move right
-    # Ditto, with arrow keys
-    bindsym $mod+Shift+Left move left
-    bindsym $mod+Shift+Down move down
-    bindsym $mod+Shift+Up move up
-    bindsym $mod+Shift+Right move right
 #
 # Workspaces:
 #
@@ -169,13 +218,14 @@ input "1739:32652:SYNA2B31:00_06CB:7F8C_Touchpad" {
     bindsym $mod+f fullscreen
 
     # Toggle the current focus between tiling and floating mode
-    bindsym $mod+Shift+space floating toggle
+    bindsym $mod+Shift+t floating toggle
 
     # Swap focus between the tiling area and the floating area
-    bindsym $mod+space focus mode_toggle
+    bindsym $mod+t focus mode_toggle
 
     # Move focus to the parent container
     bindsym $mod+a focus parent
+    bindsym $mod+shift+a focus child
 #
 # Scratchpad:
 #
@@ -196,16 +246,10 @@ mode "resize" {
     # right will grow the containers width
     # up will shrink the containers height
     # down will grow the containers height
-    bindsym $left resize shrink width 10px
-    bindsym $down resize grow height 10px
-    bindsym $up resize shrink height 10px
-    bindsym $right resize grow width 10px
-
-    # Ditto, with arrow keys
-    bindsym Left resize shrink width 10px
-    bindsym Down resize grow height 10px
-    bindsym Up resize shrink height 10px
-    bindsym Right resize grow width 10px
+    bindsym $left resize shrink width 20px
+    bindsym $down resize grow height 20px
+    bindsym $up resize shrink height 20px
+    bindsym $right resize grow width 20px
 
     # Return to default mode
     bindsym Return mode "default"
@@ -233,3 +277,4 @@ bar {
 }
 
 include /etc/sway/config.d/*
+
