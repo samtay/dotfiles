@@ -181,3 +181,22 @@
 	submodulesummary = true
 [init]
 	defaultBranch = main
+
+## trying out https://github.com/dandavison/delta
+
+[core]
+  pager = delta --syntax-theme gruvbox-dark
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true  # use n and N to move between diff sections
+    side-by-side = true
+    line-numbers = true
+
+[merge]
+    conflictstyle = diff3
+
+[diff]
+    colorMoved = default
