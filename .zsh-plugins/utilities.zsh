@@ -104,3 +104,49 @@ Pick one: "
   esac
   vlc "https://cams.cdn-surfline.com/$url"
 }
+
+toggle-theme() {
+  (
+  cd ~/.cache
+
+  # clean
+  theme=
+
+  if grep -q light theme; then
+    # make dark
+    theme=dark
+    sed -i '' 's/set background=light/set background=dark/' ~/.config/nvim/init.vim
+    sed -i '' 's/gruvbox_light/gruvbox_dark/' ~/.config/kitty/kitty.conf
+    sed -i '' 's/gruvbox-light/gruvbox-dark/' ~/.gitconfig
+    kitty @ set-colors --all --configured ~/.config/kitty/gruvbox_dark.conf
+  else
+    # make light
+    theme=light
+    sed -i '' 's/set background=dark/set background=light/' ~/.config/nvim/init.vim
+    sed -i '' 's/gruvbox_dark/gruvbox_light/' ~/.config/kitty/kitty.conf
+    sed -i '' 's/gruvbox-dark/gruvbox-light/' ~/.gitconfig
+    kitty @ set-colors --all --configured ~/.config/kitty/gruvbox_light.conf
+  fi
+
+  echo $theme > theme
+
+
+  # Idk about xdotool on mac?
+  # original_window=$(xdotool getwindowfocus)
+  # for pid in $(xdotool search --name ': nvim'); do
+    #sleep 0.5
+    #xdotool windowfocus $pid
+    #sleep 0.1
+    #xdotool key Escape
+    #sleep 0.1
+    #xdotool type ':so $MYVIMRC'
+    #sleep 0.1
+    #xdotool key Return
+  #done
+  #xdotool windowfocus $original_window
+
+  echo "Toggled to $theme theme"
+
+  cd -
+  )
+}
