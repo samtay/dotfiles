@@ -398,8 +398,7 @@ vnoremap <leader>gt :tag <c-r>=Get_visual_selection()<CR><CR>
 nnoremap <leader>gT :Tag <c-r>=expand("<cword>")<CR><CR>
 vnoremap <leader>gT :Tag <c-r>=Get_visual_selection()<CR><CR>
 " comment tools
-nnoremap <leader>; :call NERDComment('n', "Toggle")<CR>
-vnoremap <leader>; :call NERDComment('v', "Toggle")<CR>
+map <leader>; <plug>NERDCommenterToggle
 " toggles
 nnoremap <leader>tn :call NumberToggle()<CR>
 nnoremap <leader>tc :call ConcealToggle()<cr>
