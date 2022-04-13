@@ -6,8 +6,7 @@ if empty(glob(data_dir . '/autoload/plug.vim'))
 endif
 
 call plug#begin('~/.local/share/nvim/plugged')
-
-""""""""""" Custom added plugins """"""""""""""""""""
+""""""""""" Begin plugins """"""""""""""""""""
 " utils
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -68,18 +67,41 @@ Plug 'godlygeek/tabular' " TODO replace with junegunn/vim-easy-align
 Plug 'aetherknight/neoformat'
 
 " Autocomplete
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins', 'for': 'tex' }
-Plug 'Shougo/neosnippet.vim', {'for': 'tex'}
-Plug 'Shougo/neosnippet-snippets', {'for': 'tex'}
-Plug 'samtay/vim-snippets', {'for': 'tex'}
+"Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins', 'for': 'tex' }
+"Plug 'Shougo/neosnippet.vim', {'for': 'tex'}
+"Plug 'Shougo/neosnippet-snippets', {'for': 'tex'}
+"Plug 'samtay/vim-snippets', {'for': 'tex'}
 
 " language server
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-":CocInstall coc-rust-analyzer
+Plug 'neovim/nvim-lspconfig'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-cmdline'
+Plug 'hrsh7th/nvim-cmp'
+Plug 'simrat39/rust-tools.nvim'
+
+" Snippet stuff
+Plug 'hrsh7th/cmp-vsnip'
+Plug 'hrsh7th/vim-vsnip'
+Plug 'hrsh7th/vim-vsnip-integ'
+Plug 'rafamadriz/friendly-snippets'
+
+" popup selectors
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-ui-select.nvim'
+
+" highlighting
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-treesitter/nvim-treesitter-refactor'
 
 """"""""""" End plugins """""""""""""""""""""""""""""
 call plug#end()
 
+
+"""""""""""""""""""""""""""" Include lua cfg """"""""""""""""""""""""""
+lua require("cfg")
 
 """""""""""""""""""""""""""" Personal Vim Settings """"""""""""""""""""
 filetype plugin indent on
@@ -152,36 +174,48 @@ hi Comment cterm=italic
 """""""""""""""""""""""""""" Plugin Settings """"""""""""""""""""
 
 " coc settings
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
+"inoremap <silent><expr> <TAB>
+      "\ pumvisible() ? "\<C-n>" :
+      "\ <SID>check_back_space() ? "\<TAB>" :
+      "\ coc#refresh()
+"inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-" Use <c-space> to trigger completion.
-if has('nvim')
-  inoremap <silent><expr> <c-space> coc#refresh()
-else
-  inoremap <silent><expr> <c-@> coc#refresh()
-endif
+"function! s:check_back_space() abort
+  "let col = col('.') - 1
+  "return !col || getline('.')[col - 1]  =~# '\s'
+"endfunction
 
-" Make <CR> auto-select the first completion item and notify coc.nvim to
-" format on enter, <cr> could be remapped by other vim plugin
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+"" Use <c-space> to trigger completion.
+"if has('nvim')
+  "inoremap <silent><expr> <c-space> coc#refresh()
+"else
+  "inoremap <silent><expr> <c-@> coc#refresh()
+"endif
 
-" preview documentation
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-" GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+"" Make <CR> auto-select the first completion item and notify coc.nvim to
+"" format on enter, <cr> could be remapped by other vim plugin
+"inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              "\: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+"" preview documentation
+"nnoremap <silent> K :call <SID>show_documentation()<CR>
+"" GoTo code navigation.
+"nmap <silent> gd <Plug>(coc-definition)
+"nmap <silent> gy <Plug>(coc-type-definition)
+"nmap <silent> gi <Plug>(coc-implementation)
+"nmap <silent> gr <Plug>(coc-references)
+
+" nvim-cmp completion settings
+
+ " Set completeopt to have a better completion experience
+" :help completeopt
+" menuone: popup even when there's only one match
+" noinsert: Do not insert text until a selection is made
+" noselect: Do not select, force user to select one from the menu
+set completeopt=menuone,noinsert,noselect
+" Avoid showing extra messages when using completion
+set shortmess+=c
 
 " Use powerline fonts for airline
 if !exists('g:airline_symbols')
@@ -293,15 +327,15 @@ function! Get_visual_selection()
   return join(lines, "\n")
 endfunction
 
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
-    call CocActionAsync('doHover')
-  else
-    execute '!' . &keywordprg . " " . expand('<cword>')
-  endif
-endfunction
+"function! s:show_documentation()
+  "if (index(['vim','help'], &filetype) >= 0)
+    "execute 'h '.expand('<cword>')
+  "elseif (coc#rpc#ready())
+    "call CocActionAsync('doHover')
+  "else
+    "execute '!' . &keywordprg . " " . expand('<cword>')
+  "endif
+"endfunction
 
 """""""""""""""""""""""""""" Alias Settings """"""""""""""""""""
 " Save read-only files easily
@@ -332,12 +366,6 @@ nnoremap <leader>m :Marks<CR>
 " git
 nnoremap <leader>gc :Commits<CR>
 nnoremap <leader>gb :BCommits<CR>
-" coc diagnostics
-" TODO remove
-"nnoremap <leader>dn <Plug>(coc-diagnostic-next)
-"nnoremap <leader>dp <Plug>(coc-diagnostic-prev)
-nmap <leader>dp <Plug>(coc-diagnostic-prev)
-nmap <leader>dn <Plug>(coc-diagnostic-next)
 " errors
 nnoremap <leader>ee :cc<CR>
 nnoremap <leader>ej :cn<CR>
@@ -402,6 +430,32 @@ vnoremap <leader>ac :Tabularize /--<CR>
 nnoremap <leader>ve :sp ~/.config/nvim/init.vim<cr>
 nnoremap <leader>vs :so ~/.config/nvim/init.vim<cr>
 "au BufWritePost init.vim so ~/.config/nvim/init.vim
+
+
+" lsp navigation
+nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
+nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
+nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
+nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
+nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
+nnoremap <silent> gd    <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> ga    <cmd>lua vim.lsp.buf.code_action()<CR>
+" Set updatetime for CursorHold
+" 300ms of no cursor movement to trigger CursorHold
+set updatetime=300
+" Show diagnostic popup on cursor hold
+autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
+" Goto previous/next diagnostic warning/error
+nnoremap <silent> g[ <cmd>lua vim.diagnostic.goto_prev()<CR>
+nnoremap <silent> g] <cmd>lua vim.diagnostic.goto_next()<CR>
+" have a fixed column for the diagnostics to appear in
+" this removes the jitter when warnings/errors flow in
+set signcolumn=yes
+
+
 " haskell
 augroup haskell_namespace
   au!
@@ -435,6 +489,7 @@ augroup END
 augroup rust_namespace
   au!
   au FileType rust nnoremap <leader>rt :RustTest<CR>
+  au FileType rust nnoremap <leader>rT :RustTest!<CR>
   au FileType rust set softtabstop=4
   au FileType rust set shiftwidth=4
 augroup END
