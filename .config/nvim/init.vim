@@ -78,8 +78,12 @@ Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-cmdline'
+Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
+Plug 'hrsh7th/cmp-nvim-lsp-document-symbol'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'simrat39/rust-tools.nvim'
+Plug 'nvim-lua/lsp-status.nvim'
+Plug 'onsails/lspkind-nvim'
 
 " Snippet stuff
 Plug 'hrsh7th/cmp-vsnip'
@@ -217,7 +221,7 @@ set completeopt=menuone,noinsert,noselect
 " Avoid showing extra messages when using completion
 set shortmess+=c
 
-" Use powerline fonts for airline
+" Use powerline fonts for airline?
 if !exists('g:airline_symbols')
   let g:airline_symbols = {}
 endif
@@ -225,6 +229,14 @@ let g:airline_powerline_fonts = 0
 let g:airline_symbols.space = "\ua0"
 " Set airline theme
 let g:airline_theme='gruvbox'
+function! LspStatus() abort
+  let status = luaeval('require("lsp-status").status()')
+  return trim(status)
+endfunction
+call airline#parts#define_function('lsp_status', 'LspStatus')
+call airline#parts#define_condition('lsp_status', 'luaeval("#vim.lsp.buf_get_clients() > 0")')
+let g:airline#extensions#nvimlsp#enabled = 0
+let g:airline_section_warning = airline#section#create_right(['lsp_status'])
 function! AirlineInit()
     let g:airline_section_z = airline#section#create(['%{ObsessionStatus(''$'', '''')}', 'windowswap', '%3p%% ', 'linenr', ':%3v '])
 endfunction
@@ -326,16 +338,6 @@ function! Get_visual_selection()
   let lines[0] = lines[0][column_start - 1:]
   return join(lines, "\n")
 endfunction
-
-"function! s:show_documentation()
-  "if (index(['vim','help'], &filetype) >= 0)
-    "execute 'h '.expand('<cword>')
-  "elseif (coc#rpc#ready())
-    "call CocActionAsync('doHover')
-  "else
-    "execute '!' . &keywordprg . " " . expand('<cword>')
-  "endif
-"endfunction
 
 """""""""""""""""""""""""""" Alias Settings """"""""""""""""""""
 " Save read-only files easily

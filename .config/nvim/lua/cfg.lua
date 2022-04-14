@@ -36,6 +36,11 @@ require('nvim-treesitter.configs').setup({
   },
 })
 
+-- Provide some indication that rust-analyzer is busy!
+-- TODO get this to work? ugh
+local lsp_status = require('lsp-status')
+lsp_status.register_progress()
+
 -- Basic rust/lsp/cmp settings from https://sharksforarms.dev/posts/neovim-rust/
 local nvim_lsp = require('lspconfig')
 
@@ -46,7 +51,7 @@ local opts = {
         inlay_hints = {
             show_parameter_hints = false,
             parameter_hints_prefix = "",
-            other_hints_prefix = "",
+            other_hints_prefix = "=> ",
         },
     },
 
@@ -55,10 +60,12 @@ local opts = {
     -- see https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#rust_analyzer
     server = {
         -- on_attach is a callback called when the language server attachs to the buffer
-        -- on_attach = on_attach,
+        on_attach = lsp_status.on_attach,
+        capabilities = lsp_status.capabilities,
         settings = {
             -- to enable rust-analyzer settings visit:
             -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
+            -- and more: https://github.com/simrat39/rust-tools.nvim/wiki/Server-Configuration-Schema
             ["rust-analyzer"] = {
                 -- enable clippy on save
                 checkOnSave = {
@@ -68,7 +75,6 @@ local opts = {
         }
     },
 }
-
 require('rust-tools').setup(opts)
 
 -- Setup Completion
@@ -84,6 +90,7 @@ local feedkey = function(key, mode)
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
 end
 
+local lspkind = require('lspkind')
 local cmp = require'cmp'
 cmp.setup({
   -- Enable LSP snippets
@@ -132,38 +139,59 @@ cmp.setup({
     { name = 'vsnip' },
     { name = 'path' },
     { name = 'buffer' },
+    { name = 'nvim_lsp_signature_help' },
+    { name = 'nvim_lsp_document_symbol' },
   },
+
+  -- Fancy symbols
+  formatting = {
+    format = lspkind.cmp_format({
+      --mode = 'symbol', -- show only symbol annotations
+      mode = 'symbol_text', -- show both symbol & text for now
+      maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+
+      -- The function below will be called before any actual modifications from lspkind
+      -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
+      --before = function (entry, vim_item)
+        --...
+        --return vim_item
+      --end
+    })
+  }
 })
 
--- Also use as omnifunc
-cmp.setup {
-  completion = {
-    autocomplete = false, -- disable auto-completion.
-  },
-}
+-- Also use as omnifunc? TODO Is below necessary?
+--cmp.setup {
+  --completion = {
+    --autocomplete = false, -- disable auto-completion.
+  --},
+--}
 
-_G.vimrc = _G.vimrc or {}
-_G.vimrc.cmp = _G.vimrc.cmp or {}
-_G.vimrc.cmp.lsp = function()
-  cmp.complete({
-    config = {
-      sources = {
-        { name = 'nvim_lsp' }
-      }
-    }
-  })
-end
-_G.vimrc.cmp.snippet = function()
-  cmp.complete({
-    config = {
-      sources = {
-        { name = 'vsnip' }
-      }
-    }
-  })
-end
+--_G.vimrc = _G.vimrc or {}
+--_G.vimrc.cmp = _G.vimrc.cmp or {}
+--_G.vimrc.cmp.lsp = function()
+  --cmp.complete({
+    --config = {
+      --sources = {
+        --{ name = 'nvim_lsp' }
+      --}
+    --}
+  --})
+--end
+--_G.vimrc.cmp.snippet = function()
+  --cmp.complete({
+    --config = {
+      --sources = {
+        --{ name = 'vsnip' }
+      --}
+    --}
+  --})
+--end
 
-vim.cmd([[
-  inoremap <C-x><C-o> <Cmd>lua vimrc.cmp.lsp()<CR>
-  inoremap <C-x><C-s> <Cmd>lua vimrc.cmp.snippet()<CR>
-]])
+--vim.cmd([[
+  --inoremap <C-x><C-o> <Cmd>lua vimrc.cmp.lsp()<CR>
+  --inoremap <C-x><C-s> <Cmd>lua vimrc.cmp.snippet()<CR>
+--]])
+
+-- TODO potentially better completion sorting:
+-- https://github.com/hrsh7th/nvim-cmp/issues/156#issuecomment-916338617
