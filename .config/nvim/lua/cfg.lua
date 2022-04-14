@@ -1,4 +1,5 @@
-require('telescope').setup({
+local telescope = require('telescope');
+telescope.setup({
   extensions = {
     ["ui-select"] = {
       require("telescope.themes").get_dropdown {
@@ -7,7 +8,9 @@ require('telescope').setup({
     }
   }
 })
-require("telescope").load_extension("ui-select")
+telescope.load_extension("ui-select")
+telescope.load_extension("fzf")
+
 require('nvim-treesitter.configs').setup({
   -- A list of parser names, or "all"
   ensure_installed = { "c", "lua", "rust" },
@@ -135,7 +138,7 @@ cmp.setup({
 
   -- Installed sources
   sources = {
-    { name = 'nvim_lsp' },
+    { name = 'nvim_lsp' }, --, trigger_characters={'.', ":"} },
     { name = 'vsnip' },
     { name = 'path' },
     { name = 'buffer' },
@@ -157,41 +160,11 @@ cmp.setup({
         --return vim_item
       --end
     })
-  }
+  },
+  completion = {
+    autocomplete = true
+  },
 })
-
--- Also use as omnifunc? TODO Is below necessary?
---cmp.setup {
-  --completion = {
-    --autocomplete = false, -- disable auto-completion.
-  --},
---}
-
---_G.vimrc = _G.vimrc or {}
---_G.vimrc.cmp = _G.vimrc.cmp or {}
---_G.vimrc.cmp.lsp = function()
-  --cmp.complete({
-    --config = {
-      --sources = {
-        --{ name = 'nvim_lsp' }
-      --}
-    --}
-  --})
---end
---_G.vimrc.cmp.snippet = function()
-  --cmp.complete({
-    --config = {
-      --sources = {
-        --{ name = 'vsnip' }
-      --}
-    --}
-  --})
---end
-
---vim.cmd([[
-  --inoremap <C-x><C-o> <Cmd>lua vimrc.cmp.lsp()<CR>
-  --inoremap <C-x><C-s> <Cmd>lua vimrc.cmp.snippet()<CR>
---]])
 
 -- TODO potentially better completion sorting:
 -- https://github.com/hrsh7th/nvim-cmp/issues/156#issuecomment-916338617

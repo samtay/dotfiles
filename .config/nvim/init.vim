@@ -7,6 +7,8 @@ endif
 
 call plug#begin('~/.local/share/nvim/plugged')
 """"""""""" Begin plugins """"""""""""""""""""
+" TODO go through and trim these...
+
 " utils
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -27,6 +29,7 @@ Plug 'kana/vim-textobj-user' | Plug 'kana/vim-textobj-line'
 Plug 'ledger/vim-ledger'
 
 " spacemacs
+" This plugin kinda sucks, just remove it maybe?
 Plug 'hecal3/vim-leader-guide'
 
 " color
@@ -67,6 +70,7 @@ Plug 'godlygeek/tabular' " TODO replace with junegunn/vim-easy-align
 Plug 'aetherknight/neoformat'
 
 " Autocomplete
+" TODO move these to nvim-cmp?
 "Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins', 'for': 'tex' }
 "Plug 'Shougo/neosnippet.vim', {'for': 'tex'}
 "Plug 'Shougo/neosnippet-snippets', {'for': 'tex'}
@@ -95,6 +99,7 @@ Plug 'rafamadriz/friendly-snippets'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-ui-select.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
 " highlighting
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
@@ -170,45 +175,12 @@ if (has("termguicolors"))
   set termguicolors
 endif
 let g:gruvbox_italic=1
-set background=light
+set background=dark
 colorscheme gruvbox
 hi Comment cterm=italic
 
 
 """""""""""""""""""""""""""" Plugin Settings """"""""""""""""""""
-
-" coc settings
-
-"inoremap <silent><expr> <TAB>
-      "\ pumvisible() ? "\<C-n>" :
-      "\ <SID>check_back_space() ? "\<TAB>" :
-      "\ coc#refresh()
-"inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-"function! s:check_back_space() abort
-  "let col = col('.') - 1
-  "return !col || getline('.')[col - 1]  =~# '\s'
-"endfunction
-
-"" Use <c-space> to trigger completion.
-"if has('nvim')
-  "inoremap <silent><expr> <c-space> coc#refresh()
-"else
-  "inoremap <silent><expr> <c-@> coc#refresh()
-"endif
-
-"" Make <CR> auto-select the first completion item and notify coc.nvim to
-"" format on enter, <cr> could be remapped by other vim plugin
-"inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-                              "\: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-
-"" preview documentation
-"nnoremap <silent> K :call <SID>show_documentation()<CR>
-"" GoTo code navigation.
-"nmap <silent> gd <Plug>(coc-definition)
-"nmap <silent> gy <Plug>(coc-type-definition)
-"nmap <silent> gi <Plug>(coc-implementation)
-"nmap <silent> gr <Plug>(coc-references)
 
 " nvim-cmp completion settings
 
@@ -225,7 +197,7 @@ set shortmess+=c
 if !exists('g:airline_symbols')
   let g:airline_symbols = {}
 endif
-let g:airline_powerline_fonts = 0
+let g:airline_powerline_fonts = 1
 let g:airline_symbols.space = "\ua0"
 " Set airline theme
 let g:airline_theme='gruvbox'
@@ -348,37 +320,49 @@ map <S-CR> O<ESC>j
 " leader
 map <SPACE> <leader>
 
-
 """""""""""""""""""""""""""" Leader Settings """"""""""""""""""""
-" files
-nnoremap <leader>fp :Files<CR>
-nnoremap <leader>fg :GFiles<CR>
-nnoremap <leader>fG :GFiles?<CR>
-nnoremap <leader>fr :History<CR>
+" files / telescope nav
 nnoremap <leader>ft :call NERDTreeToggleInCurDir()<CR>
+nnoremap <leader>ff <cmd>Telescope find_files<CR>
+nnoremap <leader>fr <cmd>Telescope oldfiles<CR>
+nnoremap <leader>fb <cmd>Telescope buffers<CR>
 nnoremap <leader>fs :w<CR>
 nnoremap <leader>fS :wa<CR>
 nnoremap <leader>fe :!"%:p"<CR>
+nnoremap <leader>m <cmd>Telescope marks<CR>
 " buffers
-nnoremap <leader>bf :Buffers<CR>
 nnoremap <leader>bx :%bd\|e#\|bd#<CR>
 nnoremap <leader>bd :bdelete<CR>
-" marks
-nnoremap <leader>m :Marks<CR>
-" git
-nnoremap <leader>gc :Commits<CR>
-nnoremap <leader>gb :BCommits<CR>
-" errors
-nnoremap <leader>ee :cc<CR>
-nnoremap <leader>ej :cn<CR>
-nnoremap <leader>eJ :clast<CR>
-nnoremap <leader>ek :cp<CR>
-nnoremap <leader>eK :crewind<CR>
-" search
-nnoremap <leader>/ :execute 'Rg ' . input('Rg/')<CR>
-" TODO add more escape characters whenever encountering issues
-xnoremap <leader>/ y:Rg <C-r>=escape(@", '$\')<CR><CR>
-"xnoremap <leader>/ y:Rg <C-r>=Get_visual_selection()<CR><CR>
+" search for string
+nnoremap <leader>/ <cmd>Telescope live_grep<CR>
+xnoremap <leader>/ <cmd>Telescope grep_string<CR>
+" help with keymaps
+nnoremap <leader>? <cmd>Telescope keymaps<CR>
+nnoremap <leader>? <cmd>Telescope keymaps<CR>
+" git stuff
+nnoremap <leader>gs <cmd>Telescope git_status<CR>
+nnoremap <leader>gc <cmd>Telescope git_commits<CR>
+" lsp nav
+nnoremap <leader>ld <cmd>Telescope lsp_document_symbols<CR>
+nnoremap <leader>lw <cmd>Telescope lsp_workspace_symbols<CR>
+nnoremap <silent>gr <cmd>Telescope lsp_references<CR>
+nnoremap <silent>gi <cmd>Telescope lsp_implementations<CR>
+nnoremap <silent>gt <cmd>Telescope lsp_type_definitions<CR>
+nnoremap <silent>gd <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent>ga <cmd>lua vim.lsp.buf.code_action()<CR>
+nnoremap <silent>K  <cmd>lua vim.lsp.buf.hover()<CR>
+vnoremap <silent>K  <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <leader>dd <cmd>Telescope diagnostics<CR>
+nnoremap <leader>dk <cmd>lua vim.diagnostic.goto_prev()<CR>
+nnoremap <leader>dj <cmd>lua vim.diagnostic.goto_next()<CR>
+" Set updatetime for CursorHold
+" 300ms of no cursor movement to trigger CursorHold
+set updatetime=300
+" Show diagnostic popup on cursor hold
+autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
+" have a fixed column for the diagnostics to appear in
+" this removes the jitter when warnings/errors flow in
+set signcolumn=yes
 " window/pane stuff
 nnoremap <leader>w- :sp<CR>
 nnoremap <leader>w/ :vsp<CR>
@@ -394,11 +378,11 @@ nnoremap <leader>wK <C-W>K
 nnoremap <leader>wL <C-W>L
 nnoremap <leader>w<CR> <C-W>o
 nnoremap <leader><TAB> <C-^>
-" tags
-nnoremap <leader>gt :tag <c-r>=expand("<cword>")<CR><CR>
-vnoremap <leader>gt :tag <c-r>=Get_visual_selection()<CR><CR>
-nnoremap <leader>gT :Tag <c-r>=expand("<cword>")<CR><CR>
-vnoremap <leader>gT :Tag <c-r>=Get_visual_selection()<CR><CR>
+" tags TODO remove? these are less useful in the face of LSP
+"nnoremap <leader>gt :tag <c-r>=expand("<cword>")<CR><CR>
+"vnoremap <leader>gt :tag <c-r>=Get_visual_selection()<CR><CR>
+"nnoremap <leader>gT :Tag <c-r>=expand("<cword>")<CR><CR>
+"vnoremap <leader>gT :Tag <c-r>=Get_visual_selection()<CR><CR>
 " comment tools
 map <leader>; <plug>NERDCommenterToggle
 " toggles
@@ -419,8 +403,6 @@ vmap <leader>P "+P
 nmap <Leader>s <Plug>(easymotion-overwin-f2)
 map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
-" helper tools
-nnoremap <leader>? :Maps<CR>
 " align tools
 vnoremap <leader>a= :Tabularize /=<CR>
 vnoremap <leader>a; :Tabularize /::<CR>
@@ -431,30 +413,6 @@ vnoremap <leader>ac :Tabularize /--<CR>
 nnoremap <leader>ve :sp ~/.config/nvim/init.vim<cr>
 nnoremap <leader>vs :so ~/.config/nvim/init.vim<cr>
 "au BufWritePost init.vim so ~/.config/nvim/init.vim
-
-
-" lsp navigation
-nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
-nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
-nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
-nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
-nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
-nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
-nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
-nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
-nnoremap <silent> gd    <cmd>lua vim.lsp.buf.definition()<CR>
-nnoremap <silent> ga    <cmd>lua vim.lsp.buf.code_action()<CR>
-" Set updatetime for CursorHold
-" 300ms of no cursor movement to trigger CursorHold
-set updatetime=300
-" Show diagnostic popup on cursor hold
-autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
-" Goto previous/next diagnostic warning/error
-nnoremap <silent> g[ <cmd>lua vim.diagnostic.goto_prev()<CR>
-nnoremap <silent> g] <cmd>lua vim.diagnostic.goto_next()<CR>
-" have a fixed column for the diagnostics to appear in
-" this removes the jitter when warnings/errors flow in
-set signcolumn=yes
 
 
 " haskell
@@ -489,8 +447,12 @@ augroup END
 " rust
 augroup rust_namespace
   au!
+  au FileType rust nnoremap <leader>rr :RustRunnables<CR>
   au FileType rust nnoremap <leader>rt :RustTest<CR>
   au FileType rust nnoremap <leader>rT :RustTest!<CR>
+  au FileType rust nnoremap <leader>rm :RustExpandMacro<CR>
+  au FileType rust nnoremap <leader>rc :RustOpenCargo<CR>
+  au FileType rust nnoremap <leader>rp :RustParentModule<CR>
   au FileType rust set softtabstop=4
   au FileType rust set shiftwidth=4
 augroup END
