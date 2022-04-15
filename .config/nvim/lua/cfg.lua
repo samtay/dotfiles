@@ -40,7 +40,6 @@ require('nvim-treesitter.configs').setup({
 })
 
 -- Provide some indication that rust-analyzer is busy!
--- TODO get this to work? ugh
 local lsp_status = require('lsp-status')
 lsp_status.register_progress()
 
@@ -96,6 +95,9 @@ end
 local lspkind = require('lspkind')
 local cmp = require'cmp'
 cmp.setup({
+  --completion = {
+    --autocomplete = true
+  --},
   -- Enable LSP snippets
   snippet = {
     expand = function(args)
@@ -160,9 +162,6 @@ cmp.setup({
         --return vim_item
       --end
     })
-  },
-  completion = {
-    autocomplete = true
   },
 })
 
