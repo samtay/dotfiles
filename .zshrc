@@ -9,8 +9,14 @@ if [[ ! -d ~/.zplug ]]; then
 fi
 source ~/.zplug/init.zsh
 
+# must be added before sourcing plugins/ssh-agent
+zstyle :omz:plugins:ssh-agent agent-forwarding yes
+zstyle :omz:plugins:ssh-agent ssh-add-args --apple-use-keychain
+#zstyle :omz:plugins:ssh-agent lazy yes
+
 # functionality
 zplug "lib/directories",          from:oh-my-zsh
+zplug "plugins/ssh-agent",        from:oh-my-zsh
 zplug "plugins/docker",           from:oh-my-zsh, defer:1
 zplug "plugins/docker-compose",   from:oh-my-zsh, defer:1
 zplug "zsh-users/zsh-syntax-highlighting", defer:1
@@ -208,7 +214,7 @@ setopt auto_pushd
 setopt pushd_minus
 setopt pushd_ignore_dups
 # Check original command in alias completion
-setopt complete_aliases
+unsetopt complete_aliases
 unsetopt hist_verify
 unsetopt RM_STAR_WAIT
 setopt nomatch
@@ -297,3 +303,13 @@ alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 
 # eval "$(starship init zsh)"
 # eval "$(rbenv init -)"
+
+# echo 'if you get an ssh-agent auth, go to ~/.zshrc and uncomment these lines'
+# [ -z "$SSH_AUTH_SOCK" ] && eval "$(ssh-agent -s)" && ssh-add --apple-use-keychain
+
+autoload -U compinit && compinit
+alias phl='phylum -c ~/.phylum/settings.local.yaml'
+alias phs='phylum -c ~/.phylum/settings.staging.yaml'
+
+export JAVA_HOME=$(/usr/libexec/java_home -v1.8)
+eval "$(direnv hook zsh)"
