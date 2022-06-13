@@ -111,6 +111,9 @@ input "1739:32652:SYNA2B31:00_06CB:7F8C_Touchpad" {
     # Start a terminal
     bindsym $mod+Return exec $term
 
+    # Open network manager tui
+    bindsym $mod+i exec $term -e nmtui-connect
+
     # Kill focused window
     bindsym $mod+w kill
 
