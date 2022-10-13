@@ -105,6 +105,9 @@ Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/nvim-treesitter-refactor'
 
+" just 
+Plug 'NoahTheDuke/vim-just'
+
 """"""""""" End plugins """""""""""""""""""""""""""""
 call plug#end()
 
@@ -324,6 +327,7 @@ map <SPACE> <leader>
 " files / telescope nav
 nnoremap <leader>ft :call NERDTreeToggleInCurDir()<CR>
 nnoremap <leader>ff <cmd>Telescope find_files<CR>
+nnoremap <leader>fg <cmd>Telescope git_files<CR>
 nnoremap <leader>fr <cmd>Telescope oldfiles<CR>
 nnoremap <leader>fb <cmd>Telescope buffers<CR>
 nnoremap <leader>fs :w<CR>
@@ -335,7 +339,8 @@ nnoremap <leader>bx :%bd\|e#\|bd#<CR>
 nnoremap <leader>bd :bdelete<CR>
 " search for string
 nnoremap <leader>/ <cmd>Telescope live_grep<CR>
-xnoremap <leader>/ <cmd>Telescope grep_string<CR>
+vnoremap <leader>/ "zy<cmd>exec 'Telescope grep_string default_text=' . escape(@z, ' ')<cr>
+"xnoremap <leader>/ <cmd>Telescope grep_string<CR>
 " help with keymaps
 nnoremap <leader>? <cmd>Telescope keymaps<CR>
 nnoremap <leader>? <cmd>Telescope keymaps<CR>
@@ -348,13 +353,15 @@ nnoremap <leader>lw <cmd>Telescope lsp_workspace_symbols<CR>
 nnoremap <silent>gr <cmd>Telescope lsp_references<CR>
 nnoremap <silent>gi <cmd>Telescope lsp_implementations<CR>
 nnoremap <silent>gt <cmd>Telescope lsp_type_definitions<CR>
-nnoremap <silent>gd <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent>gd <cmd>Telescope lsp_definitions<CR>
 nnoremap <silent>ga <cmd>lua vim.lsp.buf.code_action()<CR>
 nnoremap <silent>K  <cmd>lua vim.lsp.buf.hover()<CR>
 vnoremap <silent>K  <cmd>lua vim.lsp.buf.hover()<CR>
 nnoremap <leader>dd <cmd>Telescope diagnostics<CR>
 nnoremap <leader>dk <cmd>lua vim.diagnostic.goto_prev()<CR>
+nnoremap <leader>dp <cmd>lua vim.diagnostic.goto_prev()<CR>
 nnoremap <leader>dj <cmd>lua vim.diagnostic.goto_next()<CR>
+nnoremap <leader>dn <cmd>lua vim.diagnostic.goto_next()<CR>
 " Set updatetime for CursorHold
 " 300ms of no cursor movement to trigger CursorHold
 set updatetime=300
@@ -453,6 +460,7 @@ augroup rust_namespace
   au FileType rust nnoremap <leader>rm :RustExpandMacro<CR>
   au FileType rust nnoremap <leader>rc :RustOpenCargo<CR>
   au FileType rust nnoremap <leader>rp :RustParentModule<CR>
+  au FileType rust nnoremap <leader>rd :RustOpenExternalDocs<CR>
   au FileType rust set softtabstop=4
   au FileType rust set shiftwidth=4
 augroup END

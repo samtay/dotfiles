@@ -69,10 +69,17 @@ local opts = {
             -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
             -- and more: https://github.com/simrat39/rust-tools.nvim/wiki/Server-Configuration-Schema
             ["rust-analyzer"] = {
-                -- enable clippy on save
+                -- enable clippy on save TODO too many warnings at phylum
                 checkOnSave = {
-                    command = "clippy"
+                    command = "clippy",
+                    extraArgs= {"--target-dir", "/tmp/rust-analyzer-check"},
+                    allFeatures = true,
+                    allTargets = true
                 },
+                cargo = {
+                    allFeatures = true
+                    --features = {"tests"}
+                }
             }
         }
     },
