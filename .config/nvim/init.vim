@@ -71,10 +71,10 @@ Plug 'aetherknight/neoformat'
 
 " Autocomplete
 " TODO move these to nvim-cmp?
-"Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins', 'for': 'tex' }
-"Plug 'Shougo/neosnippet.vim', {'for': 'tex'}
-"Plug 'Shougo/neosnippet-snippets', {'for': 'tex'}
-"Plug 'samtay/vim-snippets', {'for': 'tex'}
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins', 'for': 'tex' }
+Plug 'Shougo/neosnippet.vim', {'for': 'tex'}
+Plug 'Shougo/neosnippet-snippets', {'for': 'tex'}
+Plug 'samtay/vim-snippets', {'for': 'tex'}
 
 " language server
 Plug 'neovim/nvim-lspconfig'
@@ -104,6 +104,7 @@ Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 " highlighting
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/nvim-treesitter-refactor'
+Plug 'NoahTheDuke/vim-just'
 
 """"""""""" End plugins """""""""""""""""""""""""""""
 call plug#end()
@@ -234,7 +235,7 @@ let g:limelight_conceal_guifg = '#777777'
 let g:limelight_default_coefficient = 0.7
 
 " Rooter
-let g:rooter_patterns = ['Cargo.toml', 'Rakefile', 'stack.yaml', 'Gemfile', '.git/']
+let g:rooter_patterns = ['!../Cargo.toml', '!../../Cargo.toml', 'Cargo.toml', 'Rakefile', 'stack.yaml', 'Gemfile', '.git/']
 
 " Rust
 let g:rustfmt_autosave = 1
@@ -467,4 +468,10 @@ augroup ledger_namespace
   au!
   au FileType ledger set softtabstop=4
   au FileType ledger set shiftwidth=4
+augroup END
+" c
+augroup c_namespace
+  au!
+  au FileType c set softtabstop=4
+  au FileType c set shiftwidth=4
 augroup END

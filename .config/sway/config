@@ -71,6 +71,7 @@ client.urgent           $bg-urgent    $bg-urgent   $text          $bar $bar
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Gruvbox.png fill
+output * bg /home/sam/.config/sway/coffee-shop-background.jpg fill
 #output "Goldstar Company Ltd LG ULTRAWIDE 0x00004C25" bg /home/sam/Downloads/the_valley.png fill
 output "Unknown MSI MAG322CQR DA7A040C01269" bg /home/sam/Downloads/the_valley.png fill
 #
@@ -143,8 +144,8 @@ input "1739:32652:SYNA2B31:00_06CB:7F8C_Touchpad" {
     bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
     bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
     # brightness
-    bindsym XF86MonBrightnessUp exec light -A 3
-    bindsym XF86MonBrightnessDown exec light -U 3
+    bindsym XF86MonBrightnessUp exec light -A 8
+    bindsym XF86MonBrightnessDown exec light -U 8
 
     bindsym $mod+y exec grim -g "$(slurp)" "/home/sam/Screenshots/$(date -u +'%Y-%m-%d_%H-%M-%S.png')"
     bindsym $mod+Shift+y grim -o $(swaymsg -t get_outputs | jq -r '.[] | select(.focused) | .name') "/home/sam/Screenshots/$(date -u +'%Y-%m-%d_%H-%M-%S.png')"
@@ -278,6 +279,6 @@ bar {
     #    inactive_workspace #32323200 #32323200 #5c5c5c
     #}
 }
+bindsym $mod+b exec killall -SIGUSR1 waybar
 
 include /etc/sway/config.d/*
-

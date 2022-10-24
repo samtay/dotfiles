@@ -4,4 +4,5 @@ limit: 20
 lucky: true
 sites:
   - stackoverflow
-search_engine: duckduckgo
+search_engine: google
+copy_cmd: wl-copy

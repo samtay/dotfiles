@@ -84,3 +84,4 @@ smap <expr><CR>
 imap <expr><CR>
  \ neosnippet#expandable_or_jumpable() ?
  \    "\<Plug>(neosnippet_expand_or_jump)" : "\<CR>"
+nmap <leader>ll <plug>(vimtex-view)
