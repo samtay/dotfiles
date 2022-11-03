@@ -8,8 +8,8 @@ telescope.setup({
     }
   }
 })
-telescope.load_extension("fzf")
 telescope.load_extension("ui-select")
+telescope.load_extension("fzf")
 
 require('nvim-treesitter.configs').setup({
   -- A list of parser names, or "all"
@@ -71,8 +71,15 @@ local opts = {
             ["rust-analyzer"] = {
                 -- enable clippy on save
                 checkOnSave = {
-                    command = "clippy"
+                    command = "clippy",
+                    extraArgs= {"--target-dir", "/tmp/rust-analyzer-check"},
+                    allFeatures = true,
+                    allTargets = true
                 },
+                cargo = {
+                    allFeatures = true
+                    --features = {"tests"}
+                }
             }
         }
     },

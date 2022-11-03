@@ -9,8 +9,14 @@ if [[ ! -d ~/.zplug ]]; then
 fi
 source ~/.zplug/init.zsh
 
+# must be added before sourcing plugins/ssh-agent
+zstyle :omz:plugins:ssh-agent agent-forwarding yes
+zstyle :omz:plugins:ssh-agent ssh-add-args --apple-use-keychain
+#zstyle :omz:plugins:ssh-agent lazy yes
+
 # functionality
 zplug "lib/directories",          from:oh-my-zsh
+zplug "plugins/ssh-agent",        from:oh-my-zsh
 zplug "plugins/docker",           from:oh-my-zsh, defer:1
 zplug "plugins/docker-compose",   from:oh-my-zsh, defer:1
 zplug "zsh-users/zsh-syntax-highlighting", defer:1
@@ -104,7 +110,10 @@ kitty + complete setup zsh | source /dev/stdin
 #####################################################################
 
 # Color settings for zsh complete candidates
-alias ll='ls -lhF --show-control-chars --color=always'
+export less='less -R'
+alias ls='ls -lGH'
+export CLICOLOR=1
+alias ll='ls -lhF'
 alias l='ll -A'
 alias lt='l -t'
 alias ltr='lt -r'
@@ -205,7 +214,7 @@ setopt auto_pushd
 setopt pushd_minus
 setopt pushd_ignore_dups
 # Check original command in alias completion
-setopt complete_aliases
+unsetopt complete_aliases
 unsetopt hist_verify
 unsetopt RM_STAR_WAIT
 setopt nomatch

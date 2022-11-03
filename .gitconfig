@@ -1,6 +1,7 @@
 [user]
-	email = samctay@pm.me
+  email = samctay@pm.me
   name = Sam Tay
+	signingkey = E53F237A2666836C
 
 [color]
   ui = true
@@ -181,3 +182,24 @@
 	submodulesummary = true
 [init]
 	defaultBranch = main
+
+## trying out https://github.com/dandavison/delta
+
+[core]
+  pager = delta --syntax-theme gruvbox-dark
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true  # use n and N to move between diff sections
+    side-by-side = false
+    line-numbers = true
+
+[merge]
+    conflictstyle = diff3
+
+[diff]
+    colorMoved = default
+[commit]
+	gpgsign = true
