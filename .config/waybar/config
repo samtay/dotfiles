@@ -1,7 +1,7 @@
 {
     "layer": "top",
-    "position": "top",
-    "height": 25,
+    "position": "bottom",
+    "height": 26,
      "modules-left": [
         "sway/workspaces",
         "sway/mode"
@@ -9,7 +9,7 @@
     "modules-right": [
         "pulseaudio",
         "network",
-        "custom/vpn",
+        /*"custom/vpn",*/
         "cpu",
         "memory",
         "backlight",
@@ -17,17 +17,17 @@
         "clock",
         "tray"
     ],
-    "custom/yubikey": {
-        "exec": "waybar-yubikey",
-        "return-type": "json"
-    },
-    "custom/vpn": {
-        "format": "{}",
-        "return-type": "json",
-        "exec": "waybar-vpn",
-        "on-click": "protonvpn",
-        "on-click-right": "protonvpn-cli disconnect"
-    },
+    /*"custom/yubikey": {*/
+        /*"exec": "waybar-yubikey",*/
+        /*"return-type": "json"*/
+    /*},*/
+    /*"custom/vpn": {*/
+        /*"format": "{}",*/
+        /*"return-type": "json",*/
+        /*[>"exec": "waybar-vpn",<]*/
+        /*"on-click": "protonvpn",*/
+        /*"on-click-right": "protonvpn-cli disconnect"*/
+    /*},*/
     "sway/workspaces": {
         "disable-scroll": true,
         "disable-click": true,
@@ -55,7 +55,7 @@
     },
     "backlight": {
         "format": "{icon} {percent}%",
-        "format-icons": [""]
+        "format-icons": ["☼"]
     },
     "battery": {
         "states": {
@@ -74,7 +74,8 @@
         "format-ethernet": " {ifname}",
         "format-linked": " {ifname}",
         "format-disconnected": "  ",
-        "tooltip-format": "{ifname}: {ipaddr}/{cidr}\n {bandwidthDownBits}\n {bandwidthUpBits}"
+        "tooltip-format": "{ifname}: {ipaddr}/{cidr}\n {bandwidthDownBits}\n {bandwidthUpBits}",
+        "on-click": "nmtui-connect"
     },
     "pulseaudio": {
         "format": "{icon} {volume}%   {format_source}",
