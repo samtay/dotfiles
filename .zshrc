@@ -297,9 +297,9 @@ export FZF_DEFAULT_COMMAND="rg --files --hidden -g '!.git'"
 alias -g vim='nvim'
 alias -g agl='rg --pager="less -XFR"'
 #alias dotfiles='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
-alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
+alias dot='git --git-dir=$HOME/.local/share/dotfiles --work-tree=$HOME'
 
-source /home/sam/.config/broot/launcher/bash/br
+#source /home/sam/.config/broot/launcher/bash/br
 
 # eval "$(starship init zsh)"
 eval "$(rbenv init -)"
