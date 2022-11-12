@@ -1,7 +1,7 @@
 [user]
   email = samctay@pm.me
   name = Sam Tay
-	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILSOyLI6M+OWZsE10mkZMcbnQ1a/wnjPgX1eNHJ6iYYo
+  signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILSOyLI6M+OWZsE10mkZMcbnQ1a/wnjPgX1eNHJ6iYYo
 
 [color]
   ui = true
