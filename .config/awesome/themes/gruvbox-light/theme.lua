@@ -15,20 +15,35 @@ local os = os
 local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
 
 local theme                                     = {}
-theme.dir                                       = os.getenv("HOME") .. "/.config/awesome/themes/powerarrow-dark"
+theme.color = {
+  background = "#fbf1c7",
+  foreground = "#3c3836",
+  highlight = "#f9f5d7",
+  black = "#3c3836",
+  red = "#cc241d",
+  green = "#98971a",
+  yellow = "#d79921",
+  blue = "#458588",
+  magenta = "#b16286",
+  cyan = "#689d6a",
+  white = "#fbf1c7",
+  gray = '#7c6f64'
+}
+theme.dir                                       = os.getenv("HOME") .. "/.config/awesome/themes/gruvbox-light"
 theme.wallpaper                                 = theme.dir .. "/wall.png"
 theme.font                                      = "FiraCode 9"
-theme.fg_normal                                 = "#DDDDFF"
-theme.fg_focus                                  = "#EA6F81"
-theme.fg_urgent                                 = "#CC9393"
-theme.bg_normal                                 = "#1A1A1A"
-theme.bg_focus                                  = "#313131"
-theme.bg_urgent                                 = "#1A1A1A"
-theme.border_width                              = dpi(1)
-theme.border_normal                             = "#3F3F3F"
-theme.border_focus                              = "#7F7F7F"
-theme.border_marked                             = "#CC9393"
-theme.tasklist_bg_focus                         = "#1A1A1A"
+theme.bg_normal = theme.color.background
+theme.bg_focus = theme.color.highlight
+theme.bg_urgent = theme.bg_normal
+theme.fg_normal = theme.color.foreground
+theme.fg_focus = theme.color.red
+theme.fg_urgent = theme.color.red
+theme.useless_gap = dpi(3)
+theme.border_width = dpi(2)
+theme.border_normal = theme.bg_normal
+theme.border_focus = theme.color.blue
+theme.border_marked = theme.color.magenta
+theme.tasklist_bg_focus                         = theme.bg_focus
 theme.titlebar_bg_focus                         = theme.bg_focus
 theme.titlebar_bg_normal                        = theme.bg_normal
 theme.titlebar_fg_focus                         = theme.fg_focus
@@ -68,7 +83,6 @@ theme.widget_mail                               = theme.dir .. "/icons/mail.png"
 theme.widget_mail_on                            = theme.dir .. "/icons/mail_on.png"
 theme.tasklist_plain_task_name                  = true
 theme.tasklist_disable_icon                     = true
-theme.useless_gap                               = dpi(4)
 theme.titlebar_close_button_focus               = theme.dir .. "/icons/titlebar/close_focus.png"
 theme.titlebar_close_button_normal              = theme.dir .. "/icons/titlebar/close_normal.png"
 theme.titlebar_ontop_button_focus_active        = theme.dir .. "/icons/titlebar/ontop_focus_active.png"
@@ -259,9 +273,9 @@ local neticon = wibox.widget.imagebox(theme.widget_net)
 local net = lain.widget.net({
     settings = function()
         widget:set_markup(markup.font(theme.font,
-                          markup("#7AC82E", " " .. string.format("%06.1f", net_now.received))
+                          markup(theme.color.green, " " .. string.format("%06.1f", net_now.received))
                           .. " " ..
-                          markup("#46A8C3", " " .. string.format("%06.1f", net_now.sent) .. " ")))
+                          markup(theme.color.blue, " " .. string.format("%06.1f", net_now.sent) .. " ")))
     end
 })
 
