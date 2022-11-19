@@ -43,10 +43,34 @@ backup() {
 }
 
 displays-toggle() {
+  declare -a all_connected=( $( { xrandr -q || exit 1; } | awk '$2 == "connected" {print $1}' ) )
+
+
+  [[ ${#all_connected[@]} = 0 ]] && {
+      echo "no monitors connected"
+      return 1
+  }
+
   if xrandr --listmonitors | grep eDP-1 ; then
-    xrandr --output eDP-1 --off --output DP-1 --auto
+    for (( j=0; j<=${#all_connected[@]}; j++ )); do
+        if [[ ! -z ${all_connected[$j]} ]]; then
+          if [[ ${all_connected[$j]} != "eDP-1" ]]; then
+            echo "Turning on ${all_connected[$j]}"
+            xrandr --output ${all_connected[$j]} --auto
+          fi
+        fi
+    done
+    xrandr --output eDP-1 --off
   else
-    xrandr --output DP-1 --off --output eDP-1 --auto
+    xrandr --output eDP-1 --auto
+    for (( j=0; j<=${#all_connected[@]}; j++ )); do
+        if [[ ! -z ${all_connected[$j]} ]]; then
+          if [[ ${all_connected[$j]} != "eDP-1" ]]; then
+            echo "Turning off ${all_connected[$j]}"
+            xrandr --output ${all_connected[$j]} --off
+          fi
+        fi
+    done
   fi
 }
 

@@ -13,3 +13,9 @@ export PATH="$PATH:$HOME/.scripts"
 # The original version is saved in .zprofile.pysave
 # PATH="/Library/Frameworks/Python.framework/Versions/3.10/bin:${PATH}"
 # export PATH
+
+# If running from tty1 start sway
+if [ "$(tty)" = "/dev/tty1" ]; then
+	exec dbus-run-session awesome
+fi
+
