@@ -9,18 +9,22 @@ if grep -q light ~/.config/.theme; then
   sed -i 's/set background=light/set background=dark/' ~/.config/nvim/init.vim
   sed -i "s/gruvbox_light/gruvbox_dark/" ~/.config/kitty/kitty.conf
   sed -i "s/gruvbox-light/gruvbox-dark/" ~/.gitconfig
-  sed -i "s/gruvbox-light/gruvbox-dark/" ~/.config/awesome/rc.lua
+  sed -i "s/gruvbox-light/gruvbox-dark/" ~/.config/awesome/themes/gruvbox/theme.lua
+  sed -i "s/gruvbox-light/gruvbox-dark/" ~/.config/rofi/config.rasi
 else
   # make light
   theme=light
   sed -i 's/set background=dark/set background=light/' ~/.config/nvim/init.vim
   sed -i "s/gruvbox_dark/gruvbox_light/" ~/.config/kitty/kitty.conf
   sed -i "s/gruvbox-dark/gruvbox-light/" ~/.gitconfig
-  sed -i "s/gruvbox-dark/gruvbox-light/" ~/.config/awesome/rc.lua
+  sed -i "s/gruvbox-dark/gruvbox-light/" ~/.config/awesome/themes/gruvbox/theme.lua
+  sed -i "s/gruvbox-dark/gruvbox-light/" ~/.config/rofi/config.rasi
 fi
 
 echo $theme > ~/.config/.theme
+
 pkill -USR1 kitty
+
 echo 'awesome.restart()' | awesome-client &
 
 # reload vim instances

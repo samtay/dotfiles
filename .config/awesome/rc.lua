@@ -5,6 +5,10 @@
 
 --]]
 
+-- TODO
+-- 1. Modal! https://github.com/potamides/modalawesome
+-- 2. Better theme. pick icons, bar, widgets and shit from a r/unixporn
+
 -- {{{ Required libraries
 
 -- If LuaRocks is installed, make sure that packages installed through it are
@@ -23,6 +27,8 @@ local freedesktop   = require("freedesktop")
 local hotkeys_popup = require("awful.hotkeys_popup")
                       require("awful.hotkeys_popup.keys")
 local mytable       = awful.util.table or gears.table -- 4.{0,1} compatibility
+local xrandr        = require("xrandr")
+local bling         = require("bling")
 
 -- }}}
 
@@ -73,7 +79,7 @@ run_once({
   "pipewire",
   "pipewire-pulse",
   "picom --backend glx --blur-background --vsync -f -D 5",
-  "/usr/lib64/libexec/polkit-kde-authentication-agent-1"
+  "clipmenud"
 })
 
 -- TODO maybe do this at some point instead
@@ -101,8 +107,8 @@ local themes = {
     "powerarrow-dark", -- 7
     "rainbow",         -- 8
     "steamburn",       -- 9
-    "vertex",           -- 10
-    "gruvbox-light",     -- 11
+    "vertex",          -- 10
+    "gruvbox",         -- 11
 }
 
 local chosen_theme = themes[11]
@@ -115,11 +121,12 @@ local editor       = os.getenv("EDITOR") or "nvim"
 local browser      = "firefox"
 
 awful.util.terminal = terminal
-awful.util.tagnames = { "1", "2", "3", "4", "5" }
+awful.util.tagnames = { "1", "2", "3", "4", "5", "6", "7", "8", "9"}
 awful.layout.layouts = {
-    awful.layout.suit.tile.left,
     awful.layout.suit.tile,
     awful.layout.suit.floating,
+    bling.layout.mstab,
+    --awful.layout.suit.tile.left,
     --awful.layout.suit.tile.bottom,
     --awful.layout.suit.tile.top,
     --awful.layout.suit.fair,
@@ -275,17 +282,27 @@ root.buttons(mytable.join(
 -- {{{ Key bindings
 
 globalkeys = mytable.join(
+    -- Monitor mgmt (testing this out)
+    awful.key({modkey}, "d", function() xrandr.xrandr() end,
+              {description = "Change monitor configuration"}),
+
+    -- Hibernate!
+    awful.key({modkey, altkey, "Control" }, "h", function() os.execute("loginctl hibernate") end,
+              {description = "Hibernate (to disk)", group = "hotkeys"}),
+
     -- Toggle theme
     awful.key({modkey }, "t", function() os.execute("~/.scripts/toggle-theme") end,
-              {description = "destroy all notifications", group = "hotkeys"}),
+              {description = "toggle dark/light theme", group = "hotkeys"}),
 
     -- Destroy all notifications
     awful.key({ "Control",           }, "space", function() naughty.destroy_all_notifications() end,
               {description = "destroy all notifications", group = "hotkeys"}),
     -- Take a screenshot
     -- https://github.com/lcpz/dots/blob/master/bin/screenshot
-    awful.key({ altkey }, "p", function() os.execute("screenshot") end,
-              {description = "take a screenshot", group = "hotkeys"}),
+    awful.key({ modkey }, "y", function() os.execute("scrot -s -e 'mv $f ~/screenshots/'") end,
+              {description = "take a selected screenshot", group = "hotkeys"}),
+    awful.key({ modkey, "Shift" }, "y", function() os.execute("scrot -e 'mv $f ~/screenshots/'") end,
+              {description = "take a full screenshot", group = "hotkeys"}),
 
     -- X screen locker
     awful.key({ altkey, "Control" }, "l", function () os.execute(scrlocker) end,
@@ -304,10 +321,10 @@ globalkeys = mytable.join(
               {description = "go back", group = "tag"}),
 
     -- Non-empty tag browsing
-    awful.key({ altkey }, "Left", function () lain.util.tag_view_nonempty(-1) end,
-              {description = "view  previous nonempty", group = "tag"}),
-    awful.key({ altkey }, "Right", function () lain.util.tag_view_nonempty(1) end,
-              {description = "view  previous nonempty", group = "tag"}),
+    --awful.key({ altkey }, "Left", function () lain.util.tag_view_nonempty(-1) end,
+              --{description = "view  previous nonempty", group = "tag"}),
+    --awful.key({ altkey }, "Right", function () lain.util.tag_view_nonempty(1) end,
+              --{description = "view  previous nonempty", group = "tag"}),
 
     -- Default client focus
     awful.key({ altkey,           }, "j",
@@ -350,7 +367,7 @@ globalkeys = mytable.join(
         {description = "focus right", group = "client"}),
 
     -- Menu
-    awful.key({ modkey,           }, "w", function () awful.util.mymainmenu:show() end,
+    awful.key({ altkey,           }, "o", function () awful.util.mymainmenu:show() end,
               {description = "show main menu", group = "awesome"}),
 
     -- Layout manipulation
@@ -529,16 +546,26 @@ globalkeys = mytable.join(
         end,
         {description = "mpc on/off", group = "widgets"}),
 
+    -- Bluetooth
+    awful.key({modkey }, "c", function() os.execute("~/.scripts/rofi-bluetooth") end,
+              {description = "bluetooth options", group = "hotkeys"}),
+
     -- Copy primary to clipboard (terminals to gtk)
-    awful.key({ modkey }, "c", function () awful.spawn.with_shell("xsel | xsel -i -b") end,
-              {description = "copy terminal to gtk", group = "hotkeys"}),
+    --awful.key({ modkey }, "c", function () awful.spawn.with_shell("xsel | xsel -i -b") end,
+              --{description = "copy terminal to gtk", group = "hotkeys"}),
     -- Copy clipboard to primary (gtk to terminals)
-    awful.key({ modkey }, "v", function () awful.spawn.with_shell("xsel -b | xsel") end,
-              {description = "copy gtk to terminal", group = "hotkeys"}),
+    --awful.key({ modkey }, "v", function () awful.spawn.with_shell("xsel -b | xsel") end,
+              --{description = "copy gtk to terminal", group = "hotkeys"}),
 
     -- User programs
     awful.key({ modkey }, "q", function () awful.spawn(browser) end,
               {description = "run browser", group = "launcher"}),
+
+    -- Clipboard
+    awful.key({ modkey }, "p", function ()
+              os.execute("CM_LAUNCHER=rofi clipmenu")
+              end,
+              {description = "prompt: paste from clipboard history", group = "hotkeys"}),
 
     -- Default
     --[[ Menubar
@@ -556,8 +583,7 @@ globalkeys = mytable.join(
     -- check https://github.com/DaveDavenport/rofi for more details
     -- rofi
     awful.key({ modkey }, "o", function ()
-            os.execute(string.format("rofi -show %s -theme %s",
-            'run', 'dmenu'))
+            os.execute("rofi -show combi -combi-modes drun,run -modes combi")
         end,
         {description = "show rofi", group = "launcher"}),
     --
@@ -587,7 +613,7 @@ clientkeys = mytable.join(
             c:raise()
         end,
         {description = "toggle fullscreen", group = "client"}),
-    awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end,
+    awful.key({ modkey }, "w", function (c) c:kill() end,
               {description = "close", group = "client"}),
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ,
               {description = "toggle floating", group = "client"}),
@@ -748,9 +774,13 @@ awful.rules.rules = {
       }, properties = { titlebars_enabled = true }
     },
 
-    -- Set Firefox to always map on the tag named "2" on screen 1.
-    -- { rule = { class = "Firefox" },
-    --   properties = { screen = 1, tag = "2" } },
+    -- Set 1PW to always map on the tag named "4" on screen 1.
+    --{ rule = { class = "1Password" },
+      --properties = { screen = 1, tag = "4" }
+    --},
+    --{ rule_any = { class = {"Spotify", "Discord"} },
+      --properties = { screen = 1, tag = "3", maximized = true }
+    --},
 }
 
 -- }}}

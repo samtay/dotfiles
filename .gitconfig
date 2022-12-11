@@ -186,7 +186,7 @@
 ## trying out https://github.com/dandavison/delta
 
 [core]
-  pager = delta --syntax-theme gruvbox-dark
+  pager = delta --syntax-theme gruvbox-light
 
 [interactive]
     diffFilter = delta --color-only
@@ -195,6 +195,7 @@
     navigate = true  # use n and N to move between diff sections
     side-by-side = false
     line-numbers = true
+    syntax-theme = gruvbox-light
 
 [merge]
     conflictstyle = diff3
@@ -205,5 +206,6 @@
 	gpgsign = true
 [gpg]
 	format = ssh
+
 [gpg "ssh"]
 	program = /opt/1Password/op-ssh-sign
