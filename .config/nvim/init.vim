@@ -179,7 +179,7 @@ if (has("termguicolors"))
   set termguicolors
 endif
 let g:gruvbox_italic=1
-set background=light
+set background=dark
 colorscheme gruvbox
 hi Comment cterm=italic
 

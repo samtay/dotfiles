@@ -16,8 +16,8 @@ local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
 
 local theme                                     = {}
 theme.dir                                       = os.getenv("HOME") .. "/.config/awesome/themes/gruvbox"
-theme.color                                     = dofile(theme.dir .. "/gruvbox-light.lua")
-theme.wallpaper                                 = theme.dir .. "/gruvbox-light-wall.png"
+theme.color                                     = dofile(theme.dir .. "/gruvbox-dark.lua")
+theme.wallpaper                                 = theme.dir .. "/gruvbox-dark-wall.png"
 theme.font                                      = "FiraCode 9"
 theme.bg_normal = theme.color.background
 theme.bg_focus = theme.color.highlight

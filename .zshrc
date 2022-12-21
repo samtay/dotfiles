@@ -45,6 +45,7 @@ export PATH="$HOME/.cabal/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.npm-global/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/go/bin:$PATH"
 #export PATH=/usr/local/texlive/2018/bin/x86_64-linux:$PATH
 #export INFOPATH=$INFOPATH:/usr/local/texlive/2018/texmf-dist/doc/info
 #export MANPATH=$MANPATH:/usr/local/texlive/2018/texmf-dist/doc/man
@@ -244,6 +245,14 @@ bindkey "^u" backward-kill-line
 zmodload zsh/complist
 bindkey -M menuselect '^[[Z' reverse-menu-complete # shift tab for reverse completions
 
+# Yank to the system clipboard
+function vi-yank-xclip {
+    zle vi-yank
+    echo "$CUTBUFFER" | xclip -sel clip
+}
+zle -N vi-yank-xclip
+bindkey -M vicmd 'y' vi-yank-xclip
+
 
 #####################################################################
 # misc tasks
@@ -298,6 +307,9 @@ alias -g agl='rg --pager="less -XFR"'
 alias dot='git --git-dir=$HOME/.local/share/dotfiles --work-tree=$HOME'
 
 #source /home/sam/.config/broot/launcher/bash/br
+source ~/.scripts/aws-zsh-completer
 
 # eval "$(starship init zsh)"
 eval "$(rbenv init -)"
+
+#export IPFS_PATH=/var/lib/ipfs
