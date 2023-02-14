@@ -483,3 +483,9 @@ augroup c_namespace
   au FileType c set softtabstop=4
   au FileType c set shiftwidth=4
 augroup END
+" solidity
+augroup solidity_namespace
+  au!
+  au FileType solidity set softtabstop=4
+  au FileType solidity set shiftwidth=4
+augroup END

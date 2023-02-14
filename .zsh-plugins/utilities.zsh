@@ -13,6 +13,9 @@ alias sync-391-down='rsync -ae ssh --info=progress2 tays@madrid.stat.washington.
 alias sync-391-up='rsync -ae ssh --info=progress2 ~/uw/stat391/upload-dir/ tays@madrid.stat.washington.edu:/mounts/costila/common/391stuff/sam-upload-dir'
 alias sync-391='sync-391-up ; sync-391-down'
 
+rgl() {
+  rg --color=always "$@" | less -R
+}
 
 fix-wide-monitor() {
   if [ -z "$1" ]; then

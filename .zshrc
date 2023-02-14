@@ -313,3 +313,14 @@ source ~/.scripts/aws-zsh-completer
 eval "$(rbenv init -)"
 
 #export IPFS_PATH=/var/lib/ipfs
+export AWS_WEST_A=ec2-35-86-15-29.us-west-2.compute.amazonaws.com
+export AWS_WEST_B=ec2-34-223-63-98.us-west-2.compute.amazonaws.com
+export AWS_EAST_A=ec2-54-147-130-127.compute-1.amazonaws.com
+
+# little hack to remind myself to upgrade shit
+local day=$((($(date +%s) - $(date -d $(sed -n '/upgrade$/x;${x;s/.\([0-9-]*\).*/\1/p}' /var/log/pacman.log) +%s)) / 86400))
+if (( day > 2 )); then
+  echo "psst: it's been $day days since upgrading. you should run \`yay\`"
+fi
+
+export PATH="$PATH:/home/sam/.foundry/bin"

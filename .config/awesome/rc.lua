@@ -76,10 +76,9 @@ end
 
 run_once({
   "unclutter -root",
-  "pipewire",
-  "pipewire-pulse",
   "picom --backend glx --blur-background --vsync -f -D 5",
-  "clipmenud"
+  "clipmenud",
+  "/usr/lib/polkit-kde-authentication-agent-1"
 })
 
 -- TODO maybe do this at some point instead
@@ -287,7 +286,7 @@ globalkeys = mytable.join(
               {description = "Change monitor configuration"}),
 
     -- Hibernate!
-    awful.key({modkey, altkey, "Control" }, "h", function() os.execute("loginctl hibernate") end,
+    awful.key({modkey, "Shift", "Control" }, "h", function() os.execute("systemctl hibernate") end,
               {description = "Hibernate (to disk)", group = "hotkeys"}),
 
     -- Toggle theme

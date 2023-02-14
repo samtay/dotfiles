@@ -148,9 +148,6 @@
   # Completely delete a branch (local and origin)
   rmb = !sh -c 'git branch -D $1 && git push origin $1 --delete' -
 
-  # Cleanup your repo
-  cleanup = !git remote prune origin && git gc && git clean -dfx && git stash clear
-
   # Merging
   ours = "!f() { git co --ours $@ && git add $@; }; f"
   theirs = "!f() { git co --theirs $@ && git add $@; }; f"
