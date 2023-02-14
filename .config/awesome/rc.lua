@@ -299,7 +299,7 @@ globalkeys = mytable.join(
               {description = "destroy all notifications", group = "hotkeys"}),
     -- Take a screenshot
     -- https://github.com/lcpz/dots/blob/master/bin/screenshot
-    awful.key({ modkey }, "y", function() os.execute("scrot -s -e 'mv $f ~/screenshots/'") end,
+    awful.key({ modkey }, "y", function() os.execute("scrot -fs -e 'mv $f ~/screenshots/'") end,
               {description = "take a selected screenshot", group = "hotkeys"}),
     awful.key({ modkey, "Shift" }, "y", function() os.execute("scrot -e 'mv $f ~/screenshots/'") end,
               {description = "take a full screenshot", group = "hotkeys"}),
