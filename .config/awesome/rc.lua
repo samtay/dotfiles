@@ -8,6 +8,7 @@
 -- TODO
 -- 1. Modal! https://github.com/potamides/modalawesome
 -- 2. Better theme. pick icons, bar, widgets and shit from a r/unixporn
+-- 3. auto layout obsidian->3 discord->4 1pw->9 etc.
 
 -- {{{ Required libraries
 
@@ -76,7 +77,7 @@ end
 
 run_once({
   "unclutter -root",
-  "picom --backend glx --blur-background --vsync -f -D 5",
+  --"picom --backend glx --blur-background --vsync --fading --fade-delta 3 --inactive-opacity 1",
   "clipmenud",
   "/usr/lib/polkit-kde-authentication-agent-1"
 })
@@ -848,9 +849,9 @@ client.connect_signal("request::titlebars", function(c)
 end)
 
 -- Enable sloppy focus, so that focus follows mouse.
-client.connect_signal("mouse::enter", function(c)
-    c:emit_signal("request::activate", "mouse_enter", {raise = vi_focus})
-end)
+--client.connect_signal("mouse::enter", function(c)
+    --c:emit_signal("request::activate", "mouse_enter", {raise = vi_focus})
+--end)
 
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
