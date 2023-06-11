@@ -14,9 +14,9 @@ let g:vimtex_compiler_latexmk = {
       \   '--enable-write18',
       \ ]
       \}
-call deoplete#custom#var('omni', 'input_patterns', {
-  \ 'tex': g:vimtex#re#deoplete
-  \})
+"call deoplete#custom#source('omni', 'input_patterns', {
+  "\ 'tex': g:vimtex#re#deoplete
+  "\})
 call vimtex#imaps#add_map(
   \{
   \ 'lhs' : '-1',
@@ -65,7 +65,7 @@ call vimtex#imaps#add_map(
   \ 'rhs' : '\mathcal{}',
   \ 'wrapper' : 'vimtex#imaps#wrap_trivial'
   \})
-" Use deoplete / snippets.
+"Use deoplete / snippets.
 let g:deoplete#enable_at_startup = 1
 let g:neosnippet#enable_snipmate_compatibility = 1
 let g:neosnippet#snippets_directory='~/git/vim-snippets/snippets'

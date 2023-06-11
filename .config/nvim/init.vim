@@ -27,6 +27,8 @@ Plug 'tpope/vim-obsession'
 Plug 'Yggdroot/indentLine'
 Plug 'kana/vim-textobj-user' | Plug 'kana/vim-textobj-line'
 Plug 'ledger/vim-ledger'
+Plug 'danilamihailov/beacon.nvim'
+Plug 'nvim-tree/nvim-web-devicons'
 
 " spacemacs
 " This plugin kinda sucks, just remove it maybe?
@@ -51,13 +53,17 @@ Plug 'peitalin/vim-jsx-typescript'
 Plug 'rust-lang/rust.vim'
 Plug 'cespare/vim-toml'
 
+" dart/flutter
+Plug 'dart-lang/dart-vim-plugin'
+Plug 'akinsho/flutter-tools.nvim'
+
 " coq ?
 " check back after neovim support added
 " Plug 'whonore/Coqtail' | Plug 'let-def/vimbufsync'
 Plug 'https://framagit.org/tyreunom/coquille.git'
 
 " tex
-Plug 'lervag/vimtex', { 'for': 'tex' }
+Plug 'lervag/vimtex' ", { 'for': 'tex' }
 
 " nix
 Plug 'LnL7/vim-nix'
@@ -88,6 +94,7 @@ Plug 'hrsh7th/nvim-cmp'
 Plug 'simrat39/rust-tools.nvim'
 Plug 'nvim-lua/lsp-status.nvim'
 Plug 'onsails/lspkind-nvim'
+Plug 'jose-elias-alvarez/typescript.nvim'
 
 " Snippet stuff
 Plug 'hrsh7th/cmp-vsnip'
@@ -179,7 +186,7 @@ if (has("termguicolors"))
   set termguicolors
 endif
 let g:gruvbox_italic=1
-set background=dark
+set background=light
 colorscheme gruvbox
 hi Comment cterm=italic
 
@@ -276,6 +283,15 @@ function! NumberToggle()
   endif
 endfunc
 
+function! TabToggle()
+  if(&expandtab)
+    set noexpandtab
+  else
+    set expandtab
+  endif
+  retab!
+endfunc
+
 function! NERDTreeToggleInCurDir()
   " If NERDTree is open in the current buffer
   if (exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1)
@@ -334,7 +350,6 @@ nnoremap <leader>fb <cmd>Telescope buffers<CR>
 nnoremap <leader>fs :w<CR>
 nnoremap <leader>fS :wa<CR>
 nnoremap <leader>fe :!"%:p"<CR>
-nnoremap <leader>m <cmd>Telescope marks<CR>
 " buffers
 nnoremap <leader>bx :%bd\|e#\|bd#<CR>
 nnoremap <leader>bd :bdelete<CR>
@@ -356,6 +371,7 @@ nnoremap <silent>gi <cmd>Telescope lsp_implementations<CR>
 nnoremap <silent>gt <cmd>Telescope lsp_type_definitions<CR>
 nnoremap <silent>gd <cmd>Telescope lsp_definitions<CR>
 nnoremap <silent>ga <cmd>lua vim.lsp.buf.code_action()<CR>
+nnoremap <leader>gm <cmd>Telescope marks<CR>
 nnoremap <silent>K  <cmd>lua vim.lsp.buf.hover()<CR>
 vnoremap <silent>K  <cmd>lua vim.lsp.buf.hover()<CR>
 nnoremap <leader>dd <cmd>Telescope diagnostics<CR>
@@ -399,6 +415,7 @@ nnoremap <leader>tc :call ConcealToggle()<cr>
 nnoremap <leader>ts :noh<cr>
 nnoremap <leader>tg :Goyo<cr>
 nnoremap <leader>tl :Limelight!!<cr>
+nnoremap <leader>tt :call TabToggle()<CR>
 " copy/paste
 vmap <leader>y "+y
 nmap <leader>p "+p
@@ -419,9 +436,16 @@ vnoremap <leader>a, :Tabularize /,<CR>
 vnoremap <leader>ac :Tabularize /--<CR>
 " vimrc
 nnoremap <leader>ve :sp ~/.config/nvim/init.vim<cr>
+nnoremap <leader>le :sp ~/.config/nvim/lua/cfg.lua<cr>
 nnoremap <leader>vs :so ~/.config/nvim/init.vim<cr>
 "au BufWritePost init.vim so ~/.config/nvim/init.vim
 
+" mobile dev (best namespace i could think of)
+nnoremap <leader>mm :Telescope flutter commands<cr>
+nnoremap <leader>mr :FlutterReload<cr>
+nnoremap <leader>mx :FlutterRun<cr>
+nnoremap <leader>md :FlutterDevices<cr>
+nnoremap <leader>mq :FlutterQuit<cr>
 
 " haskell
 augroup haskell_namespace
@@ -462,9 +486,11 @@ augroup rust_namespace
   au FileType rust nnoremap <leader>rc :RustOpenCargo<CR>
   au FileType rust nnoremap <leader>rp :RustParentModule<CR>
   au FileType rust nnoremap <leader>rd :RustOpenExternalDocs<CR>
+  au FileType rust set tabstop=4
   au FileType rust set softtabstop=4
   au FileType rust set shiftwidth=4
 augroup END
+"let g:rust_recommended_style = v:false
 " java
 augroup java_namespace
   au!
@@ -488,4 +514,13 @@ augroup solidity_namespace
   au!
   au FileType solidity set softtabstop=4
   au FileType solidity set shiftwidth=4
+augroup END
+" dart
+augroup dart_namespace
+  au!
+  au FileType dart set softtabstop=2
+  au FileType dart set shiftwidth=2
+  au FileType dart let g:dart_trailing_comma_indent = v:true
+  au FileType dart let g:dart_style_guide = 2
+  "au FileType dart let g:dart_format_on_save = 1
 augroup END

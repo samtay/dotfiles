@@ -43,9 +43,9 @@ require('nvim-treesitter.configs').setup({
 local lsp_status = require('lsp-status')
 lsp_status.register_progress()
 
--- Basic rust/lsp/cmp settings from https://sharksforarms.dev/posts/neovim-rust/
 local nvim_lsp = require('lspconfig')
 
+-- rust opts
 local opts = {
     tools = { -- rust-tools options
         autoSetHints = true,
@@ -71,19 +71,52 @@ local opts = {
                 -- enable clippy on save
                 checkOnSave = {
                     command = "clippy",
-                    extraArgs= {"--target-dir", "/tmp/rust-analyzer-check"},
+                    --extraArgs= {"--target-dir", "/tmp/rust-analyzer-check"},
                     allFeatures = true,
                     allTargets = true
                 },
                 cargo = {
                     allFeatures = true
                     --features = {"tests"}
-                }
+                },
+                --rustfmt = {
+                    --extraArgs = { "+nightly" }
+                --}
             }
         }
     },
 }
+-- rust
 require('rust-tools').setup(opts)
+-- typescript
+require("typescript").setup({
+    disable_commands = false, -- prevent the plugin from creating Vim commands
+    debug = false, -- enable debug logging for commands
+    go_to_source_definition = {
+        fallback = true, -- fall back to standard LSP definition on failure
+    },
+    server = { -- pass options to lspconfig's setup method
+        on_attach = lsp_status.on_attach
+    },
+})
+-- latex
+nvim_lsp.texlab.setup {}
+-- python
+nvim_lsp.pyright.setup {}
+
+-- dart/flutter
+require("flutter-tools").setup {}
+
+--bash
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'sh',
+  callback = function()
+    vim.lsp.start({
+      name = 'bash-language-server',
+      cmd = { 'bash-language-server', 'start' },
+    })
+  end,
+})
 
 -- Setup Completion
 -- See https://github.com/hrsh7th/nvim-cmp#basic-configuration
@@ -173,3 +206,6 @@ cmp.setup({
 
 -- TODO potentially better completion sorting:
 -- https://github.com/hrsh7th/nvim-cmp/issues/156#issuecomment-916338617
+
+-- format on save
+--vim.cmd [[autocmd BufWritePre <buffer> lua vim.lsp.buf.format()]]
