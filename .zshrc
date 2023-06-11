@@ -21,6 +21,7 @@ zplug "plugins/docker",           from:oh-my-zsh, defer:1
 zplug "plugins/docker-compose",   from:oh-my-zsh, defer:1
 zplug "zsh-users/zsh-syntax-highlighting", defer:1
 zplug "zsh-users/zsh-history-substring-search", defer:2
+zplug "zsh-users/zsh-completions"
 zplug "~/.zsh-plugins", from:local, defer:3
 zplug "spwhitt/nix-zsh-completions"
 

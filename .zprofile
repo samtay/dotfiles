@@ -19,3 +19,4 @@ if [ "$(tty)" = "/dev/tty1" ]; then
 	exec dbus-run-session awesome
 fi
 
+#source "/home/sam/code/emsdk/emsdk_env.sh"

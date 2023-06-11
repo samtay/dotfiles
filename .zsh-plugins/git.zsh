@@ -1,5 +1,6 @@
 # status
 alias -g gst='git status'
+alias -g gsti='git status --ignore-submodules'
 alias -g gsl='gst | less'
 alias -g gd='git diff'
 alias -g gdc='gd --cached'
