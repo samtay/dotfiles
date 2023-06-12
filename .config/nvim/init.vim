@@ -29,6 +29,7 @@ Plug 'kana/vim-textobj-user' | Plug 'kana/vim-textobj-line'
 Plug 'ledger/vim-ledger'
 Plug 'danilamihailov/beacon.nvim'
 Plug 'nvim-tree/nvim-web-devicons'
+Plug 'nvim-tree/nvim-tree.lua'
 
 " spacemacs
 " This plugin kinda sucks, just remove it maybe?
@@ -52,6 +53,9 @@ Plug 'peitalin/vim-jsx-typescript'
 " rust
 Plug 'rust-lang/rust.vim'
 Plug 'cespare/vim-toml'
+Plug 'mfussenegger/nvim-dap'
+Plug 'rcarriga/nvim-dap-ui'
+Plug 'folke/neodev.nvim'
 
 " dart/flutter
 Plug 'dart-lang/dart-vim-plugin'
@@ -342,7 +346,8 @@ map <SPACE> <leader>
 
 """""""""""""""""""""""""""" Leader Settings """"""""""""""""""""
 " files / telescope nav
-nnoremap <leader>ft :call NERDTreeToggleInCurDir()<CR>
+nnoremap <leader>ft :NvimTreeToggle<CR>
+nnoremap <leader>fT :NvimTreeFindFile<CR>
 nnoremap <leader>ff <cmd>Telescope find_files<CR>
 nnoremap <leader>fg <cmd>Telescope git_files<CR>
 nnoremap <leader>fr <cmd>Telescope oldfiles<CR>
@@ -374,11 +379,20 @@ nnoremap <silent>ga <cmd>lua vim.lsp.buf.code_action()<CR>
 nnoremap <leader>gm <cmd>Telescope marks<CR>
 nnoremap <silent>K  <cmd>lua vim.lsp.buf.hover()<CR>
 vnoremap <silent>K  <cmd>lua vim.lsp.buf.hover()<CR>
-nnoremap <leader>dd <cmd>Telescope diagnostics<CR>
-nnoremap <leader>dk <cmd>lua vim.diagnostic.goto_prev()<CR>
-nnoremap <leader>dp <cmd>lua vim.diagnostic.goto_prev()<CR>
-nnoremap <leader>dj <cmd>lua vim.diagnostic.goto_next()<CR>
-nnoremap <leader>dn <cmd>lua vim.diagnostic.goto_next()<CR>
+nnoremap <leader>ee <cmd>Telescope diagnostics<CR>
+nnoremap <leader>ek <cmd>lua vim.diagnostic.goto_prev()<CR>
+nnoremap <leader>ej <cmd>lua vim.diagnostic.goto_next()<CR>
+
+" dap shortcuts
+nnoremap <leader>db <cmd>lua require'dap'.toggle_breakpoint()<CR>
+nnoremap <leader>dc <cmd>lua require'dap'.continue()<CR>
+nnoremap <leader>dso <cmd>lua require'dap'.step_over()<CR>
+nnoremap <leader>dj <cmd>lua require'dap'.step_over()<CR>
+nnoremap <leader>dsi <cmd>lua require'dap'.step_into()<CR>
+nnoremap <leader>dl <cmd>lua require'dap'.step_into()<CR>
+nnoremap <leader>dr <cmd>lua require'dap'.repl.open()<CR>
+nnoremap <leader>do <cmd>lua require'dap'.repl.open()<CR>
+
 " Set updatetime for CursorHold
 " 300ms of no cursor movement to trigger CursorHold
 set updatetime=300

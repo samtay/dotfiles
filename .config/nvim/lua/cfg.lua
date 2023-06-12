@@ -1,3 +1,9 @@
+-- file tree
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+vim.opt.termguicolors = true
+require("nvim-tree").setup()
+
 local telescope = require('telescope');
 telescope.setup({
   extensions = {
@@ -46,7 +52,31 @@ lsp_status.register_progress()
 local nvim_lsp = require('lspconfig')
 
 -- rust opts
+-- rust debugging
+require("neodev").setup({
+  library = { plugins = { "nvim-dap-ui" }, types = true }
+})
+local extension_path = vim.env.HOME .. '/.local/share/codelldb/extension/'
+local codelldb_path = extension_path .. 'adapter/codelldb'
+local liblldb_path = extension_path .. 'lldb/lib/liblldb.so'
+local dap = require('dap')
+local dapui = require('dapui')
+dapui.setup()
+dap.listeners.after.event_initialized["dapui_config"] = function()
+  dapui.open()
+end
+dap.listeners.before.event_terminated["dapui_config"] = function()
+  dapui.close()
+end
+dap.listeners.before.event_exited["dapui_config"] = function()
+  dapui.close()
+end
+
 local opts = {
+    dap = {
+        adapter = require('rust-tools.dap').get_codelldb_adapter(codelldb_path, liblldb_path)
+    },
+
     tools = { -- rust-tools options
         autoSetHints = true,
         inlay_hints = {
@@ -103,6 +133,8 @@ require("typescript").setup({
 nvim_lsp.texlab.setup {}
 -- python
 nvim_lsp.pyright.setup {}
+-- lua itself
+nvim_lsp.lua_ls.setup {}
 
 -- dart/flutter
 require("flutter-tools").setup {}
