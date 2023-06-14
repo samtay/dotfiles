@@ -4,24 +4,24 @@ set -eo
 theme=
 
 if grep -q light ~/.config/.theme; then
-  # make dark
-  theme=dark
-  sed -i 's/set background=light/set background=dark/' ~/.config/nvim/init.vim
-  sed -i "s/gruvbox_light/gruvbox_dark/" ~/.config/kitty/kitty.conf
-  sed -i "s/gruvbox-light/gruvbox-dark/" ~/.gitconfig
-  sed -i "s/gruvbox-light/gruvbox-dark/" ~/.config/awesome/themes/gruvbox/theme.lua
-  sed -i "s/gruvbox-light/gruvbox-dark/" ~/.config/rofi/config.rasi
+	# make dark
+	theme=dark
+	sed -i 's/background = "light"/background = "dark"/' ~/.config/astronvim/lua/user/options.lua
+	sed -i "s/gruvbox_light/gruvbox_dark/" ~/.config/kitty/kitty.conf
+	sed -i "s/gruvbox-light/gruvbox-dark/" ~/.gitconfig
+	sed -i "s/gruvbox-light/gruvbox-dark/" ~/.config/awesome/themes/gruvbox/theme.lua
+	sed -i "s/gruvbox-light/gruvbox-dark/" ~/.config/rofi/config.rasi
 else
-  # make light
-  theme=light
-  sed -i 's/set background=dark/set background=light/' ~/.config/nvim/init.vim
-  sed -i "s/gruvbox_dark/gruvbox_light/" ~/.config/kitty/kitty.conf
-  sed -i "s/gruvbox-dark/gruvbox-light/" ~/.gitconfig
-  sed -i "s/gruvbox-dark/gruvbox-light/" ~/.config/awesome/themes/gruvbox/theme.lua
-  sed -i "s/gruvbox-dark/gruvbox-light/" ~/.config/rofi/config.rasi
+	# make light
+	theme=light
+	sed -i 's/background = "dark"/background = "light"/' ~/.config/astronvim/lua/user/options.lua
+	sed -i "s/gruvbox_dark/gruvbox_light/" ~/.config/kitty/kitty.conf
+	sed -i "s/gruvbox-dark/gruvbox-light/" ~/.gitconfig
+	sed -i "s/gruvbox-dark/gruvbox-light/" ~/.config/awesome/themes/gruvbox/theme.lua
+	sed -i "s/gruvbox-dark/gruvbox-light/" ~/.config/rofi/config.rasi
 fi
 
-echo $theme > ~/.config/.theme
+echo $theme >~/.config/.theme
 
 pkill -USR1 kitty
 
@@ -30,14 +30,14 @@ echo 'awesome.restart()' | awesome-client &
 # reload vim instances
 #original_window=$(xdotool getwindowfocus)
 #for pid in $(xdotool search --name ': nvim'); do
-  #sleep 0.5
-  #xdotool windowfocus $pid
-  #sleep 0.1
-  #xdotool key Escape
-  #sleep 0.1
-  #xdotool type ':so $MYVIMRC'
-  #sleep 0.1
-  #xdotool key Return
+#sleep 0.5
+#xdotool windowfocus $pid
+#sleep 0.1
+#xdotool key Escape
+#sleep 0.1
+#xdotool type ':so $MYVIMRC'
+#sleep 0.1
+#xdotool key Return
 #done
 #xdotool windowfocus $original_window
 
