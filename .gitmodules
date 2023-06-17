@@ -4,3 +4,9 @@
 [submodule ".config/astronvim/lua/user"]
 	path = .config/astronvim/lua/user
 	url = git@github.com:samtay/astronvim-conf.git
+[submodule "/home/sam/.config/xmonad/xmonad-git"]
+	path = /home/sam/.config/xmonad/xmonad-git
+	url = git@github.com:xmonad/xmonad.git
+[submodule "/home/sam/.config/xmonad/xmonad-contrib-git"]
+	path = /home/sam/.config/xmonad/xmonad-contrib-git
+	url = git@github.com:xmonad/xmonad-contrib.git
