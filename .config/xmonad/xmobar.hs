@@ -1,6 +1,6 @@
 -- docs: http://projects.haskell.org/xmobar/
 Config {
-    font = "xft:Source Code Pro-9",
+    font = "xft:Nerd FiraCode-9",
     bgColor = "#2d2d2d",
     fgColor = "#cccccc",
     position = Top,
@@ -37,7 +37,7 @@ Config {
           , "--normal",   "#6699cc"
           , "--low",      "#99cc99"
           ] 60
-      , Run Network "wlp3s0"
+      , Run Network "wlan0"
           [ "--template", "Wifi: <rx> KB/s"
           , "--High",     "200"
           , "--Low",      "10"

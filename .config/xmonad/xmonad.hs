@@ -6,7 +6,6 @@ import Data.Semigroup ((<>))
 import System.IO
 import System.Exit
 import XMonad
-import XMonad.Config.Xfce
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
@@ -18,16 +17,24 @@ import XMonad.Layout.Fullscreen
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Spiral
 import XMonad.Layout.Tabbed
+import XMonad.Layout.ResizableTile
 import XMonad.Layout.ResizableThreeColumns
 import XMonad.Layout.TwoPane
 import XMonad.Prompt
 import XMonad.Prompt.Shell
 import XMonad.Util.Run(spawnPipe)
 import XMonad.Util.EZConfig(additionalKeys)
+import XMonad.Util.SessionStart
 import Graphics.X11.ExtraTypes.XF86
+import XMonad.Hooks.TaffybarPagerHints
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
+-- TODO
+-- 3. port alt+d displays script (or find rofi script that does the same)
+-- 4. Use JumpToLayout to full screen on alt+f
+-- 5. Fix reloading xmonad
+-- 6. Taffybar ?
 
 ------------------------------------------------------------------------
 -- Terminal
@@ -39,7 +46,7 @@ myTerminal = "kitty"
 -- The command to use as a launcher, to launch commands that don't have
 -- preset keybindings.
 --myLauncher = "$(yeganesh -x)"
-myLauncher = "rofi -matching fuzzy -show run"
+myLauncher = "rofi -show combi -combi-modes drun,run -modes combi"
 
 ------------------------------------------------------------------------
 -- Workspaces
@@ -71,12 +78,6 @@ myManageHook = def
 -}
 
 ------------------------------------------------------------------------
--- XMonad Prompt
---
--- TODO explore
-myXPConfig = def
-
-------------------------------------------------------------------------
 
 ------------------------------------------------------------------------
 -- Layouts
@@ -89,44 +90,73 @@ myXPConfig = def
 -- which denotes layout choice.
 --
 myLayoutHook = avoidStruts $
-      ResizableThreeCol 1 (3/100) (1/3) []
+      ResizableTall 1 (3/100) (1/2) []
   ||| ResizableThreeColMid 1 (3/100) (1/3) []
-  ||| emptyBSP
   ||| noBorders (fullscreenFull Full)
 
 ------------------------------------------------------------------------
 -- Colors and borders
--- Currently based on the tomorrow night eighties theme.
+-- Based on gruvbox.
 --
-myNormalBorderColor  = currentline
-myFocusedBorderColor = brightGreen
+myNormalBorderColor  = gray myTheme
+myFocusedBorderColor = brightGreen myTheme
 myBorderWidth = 2
 
 -- Colors for text and backgrounds of each tab when in "Tabbed" layout.
 tabConfig = def {
-    fontName = "xft:Source Code Pro:size=9",
-    activeBorderColor   = aqua,
-    activeTextColor     = foreground,
-    activeColor         = selection,
-    inactiveBorderColor = selection,
-    inactiveTextColor   = comment,
-    inactiveColor       = background
+    fontName = "xft:FiraCode Nerd Font-9",
+    -- fontName = "xft:Source Code Pro:size=9",
+    activeBorderColor   = aqua myTheme,
+    activeTextColor     = foreground myTheme,
+    activeColor         = red myTheme,
+    inactiveBorderColor = gray myTheme,
+    inactiveTextColor   = gray myTheme,
+    inactiveColor       = background myTheme
 }
 
--- Tomorrow Night Eighties theme
-background = "#2d2d2d"
-currentline = "#393939"
-selection = "#515151"
-foreground = "#cccccc"
-comment = "#999999"
-red = "#f2777a"
-orange = "#f99157"
-yellow = "#ffcc66"
-green = "#99cc99"
-brightGreen = "#77ee77"
-aqua = "#66cccc"
-blue = "#6699cc"
-purple = "#cc99cc"
+data GruvboxTheme = GruvboxTheme {
+  background :: String,
+  foreground :: String,
+  red :: String,
+  green :: String,
+  brightGreen :: String,
+  yellow :: String,
+  blue :: String,
+  purple :: String,
+  aqua :: String,
+  gray :: String,
+  orange :: String
+}
+
+myTheme = gruvboxDark
+
+gruvboxDark = GruvboxTheme {
+  background = "#282828",
+  foreground = "#ebdbb2",
+  red = "#cc241d",
+  green = "#98971a",
+  brightGreen = "#b8bb26",
+  yellow = "#d79921",
+  blue = "#458588",
+  purple = "#b16286",
+  aqua = "#689d6a",
+  gray = "#a89984",
+  orange = "#d65d0e"
+}
+
+gruvboxLight = GruvboxTheme {
+  background = "#fbf1c7",
+  foreground = "#3c3836",
+  red = "#cc241d",
+  green = "#98971a",
+  brightGreen = "#b8bb26",
+  yellow = "#d79921",
+  blue = "#458588",
+  purple = "#b16286",
+  aqua = "#689d6a",
+  gray = "#7c6f64",
+  orange = "#d65d0e"
+}
 
 ------------------------------------------------------------------------
 -- Key bindings
@@ -145,42 +175,46 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   --
 
   -- Start a terminal.  Terminal to start is specified by myTerminal variable.
-  [ ((modMask .|. shiftMask, xK_Return),
+  [ ((modMask, xK_Return),
      spawn $ XMonad.terminal conf)
 
   -- Shell prompt
-  , ((modMask .|. controlMask, xK_Return),
-     shellPrompt myXPConfig)
+  -- , ((modMask .|. controlMask, xK_Return),
+  --    shellPrompt myXPConfig)
 
   -- Start editing dotfiles
-  , ((modMask, xK_x), submap . M.fromList $
-      [ ((0, xK_x), editFile "$HOME/.xmonad/xmonad.hs")
+  , ((modMask, xK_period), submap . M.fromList $
+      [ ((0, xK_x), editFile "$HOME/.config/xmonad/xmonad.hs")
       , ((0, xK_v), editFile "$HOME/.config/nvim/init.vim")
       , ((0, xK_z), editFile "$HOME/.zshrc")
       ])
 
-  -- Ensure panel is up
-  , ((modMask .|. shiftMask, xK_r),
-     spawn "xfce4-panel --disable-wm-check")
-
-  -- XFCE settings
-  , ((modMask .|. shiftMask, xK_comma),
-     spawn "xfce4-settings-manager")
+  -- Hibernate
+  , ((modMask .|. controlMask .|. shiftMask , xK_h),
+     spawn "systemctl hibernate")
 
   -- Toggle multi monitor display (xrandr wrapper)
+  -- TODO redo tese?
   , ((modMask .|. shiftMask, xK_d), submap . M.fromList $
       [ ((0, xK_0), spawn "displays-toggle 0")
       , ((0, xK_1), spawn "displays-toggle 1")
       , ((0, xK_2), spawn "displays-toggle 2")
       ])
+  -- For now just support monitor on top
+  , ((modMask, xK_d), submap . M.fromList $
+      [ ((0, xK_0), spawn "xrandr --output eDP-1 --auto --output DP-3 --off")
+      , ((0, xK_1), spawn "xrandr --output eDP-1 --primary --mode 2256x1504 --pos 152x1440 --rotate normal --output DP-3 --mode 2560x1440 --pos 0x0")
+      ])
 
   -- Toggle theme
-  , ((modMask .|. shiftMask, xK_t),
-      spawn "$HOME/git/dotfiles/toggle-theme"
+  , ((modMask, xK_t), do
+      spawn "$HOME/.scripts/toggle-theme"
+      spawn "xmonad --recompile"
+      restart "xmonad" True
     )
   -- Spawn the launcher using command specified by myLauncher.
   -- Use this to launch programs without a key binding.
-  , ((modMask, xK_p),
+  , ((modMask, xK_o),
      spawn myLauncher)
 
   -- Spawn washout cams
@@ -208,17 +242,18 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- Take a selective screenshot.
   , ((modMask, xK_y),
-     spawn "sleep 0.2; scrot -s -e 'mv $f ~/screenshots/'")
+     -- sleep 0.1; 
+     spawn "scrot -fs -e 'mv $f ~/screenshots/'")
 
   -- Take a full screenshot.
   , ((modMask .|. shiftMask, xK_y),
-     spawn "sleep 0.2; scrot -s -e 'mv $f ~/screenshots/ && dragon-drag-and-drop -x ~/screenshots/$f'")
+     spawn "scrot -e 'mv $f ~/screenshots/'")
+     -- spawn "sleep 0.2; scrot -s -e 'mv $f ~/screenshots/ && dragon-drag-and-drop -x ~/screenshots/$f'")
 
   -- Toggle status bar
   , ((modMask, xK_b),
      sendMessage ToggleStruts)
 
-{-
   -- Increase brightness.
   , ((0, xF86XK_MonBrightnessUp),
      spawn "light -A 5")
@@ -226,7 +261,6 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- Decrease brightness.
   , ((0, xF86XK_MonBrightnessDown),
      spawn "light -U 5")
--}
 
   -- Mute volume.
   , ((0, xF86XK_AudioMute),
@@ -240,40 +274,24 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((0, xF86XK_AudioRaiseVolume),
      spawn "pactl set-sink-volume @DEFAULT_SINK@ +5%")
 
-  -- Decrease volume.
-  , ((modMask .|. controlMask, xK_j),
-     spawn "pactl set-sink-volume alsa_output.pci-0000_01_00.1.hdmi-stereo -5%")
-
-  -- Increase volume.
-  , ((modMask .|. controlMask, xK_k),
-     spawn "pactl set-sink-volume alsa_output.pci-0000_01_00.1.hdmi-stereo +5%")
-
-  -- Audio previous.
-  , ((0, 0x1008FF16),
-     spawn "")
-
-  -- Play/pause.
-  , ((0, 0x1008FF14),
-     spawn "")
-
-  -- Audio next.
-  , ((0, 0x1008FF17),
-     spawn "")
-
-  -- Toggle screen TODO UNCOMMENT WITH NEW MONITOR
-  --, ((modMask, xK_quoteleft),
-  --    nextScreen)
-
   -- Toggle workspace
   , ((modMask, xK_Tab),
       toggleWS)
+
+  -- Prompt for clipboard history
+  , ((modMask, xK_p),
+      spawn "CM_LAUNCHER=rofi clipmenu")
+
+  -- Connect bluetooth
+  , ((modMask, xK_c),
+      spawn "~/.scripts/rofi-bluetooth")
 
   --------------------------------------------------------------------
   -- "Standard" xmonad key bindings
   --
 
   -- Close focused window.
-  , ((modMask .|. shiftMask, xK_c),
+  , ((modMask, xK_w),
      kill)
 
   -- Cycle through the available layout algorithms.
@@ -296,12 +314,8 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask, xK_k),
      windows W.focusUp  )
 
-  -- Move focus to the master window.
-  , ((modMask, xK_m),
-     windows W.focusMaster  )
-
   -- Swap the focused window and the master window.
-  , ((modMask, xK_Return),
+  , ((modMask .|. shiftMask, xK_Return),
      windows W.swapMaster)
 
   -- Swap the focused window with the next window.
@@ -333,24 +347,26 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
      sendMessage Rotate)
 
   -- Push window back into tiling.
-  , ((modMask, xK_t),
+  , ((modMask .|. shiftMask, xK_t),
      withFocused $ windows . W.sink)
 
   -- Increment the number of windows in the master area.
-  , ((modMask, xK_comma),
+  , ((modMask .|. shiftMask, xK_comma),
      sendMessage (IncMasterN 1))
 
   -- Decrement the number of windows in the master area.
-  , ((modMask, xK_period),
+  , ((modMask .|. shiftMask, xK_period),
      sendMessage (IncMasterN (-1)))
 
-  -- Quit xmonad.
+  -- Quit xmonad. 
   , ((modMask .|. shiftMask, xK_q),
-     spawn "xfce4-session-logout")
+     io exitSuccess)
 
   -- Restart xmonad.
-  , ((modMask, xK_q),
-     spawn "xmonad --recompile" >> restart "xmonad" True)
+  , ((modMask, xK_r), do
+      spawn "xmonad --recompile"
+      restart "xmonad" True
+    )
   ]
 
   ++
@@ -362,10 +378,11 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
       , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
   ++
 
-  -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
-  -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
-  [((m .|. modMask, key), screenWorkspace sc >>= flip whenJust (windows . f))
-    | (key, sc) <- zip [xK_w, xK_e] [0, 1]
+  -- use super for focus & moving screens
+  -- super-N, Switch to physical/Xinerama screens N
+  -- super-shift-N Move client to screen N
+  [((m .|. mod4Mask, key), screenWorkspace sc >>= flip whenJust (windows . f))
+    | (key, sc) <- zip [xK_1 .. xK_9] [0 .. 10]
     , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
 
@@ -395,17 +412,18 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 
 ------------------------------------------------------------------------
 -- Custom startup
---
--- Trying to just get this damn xfce panel to work on start up.
 myStartupHook :: X ()
 myStartupHook = do
-  ewmhDesktopsStartup
-  spawn "sleep 1.0 ; xfce4-panel -r --disable-wm-check"
+  doOnce $ do
+    spawn "clipmenud"
+    spawn "/usr/lib/polkit-kde-authentication-agent-1"
+  spawn "feh --bg-scale --no-fehbg ~/.config/bg/retro-linux.png"
+  setSessionStarted
 
 ------------------------------------------------------------------------
 -- Run xmonad with all the defaults we set up.
 --
-main = xmonad $ xfceConfig
+main = xmonad $ docks $ ewmh $ pagerHints $ def
   { terminal           = myTerminal
   , focusFollowsMouse  = myFocusFollowsMouse
   , borderWidth        = myBorderWidth
