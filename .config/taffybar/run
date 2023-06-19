@@ -1,0 +1,5 @@
+#!/bin/sh
+cd ~/.config/taffybar || exit 1
+stack install taffybar
+pkill -f taffybar-linux-x86_64
+exec ~/.local/bin/taffybar

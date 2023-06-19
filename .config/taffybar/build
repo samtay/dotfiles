@@ -1,0 +1,3 @@
+#!/bin/sh
+cd ~/.config/taffybar || exit 1
+exec stack install taffybar

@@ -1,0 +1,38 @@
+resolver: lts-18.28
+
+packages:
+  - ConfigFile-1.1.4
+  - cairo-0.13.8.2
+  - gi-atk-2.0.24
+  - gi-cairo-1.0.26
+  - gi-cairo-connector-0.1.1
+  - gi-cairo-render-0.1.1
+  - gi-dbusmenu-0.4.10
+  - gi-dbusmenugtk3-0.4.11
+  - gi-freetype2-2.0.1
+  - gi-gdk-3.0.25
+  - gi-gdkpixbuf-2.0.28
+  - gi-gdkx11-3.0.12
+  - gi-gio-2.0.29
+  - gi-glib-2.0.29
+  - gi-gmodule-2.0.2
+  - gi-gobject-2.0.27
+  - gi-gtk-3.0.38
+  - gi-harfbuzz-0.0.6
+  - gi-pango-1.0.26
+  - gi-xlib-2.0.11
+  - gio-0.13.8.2
+  - glib-0.13.8.2
+  # - gtk-sni-tray-0.1.8.1
+  - gtk-sni-tray-0.1.8.0
+  # - git: git@github.com:taffybar/gtk-sni-tray.git
+  #   commit: d94a9e3ec2e6310b2b36d17638d1facdee292b59
+  - gtk2hs-buildtools-0.13.8.3
+  - gtk3-0.15.7
+  - haskell-gi-0.26.7
+  - haskell-gi-base-0.26.4
+  - pango-0.13.8.2
+  - taffybar-3.3.0
+  - xdg-desktop-entry-0.1.1.1
+  - xmonad-0.17.0
+  - xmonad-contrib-0.17.0

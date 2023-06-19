@@ -1,0 +1,8 @@
+resolver: snapshot.yaml
+
+packages:
+  - .
+
+extra-deps:
+  - git: git@github.com:taffybar/gtk-sni-tray.git
+    commit: d94a9e3ec2e6310b2b36d17638d1facdee292b59
