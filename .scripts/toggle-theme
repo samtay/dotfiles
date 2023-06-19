@@ -11,6 +11,9 @@ if grep -q light ~/.config/.theme; then
 	sed -i "s/gruvbox-light/gruvbox-dark/" ~/.gitconfig
 	sed -i "s/gruvbox-light/gruvbox-dark/" ~/.config/awesome/themes/gruvbox/theme.lua
 	sed -i "s/gruvbox-light/gruvbox-dark/" ~/.config/rofi/config.rasi
+	sed -i "s/myTheme = gruvboxLight/myTheme = gruvboxDark/" ~/.config/taffybar/taffybar.hs
+	sed -i "s/myTheme = gruvboxLight/myTheme = gruvboxDark/" ~/.config/xmonad/xmonad.hs
+	ln -fs ~/.config/bg/retro-linux-dark.png ~/.config/bg/retro-linux.png
 else
 	# make light
 	theme=light
@@ -19,13 +22,18 @@ else
 	sed -i "s/gruvbox-dark/gruvbox-light/" ~/.gitconfig
 	sed -i "s/gruvbox-dark/gruvbox-light/" ~/.config/awesome/themes/gruvbox/theme.lua
 	sed -i "s/gruvbox-dark/gruvbox-light/" ~/.config/rofi/config.rasi
+	sed -i "s/myTheme = gruvboxDark/myTheme = gruvboxLight/" ~/.config/taffybar/taffybar.hs
+	sed -i "s/myTheme = gruvboxDark/myTheme = gruvboxLight/" ~/.config/xmonad/xmonad.hs
+	ln -fs ~/.config/bg/retro-linux-light.png ~/.config/bg/retro-linux.png
 fi
+feh --bg-scale --no-fehbg ~/.config/bg/retro-linux.png
 
 echo $theme >~/.config/.theme
 
 pkill -USR1 kitty
 
-echo 'awesome.restart()' | awesome-client &
+# when on awesomewm; will figure out xmonad shortly. or its so minimal that it won't matter.
+# echo 'awesome.restart()' | awesome-client &
 
 # reload vim instances
 #original_window=$(xdotool getwindowfocus)

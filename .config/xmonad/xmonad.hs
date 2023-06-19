@@ -12,6 +12,7 @@ import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.SetWMName
 import XMonad.Actions.CycleWS
 import XMonad.Actions.Submap
+import XMonad.Actions.SpawnOn
 import XMonad.Layout.BinarySpacePartition
 import XMonad.Layout.Fullscreen
 import XMonad.Layout.NoBorders
@@ -68,14 +69,14 @@ myWorkspaces = map show ([1..9] ++ [0])
 -- To match on the WM_NAME, you can use 'title' in the same way that
 -- 'className' and 'resource' are used below.
 --
-{-
 myManageHook = composeAll
-    [ className =? "Google-chrome"  --> doShift "3:web"
-    , resource  =? "desktop_window" --> doIgnore
-    , className =? "stalonetray"    --> doIgnore
-    , isFullscreen --> (doF W.focusDown <+> doFullFloat)]
-myManageHook = def
--}
+    [ className =? "obsidian"  --> doShift "3"
+    , className =? "1Password"  --> doShift "9"
+    ]
+    -- , resource  =? "desktop_window" --> doIgnore
+    -- , className =? "stalonetray"    --> doIgnore
+    -- , isFullscreen --> (doF W.focusDown <+> doFullFloat)]
+-- myManageHook = def
 
 ------------------------------------------------------------------------
 
@@ -99,8 +100,8 @@ myLayoutHook = avoidStruts $
 -- Based on gruvbox.
 --
 myNormalBorderColor  = gray myTheme
-myFocusedBorderColor = brightGreen myTheme
-myBorderWidth = 2
+myFocusedBorderColor = red myTheme
+myBorderWidth = 3
 
 -- Colors for text and backgrounds of each tab when in "Tabbed" layout.
 tabConfig = def {
@@ -128,7 +129,7 @@ data GruvboxTheme = GruvboxTheme {
   orange :: String
 }
 
-myTheme = gruvboxDark
+myTheme = gruvboxLight
 
 gruvboxDark = GruvboxTheme {
   background = "#282828",
@@ -417,7 +418,11 @@ myStartupHook = do
   doOnce $ do
     spawn "clipmenud"
     spawn "/usr/lib/polkit-kde-authentication-agent-1"
+    spawnOn "9" "1password"
+    spawnOn "3" "obsidian"
+    windows $ W.view "1"
   spawn "feh --bg-scale --no-fehbg ~/.config/bg/retro-linux.png"
+  spawn "/home/sam/.config/taffybar/run"
   setSessionStarted
 
 ------------------------------------------------------------------------
@@ -435,4 +440,5 @@ main = xmonad $ docks $ ewmh $ pagerHints $ def
   , workspaces         = myWorkspaces
   , layoutHook         = myLayoutHook
   , startupHook        = myStartupHook
+  , manageHook         = myManageHook
   }
