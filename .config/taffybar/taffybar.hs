@@ -56,17 +56,17 @@ myGraphConfig =
 
 netCfg = myGraphConfig
   { graphDataColors = [yellow1 myTheme, yellow2 myTheme]
-  , graphLabel = Just "net"
+  , graphLabel = Just "&#988859; "
   }
 
 memCfg = myGraphConfig
   { graphDataColors = [blue myTheme]
-  , graphLabel = Just "mem"
+  , graphLabel = Just "&#58957; "
   }
 
 cpuCfg = myGraphConfig
   { graphDataColors = [green1 myTheme, green2 myTheme]
-  , graphLabel = Just "cpu"
+  , graphLabel = Just "&#62652; "
   }
 
 memCallback :: IO [Double]
