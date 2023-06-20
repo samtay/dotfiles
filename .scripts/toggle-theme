@@ -14,6 +14,7 @@ if grep -q light ~/.config/.theme; then
 	sed -i "s/myTheme = gruvboxLight/myTheme = gruvboxDark/" ~/.config/taffybar/taffybar.hs
 	sed -i "s/myTheme = gruvboxLight/myTheme = gruvboxDark/" ~/.config/xmonad/xmonad.hs
 	ln -fs ~/.config/bg/retro-linux-dark.png ~/.config/bg/retro-linux.png
+	ln -fs ~/.config/taffybar/gruvbox-dark.css ~/.config/taffybar/taffybar.css
 else
 	# make light
 	theme=light
@@ -25,6 +26,7 @@ else
 	sed -i "s/myTheme = gruvboxDark/myTheme = gruvboxLight/" ~/.config/taffybar/taffybar.hs
 	sed -i "s/myTheme = gruvboxDark/myTheme = gruvboxLight/" ~/.config/xmonad/xmonad.hs
 	ln -fs ~/.config/bg/retro-linux-light.png ~/.config/bg/retro-linux.png
+	ln -fs ~/.config/taffybar/gruvbox-light.css ~/.config/taffybar/taffybar.css
 fi
 feh --bg-scale --no-fehbg ~/.config/bg/retro-linux.png
 
