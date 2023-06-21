@@ -198,7 +198,7 @@ myTaffybarConfig =
   let myWorkspacesConfig =
         defaultWorkspacesConfig
           { minIcons = 1
-          , widgetGap = 0
+          , widgetGap = 5
           , showWorkspaceFn = hideEmpty
           }
       workspaces = workspacesNew myWorkspacesConfig
@@ -227,9 +227,9 @@ myTaffybarConfig =
                 , mpris2New
                 ]
           , barPosition = Top
-          , barPadding = 10
+          , barPadding = 8
           , barHeight = 50
-          , widgetSpacing = 5
+          , widgetSpacing = 10
           }
    in withBatteryRefresh $
         withLogServer $
