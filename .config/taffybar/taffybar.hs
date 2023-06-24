@@ -5,6 +5,7 @@ module Main where
 import Control.Monad (void)
 import Control.Monad.IO.Class (MonadIO (liftIO))
 import Control.Monad.Trans.Reader (ReaderT (runReaderT), ask)
+import Data.List (elemIndex)
 import qualified Data.Text as Text
 import GI.Gtk (
   Widget,
@@ -47,7 +48,8 @@ import System.Taffybar.SimpleConfig (
 import System.Taffybar.Util (postGUIASync)
 import System.Taffybar.Widget (
   LayoutConfig (..),
-  WorkspacesConfig (minIcons, showWorkspaceFn, widgetGap),
+  Workspace (..),
+  WorkspacesConfig (labelSetter, minIcons, showWorkspaceFn, widgetGap),
   batteryIconNew,
   buildContentsBox,
   defaultClockConfig,
@@ -151,6 +153,19 @@ myLayoutConfig = LayoutConfig{formatLayout = pure . fmt}
     | "Full" `Text.isInfixOf` l = " &#983699; " -- 󰊓
     | otherwise = l
 
+myWorkspacesConfig :: WorkspacesConfig
+myWorkspacesConfig =
+  defaultWorkspacesConfig
+    { minIcons = 1
+    , widgetGap = 2
+    , showWorkspaceFn = hideEmpty
+    , labelSetter = pure . trimScreen . workspaceName
+    }
+ where
+  trimScreen s = case elemIndex '_' s of
+    Just i -> drop (i + 1) s
+    Nothing -> s
+
 -- {-
 battery :: TaffyIO Widget
 battery = do
@@ -195,13 +210,7 @@ cpuCallback = do
 
 myTaffybarConfig :: TaffybarConfig
 myTaffybarConfig =
-  let myWorkspacesConfig =
-        defaultWorkspacesConfig
-          { minIcons = 1
-          , widgetGap = 5
-          , showWorkspaceFn = hideEmpty
-          }
-      workspaces = workspacesNew myWorkspacesConfig
+  let workspaces = workspacesNew myWorkspacesConfig
       cpu = pollingGraphNew cpuCfg 0.5 cpuCallback
       mem = pollingGraphNew memCfg 1 memCallback
       net = networkGraphNew netCfg Nothing

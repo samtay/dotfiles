@@ -15,12 +15,14 @@ import XMonad.Actions.Submap
 import XMonad.Actions.SpawnOn
 import XMonad.Layout.BinarySpacePartition
 import XMonad.Layout.Fullscreen
+import XMonad.Layout.IndependentScreens
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Spiral
 import XMonad.Layout.Tabbed
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.ResizableThreeColumns
 import XMonad.Layout.TwoPane
+import XMonad.Layout.ToggleLayouts (ToggleLayout(..), toggleLayouts)
 import XMonad.Prompt
 import XMonad.Prompt.Shell
 import XMonad.Util.Run(spawnPipe)
@@ -53,7 +55,7 @@ myLauncher = "rofi -show combi -combi-modes drun,run -modes combi"
 -- Workspaces
 -- The default number of workspaces (virtual screens) and their names.
 --
-myWorkspaces = map show ([1..9] ++ [0])
+myWorkspaces = withScreens 2 $ map show ([1..9] ++ [0])
 
 ------------------------------------------------------------------------
 -- Window rules
@@ -82,18 +84,10 @@ myManageHook = composeAll
 
 ------------------------------------------------------------------------
 -- Layouts
--- You can specify and transform your layouts by modifying these values.
--- If you change layout bindings be sure to use 'mod-shift-space' after
--- restarting (with 'mod-q') to reset your layout state to the new
--- defaults, as xmonad preserves your old layout settings by default.
---
--- The available layouts.  Note that each layout is separated by |||,
--- which denotes layout choice.
---
 myLayoutHook = avoidStruts $
-      ResizableTall 1 (3/100) (1/2) []
-  ||| ResizableThreeColMid 1 (3/100) (1/3) []
-  ||| noBorders (fullscreenFull Full)
+  toggleLayouts
+    (noBorders $ fullscreenFull Full) $
+      ResizableTall 1 (3/100) (1/2) [] ||| ResizableThreeColMid 1 (3/100) (1/3) []
 
 ------------------------------------------------------------------------
 -- Colors and borders
@@ -186,8 +180,10 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- Start editing dotfiles
   , ((modMask, xK_period), submap . M.fromList $
       [ ((0, xK_x), editFile "$HOME/.config/xmonad/xmonad.hs")
-      , ((0, xK_v), editFile "$HOME/.config/nvim/init.vim")
+      , ((0, xK_a), editFile "$HOME/.config/astronvim")
+      , ((0, xK_v), editFile "$HOME/.config/astronvim")
       , ((0, xK_z), editFile "$HOME/.zshrc")
+      , ((0, xK_t), editFile "$HOME/.config/taffybar/taffybar.hs")
       ])
 
   -- Hibernate
@@ -203,8 +199,8 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
       ])
   -- For now just support monitor on top
   , ((modMask, xK_d), submap . M.fromList $
-      [ ((0, xK_0), spawn "xrandr --output eDP-1 --auto --output DP-3 --off")
-      , ((0, xK_1), spawn "xrandr --output eDP-1 --primary --mode 2256x1504 --pos 152x1440 --rotate normal --output DP-3 --mode 2560x1440 --pos 0x0")
+      [ ((0, xK_1), spawn "xrandr --output eDP-1 --auto --output DP-3 --off")
+      , ((0, xK_2), spawn "xrandr --output eDP-1 --primary --mode 2256x1504 --pos 152x1440 --rotate normal --output DP-3 --mode 2560x1440 --pos 0x0")
       ])
 
   -- Toggle theme
@@ -237,7 +233,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- Spawn firefox on mod + f
   , ((modMask, xK_f),
-     spawn "firefox")
+     sendMessage (Toggle "Full"))
   , ((modMask .|. shiftMask, xK_f),
      spawn "firefox --private-window")
 
@@ -278,6 +274,14 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- Toggle workspace
   , ((modMask, xK_Tab),
       toggleWS)
+
+  -- Toggle screen (well, toggle for 2 screens)
+  , ((mod4Mask, xK_Tab),
+      nextScreen)
+
+  -- Move window to other screen 
+  , ((mod4Mask .|. shiftMask, xK_Tab),
+      shiftNextScreen)
 
   -- Prompt for clipboard history
   , ((modMask, xK_p),
@@ -374,9 +378,9 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- mod-[1..0], Switch to workspace N
   -- mod-shift-[1..0], Move client to workspace N
-  [((m .|. modMask, k), windows $ f i)
-    | (i, k) <- zip (XMonad.workspaces conf) $ [xK_1 .. xK_9] ++ [xK_0]
-      , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+  [((m .|. modMask, k), windows $ onCurrentScreen f i)
+    | (i, k) <- zip (workspaces' conf) $ [xK_1 .. xK_9] ++ [xK_0]
+    , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
   ++
 
   -- use super for focus & moving screens
