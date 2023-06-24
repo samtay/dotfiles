@@ -1,0 +1,8 @@
+[Unit]
+Description=Sends Notification when battery is below safe level.
+
+[Service]
+ExecStart=/bin/bash -c "~/.scripts/low-battery-alert"
+
+[Install]
+WantedBy=default.target

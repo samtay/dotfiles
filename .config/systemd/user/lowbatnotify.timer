@@ -1,0 +1,12 @@
+# enable and start the systemd service timer on new installs
+# systemctl --user enable batnotify.timer
+# systemctl --user start batnotify.timer
+[Unit]
+Description=Run battery notifier every 30 seconds
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=30
+
+[Install]
+WantedBy=timers.target
