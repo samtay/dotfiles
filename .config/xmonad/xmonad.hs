@@ -418,6 +418,7 @@ myStartupHook = do
   doOnce $ do
     spawn "clipmenud"
     spawn "/usr/lib/polkit-kde-authentication-agent-1"
+    spawn "/usr/bin/dunst"
     spawnOn "9" "1password"
     spawnOn "3" "obsidian"
     windows $ W.view "1"

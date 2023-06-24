@@ -15,6 +15,8 @@ if grep -q light ~/.config/.theme; then
 	sed -i "s/myTheme = gruvboxLight/myTheme = gruvboxDark/" ~/.config/xmonad/xmonad.hs
 	ln -fs ~/.config/bg/retro-linux-dark.png ~/.config/bg/retro-linux.png
 	ln -fs ~/.config/taffybar/gruvbox-dark.css ~/.config/taffybar/taffybar.css
+	sed -i '/gruvbox_light/s/^/#/' ~/.config/dunst/dunstrc
+	sed -i '/gruvbox_dark/s/^#//' ~/.config/dunst/dunstrc
 else
 	# make light
 	theme=light
@@ -27,28 +29,15 @@ else
 	sed -i "s/myTheme = gruvboxDark/myTheme = gruvboxLight/" ~/.config/xmonad/xmonad.hs
 	ln -fs ~/.config/bg/retro-linux-light.png ~/.config/bg/retro-linux.png
 	ln -fs ~/.config/taffybar/gruvbox-light.css ~/.config/taffybar/taffybar.css
+	sed -i '/gruvbox_dark/s/^/#/' ~/.config/dunst/dunstrc
+	sed -i '/gruvbox_light/s/^#//' ~/.config/dunst/dunstrc
 fi
+
+# restart stuff
 feh --bg-scale --no-fehbg ~/.config/bg/retro-linux.png
-
-echo $theme >~/.config/.theme
-
+pkill -xf /usr/bin/dunst
 pkill -USR1 kitty
 
-# when on awesomewm; will figure out xmonad shortly. or its so minimal that it won't matter.
-# echo 'awesome.restart()' | awesome-client &
-
-# reload vim instances
-#original_window=$(xdotool getwindowfocus)
-#for pid in $(xdotool search --name ': nvim'); do
-#sleep 0.5
-#xdotool windowfocus $pid
-#sleep 0.1
-#xdotool key Escape
-#sleep 0.1
-#xdotool type ':so $MYVIMRC'
-#sleep 0.1
-#xdotool key Return
-#done
-#xdotool windowfocus $original_window
-
-echo "Toggled to $theme theme"
+# record current theme
+echo $theme >~/.config/.theme
+notify-send "Toggled to $theme theme"
