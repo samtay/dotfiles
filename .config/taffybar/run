@@ -2,4 +2,4 @@
 cd ~/.config/taffybar || exit 1
 stack install taffybar
 pkill -f taffybar-linux-x86_64
-exec ~/.local/bin/taffybar
+exec ~/.local/bin/taffybar >~/.config/taffybar/taffy.log 2>&1
