@@ -19,15 +19,17 @@ zplug "lib/directories",          from:oh-my-zsh
 zplug "plugins/ssh-agent",        from:oh-my-zsh
 zplug "plugins/docker",           from:oh-my-zsh, defer:1
 zplug "plugins/docker-compose",   from:oh-my-zsh, defer:1
-zplug "zsh-users/zsh-syntax-highlighting", defer:1
-zplug "zsh-users/zsh-history-substring-search", defer:2
+zplug "zsh-users/zsh-syntax-highlighting", defer:3
+zplug "zsh-users/zsh-history-substring-search", defer:3
 zplug "zsh-users/zsh-completions"
+zplug "zsh-users/zsh-autosuggestions"
 zplug "~/.zsh-plugins", from:local, defer:3
 zplug "spwhitt/nix-zsh-completions"
 
 # theme
 zplug "mafredri/zsh-async"
 zplug "sindresorhus/pure", on:"mafredri/zsh-async"
+zplug "Aloxaf/fzf-tab", defer:2
 
 # install
 zplug check || zplug install
@@ -73,7 +75,8 @@ setopt complete_in_word
 setopt always_to_end
 #zstyle ':completion:*' group-name ''
 zstyle ':completion:*:messages' format '%d'
-zstyle ':completion:*:descriptions' format '%d'
+# see below
+# zstyle ':completion:*:descriptions' format '%d'
 zstyle ':completion:*:options' verbose yes
 zstyle ':completion:*:values' verbose yes
 zstyle ':completion:*:options' prefix-needed yes
@@ -89,9 +92,22 @@ zstyle ':completion:*' menu select
 zstyle ':completion:*' keep-prefix
 zstyle ':completion:*' completer _oldlist _complete _match _ignored \
   _approximate _list
-zstyle ':completion:*' list-colors ''
+# see below
+# zstyle ':completion:*' list-colors ''
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
 zstyle ':completion:*:processes' command "ps -u $USER -o pid,stat,%cpu,%mem,cputime,command"
+
+# fzf-tab defaults
+# disable sort when completing `git checkout`
+zstyle ':completion:*:git-checkout:*' sort false
+# set descriptions format to enable group support
+zstyle ':completion:*:descriptions' format '[%d]'
+# set list-colors to enable filename colorizing
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+# preview directory's content with eza when completing cd
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
+# switch group using `,` and `.`
+zstyle ':fzf-tab:*' switch-group ',' '.'
 
 autoload -U compinit; compinit -d ~/.zcompdump
 
@@ -238,6 +254,9 @@ bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
 bindkey '^[[A'       history-substring-search-up
 bindkey '^[[B'       history-substring-search-down
+# like copilot, ctrl+space to accept autosuggestions
+bindkey '^[[13;5u' autosuggest-execute
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=white"
 
 # Like bash
 bindkey "^u" backward-kill-line
@@ -299,7 +318,9 @@ bindkey -v
 #zle -N zle-line-init
 #zle -N zle-keymap-select
 
-export FZF_DEFAULT_COMMAND="rg --files --hidden -g '!.git'"
+# TODO look at https://stackoverflow.com/a/69983807
+export FZF_DEFAULT_COMMAND="fd --color=always --hidden --exclude .git"
+export FZF_CTRL_T_OPTS="--no-multi --bind 'tab:down' --bind 'btab:up'"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 alias -g vim='nvim'
