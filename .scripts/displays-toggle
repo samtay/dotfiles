@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+set -eo
+
+displays-toggle() {
+	declare -a all_connected=($({ xrandr -q || exit 1; } | awk '$2 == "connected" {print $1}'))
+
+	[[ ${#all_connected[@]} = 0 ]] && {
+		echo "no monitors connected"
+		return 1
+	}
+
+	# shut off externals
+	if [[ "$1" == "1" ]]; then
+		for ((j = 0; j <= ${#all_connected[@]}; j++)); do
+			if [[ -n ${all_connected[$j]} ]]; then
+				if [[ ${all_connected[$j]} != "eDP-1" ]]; then
+					echo "Turning off ${all_connected[$j]}"
+					xrandr --output "${all_connected[$j]}" --off
+				fi
+			fi
+		done
+	# external requested, position it on top
+	else
+		for ((j = 0; j <= ${#all_connected[@]}; j++)); do
+			if [[ -n ${all_connected[$j]} ]]; then
+				if [[ ${all_connected[$j]} != "eDP-1" ]]; then
+					echo "Turning on ${all_connected[$j]}"
+					xrandr \
+						--output eDP-1 --primary --mode 2256x1504 --pos 152x1440 --rotate normal \
+						--output "${all_connected[$j]}" --mode 2560x1440 --pos 0x0
+				fi
+			fi
+		done
+	fi
+}
+
+displays-toggle "$@"

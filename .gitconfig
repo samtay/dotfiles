@@ -37,6 +37,9 @@
   autosetuprebase = always  # Allows the next option to work properly
   rebase = true     # Prevent automatic merge commits
 
+[advice]
+  detachedHead = false
+
 [merge]
   tool = vimdiff
 

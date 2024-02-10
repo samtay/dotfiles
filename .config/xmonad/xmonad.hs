@@ -190,17 +190,10 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask .|. controlMask .|. shiftMask , xK_h),
      spawn "systemctl hibernate")
 
-  -- Toggle multi monitor display (xrandr wrapper)
-  -- TODO redo tese?
-  , ((modMask .|. shiftMask, xK_d), submap . M.fromList $
-      [ ((0, xK_0), spawn "displays-toggle 0")
-      , ((0, xK_1), spawn "displays-toggle 1")
-      , ((0, xK_2), spawn "displays-toggle 2")
-      ])
   -- For now just support monitor on top
   , ((modMask, xK_d), submap . M.fromList $
-      [ ((0, xK_1), spawn "xrandr --output eDP-1 --auto --output DP-3 --off")
-      , ((0, xK_2), spawn "xrandr --output eDP-1 --primary --mode 2256x1504 --pos 152x1440 --rotate normal --output DP-3 --mode 2560x1440 --pos 0x0")
+      [ ((0, xK_1), spawn "displays-toggle 1")
+      , ((0, xK_2), spawn "displays-toggle 2")
       ])
 
   -- Toggle theme
