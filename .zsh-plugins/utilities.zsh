@@ -1,7 +1,7 @@
 # Aliases
 export MY_GIT_DIR="$HOME/code"
 alias copy-ssh-key='copy-file ~/.ssh/id_rsa.pub'
-alias reload-zsh='source ~/.zshrc'
+alias reload-zsh='exec zsh'
 alias ba-vpn="sudo openvpn --daemon /etc/openvpn/ba-client.conf"
 alias wifi-scan='sudo iwlist wlp1s0 scan | grep ESSID'
 alias wifi-rescan='nmcli d wifi rescan'
@@ -15,6 +15,10 @@ alias sync-391='sync-391-up ; sync-391-down'
 
 rgl() {
   rg --color=always "$@" | less -R
+}
+
+jql() {
+  jq -C "$@" | less -R
 }
 
 fix-wide-monitor() {
